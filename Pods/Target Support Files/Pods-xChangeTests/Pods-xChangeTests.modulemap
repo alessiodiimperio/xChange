@@ -1,0 +1,6 @@
+framework module Pods_xChangeTests {
+  umbrella header "Pods-xChangeTests-umbrella.h"
+
+  export *
+  module * { export * }
+}

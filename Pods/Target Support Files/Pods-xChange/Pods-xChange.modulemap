@@ -1,0 +1,6 @@
+framework module Pods_xChange {
+  umbrella header "Pods-xChange-umbrella.h"
+
+  export *
+  module * { export * }
+}
