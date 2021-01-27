@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>672136418322-inkkup60oukq8o6p2ok0o7384503chbq.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.672136418322-inkkup60oukq8o6p2ok0o7384503chbq</string>
+	<key>API_KEY</key>
+	<string>AIzaSyBXLRNOnEC0CZ9ssZUktvzxgASzMSJN_Qs</string>
+	<key>GCM_SENDER_ID</key>
+	<string>672136418322</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>se.diimperio.xchange</string>
+	<key>PROJECT_ID</key>
+	<string>xchange-55319</string>
+	<key>STORAGE_BUCKET</key>
+	<string>xchange-55319.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:672136418322:ios:07b1be2e7d37fb8baa74cb</string>
+</dict>
+</plist>

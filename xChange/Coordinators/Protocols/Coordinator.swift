@@ -7,7 +7,7 @@
 import Swinject
 
 protocol Coordinator: AnyObject {
-    var container:Container? {get set}
+    var container:Container {get}
     var navigationController:UINavigationController {get set}
     var childrenCoordinators:[Coordinator] {get set}
     func start()

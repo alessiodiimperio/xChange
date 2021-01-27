@@ -1,15 +1,14 @@
 //
-//  ProfileViewController.swift
+//  SignUpViewController.swift
 //  xChange
 //
-//  Created by Alessio on 2021-01-25.
+//  Created by Alessio on 2021-01-27.
 //
 
 import UIKit
 
-class ProfileViewController: UIViewController {
-
-    var viewModel:ProfileViewModel!
+class SignUpViewController: UIViewController, Storyboarded {
+    weak var coordinator:RootCoordinator?
     
     override func viewDidLoad() {
         super.viewDidLoad()

@@ -7,7 +7,7 @@
 
 import UIKit
 
-class TabBarController: UITabBarController {
+class TabBarController: UITabBarController, Storyboarded {
 
     var mainCoordinator:MainCoordinator!
     var favoritesCoordinator:FavoritesCoordinator!

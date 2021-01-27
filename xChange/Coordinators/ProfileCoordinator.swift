@@ -11,27 +11,30 @@ import SwinjectStoryboard
 
 class ProfileCoordinator:Coordinator {
     
-    weak var container:Container?
+    let container = SwinjectStoryboard.defaultContainer
     var childrenCoordinators = [Coordinator]()
     var navigationController:UINavigationController
     
-    init(container:Container, navigationController:UINavigationController){
-        self.container = container
+    init(navigationController:UINavigationController){
         self.navigationController = navigationController
     }
     
     func start() {
         registerDependencies()
-        let vc = container!.resolve(ProfileViewController.self)!
+        let vc = container.resolve(ProfileViewController.self)!
+        vc.coordinator = self
         vc.tabBarItem.image = UIImage(systemName: "person.fill")
         vc.tabBarItem.title = "Profile"
         navigationController.pushViewController(vc, animated: false)
     }
+    func signOut(){
+        print("Trying to sign out")
+    }
     
     func registerDependencies(){
-        let profileStoryboard = SwinjectStoryboard.create(name: "Profile", bundle: Bundle.main, container: container!)
-        container!.register(ProfileViewModel.self){_ in return ProfileViewModel()}
-        container!.register(ProfileViewController.self) { r in
+        let profileStoryboard = SwinjectStoryboard.create(name: "Profile", bundle: Bundle.main, container: container)
+        container.register(ProfileViewModel.self){_ in return ProfileViewModel()}
+        container.register(ProfileViewController.self) { r in
             let controller = profileStoryboard.instantiateViewController(withIdentifier: String(describing: ProfileViewController.self)) as! ProfileViewController
             controller.viewModel = r.resolve(ProfileViewModel.self)
             return controller

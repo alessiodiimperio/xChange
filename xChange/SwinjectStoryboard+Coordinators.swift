@@ -9,30 +9,38 @@ import UIKit
 import SwinjectStoryboard
 extension SwinjectStoryboard {
     @objc class func setup() {
-        
+
+        //MARK: Coordinator Dependencies
         defaultContainer.register(MainCoordinator.self){ _ in
             let navigationController = UINavigationController()
-            return MainCoordinator(container: defaultContainer, navigationController: navigationController)
+            return MainCoordinator(navigationController: navigationController)
         }
-        
         defaultContainer.register(FavoritesCoordinator.self){ _ in
             let navigationController = UINavigationController()
-            return FavoritesCoordinator(container: defaultContainer, navigationController: navigationController)
+            return FavoritesCoordinator(navigationController: navigationController)
         }
-        
         defaultContainer.register(AddXChangeCoordinator.self){ _ in
             let navigationController = UINavigationController()
-            return AddXChangeCoordinator(container: defaultContainer, navigationController: navigationController)
+            return AddXChangeCoordinator(navigationController: navigationController)
         }
         defaultContainer.register(ChatCoordinator.self){ _ in
             let navigationController = UINavigationController()
-            return ChatCoordinator(container: defaultContainer, navigationController: navigationController)
+            return ChatCoordinator(navigationController: navigationController)
         }
         defaultContainer.register(ProfileCoordinator.self){ _ in
             let navigationController = UINavigationController()
-            return ProfileCoordinator(container: defaultContainer, navigationController: navigationController)
+            return ProfileCoordinator(navigationController: navigationController)
         }
         
+        //MARK: Root.storyboard Dependencies
+        //ViewModels
+        defaultContainer.register(LoginViewModel.self){_ in
+            return LoginViewModel()
+        }
+        //ViewControllers
+        defaultContainer.storyboardInitCompleted(LoginViewController.self){ r, vc in
+            vc.viewModel = r.resolve(LoginViewModel.self)
+        }
         defaultContainer.storyboardInitCompleted(TabBarController.self) { r, vc in
             let mainCoordinator = r.resolve(MainCoordinator.self)!
             vc.mainCoordinator = mainCoordinator
