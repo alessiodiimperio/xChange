@@ -23,6 +23,7 @@ end
 	pod 'Firebase/Firestore'
 	pod 'Firebase/Auth'
 	pod 'Firebase/Storage'
+	pod 'FirebaseFirestoreSwift', '~> 7.0-beta'
 
   target 'xChangeTests' do
     inherit! :search_paths

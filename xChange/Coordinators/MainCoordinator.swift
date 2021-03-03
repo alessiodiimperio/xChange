@@ -9,7 +9,6 @@ import UIKit
 import Swinject
 import SwinjectStoryboard
 class MainCoordinator:Coordinator {
-    
     let container = SwinjectStoryboard.defaultContainer
     var childrenCoordinators = [Coordinator]()
     var navigationController:UINavigationController

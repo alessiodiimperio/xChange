@@ -10,7 +10,6 @@ import Swinject
 import SwinjectStoryboard
 
 class FavoritesCoordinator:Coordinator {
-    
     let container = SwinjectStoryboard.defaultContainer
     var childrenCoordinators = [Coordinator]()
     var navigationController:UINavigationController

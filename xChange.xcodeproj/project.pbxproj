@@ -23,6 +23,8 @@
 		7825556C25C024390031EC64 /* AddXChange.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7825556B25C024390031EC64 /* AddXChange.storyboard */; };
 		7825557125C0244B0031EC64 /* Chat.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7825557025C0244B0031EC64 /* Chat.storyboard */; };
 		7825557625C024550031EC64 /* Profile.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7825557525C024550031EC64 /* Profile.storyboard */; };
+		7832047525C1B2A20052CA86 /* AuthenticationProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7832047425C1B2A10052CA86 /* AuthenticationProvider.swift */; };
+		7832047D25C1B3530052CA86 /* FirebaseAuthProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7832047C25C1B3530052CA86 /* FirebaseAuthProvider.swift */; };
 		78372DA125BF0254001B82D0 /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78372DA025BF0254001B82D0 /* TabBarController.swift */; };
 		78372DB225BF07C8001B82D0 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78372DB125BF07C8001B82D0 /* MainViewController.swift */; };
 		78372DBA25BF07F8001B82D0 /* MainViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78372DB925BF07F8001B82D0 /* MainViewModel.swift */; };
@@ -30,6 +32,9 @@
 		78372DC825BF0876001B82D0 /* FavoritesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78372DC725BF0876001B82D0 /* FavoritesViewModel.swift */; };
 		78372DD225BF0A77001B82D0 /* Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78372DD125BF0A77001B82D0 /* Coordinator.swift */; };
 		78372DD725BF0AEA001B82D0 /* MainCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78372DD625BF0AEA001B82D0 /* MainCoordinator.swift */; };
+		7842342925E2C8D300A3D0DC /* ProfileCoordinatorDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7842342825E2C8D300A3D0DC /* ProfileCoordinatorDelegate.swift */; };
+		7842343525E2CBC100A3D0DC /* SignUpViewControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7842343425E2CBC100A3D0DC /* SignUpViewControllerDelegate.swift */; };
+		7842343A25E2CF0100A3D0DC /* LoginViewControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7842343925E2CF0100A3D0DC /* LoginViewControllerDelegate.swift */; };
 		7844953F25BF0187005377A5 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7844953E25BF0187005377A5 /* AppDelegate.swift */; };
 		7844954125BF0187005377A5 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7844954025BF0187005377A5 /* SceneDelegate.swift */; };
 		7844954625BF0187005377A5 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7844954425BF0187005377A5 /* Main.storyboard */; };
@@ -37,6 +42,8 @@
 		7844954B25BF0189005377A5 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7844954925BF0189005377A5 /* LaunchScreen.storyboard */; };
 		7844955625BF018A005377A5 /* xChangeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7844955525BF018A005377A5 /* xChangeTests.swift */; };
 		7844956125BF018A005377A5 /* xChangeUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7844956025BF018A005377A5 /* xChangeUITests.swift */; };
+		78A23B0125CC0AC600EB0F12 /* ChatProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78A23B0025CC0AC600EB0F12 /* ChatProvider.swift */; };
+		78A23B0625CC0B4100EB0F12 /* FavoritesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78A23B0525CC0B4100EB0F12 /* FavoritesProvider.swift */; };
 		78F2E4AD25C15F13000E5F9D /* Storyboarded.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78F2E4AC25C15F13000E5F9D /* Storyboarded.swift */; };
 		78F2E4B225C16029000E5F9D /* RootCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78F2E4B125C16029000E5F9D /* RootCoordinator.swift */; };
 		78F2E4B825C160D4000E5F9D /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78F2E4B725C160D4000E5F9D /* LoginViewController.swift */; };
@@ -44,6 +51,15 @@
 		78F2E4C625C1646E000E5F9D /* SignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78F2E4C525C1646E000E5F9D /* SignUpViewController.swift */; };
 		78F2E4CB25C1688D000E5F9D /* LoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78F2E4CA25C1688D000E5F9D /* LoginViewModel.swift */; };
 		78F2E4F025C193DF000E5F9D /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 78F2E4EF25C193DF000E5F9D /* GoogleService-Info.plist */; };
+		78F5473C25C1F02700467741 /* DataProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78F5473B25C1F02700467741 /* DataProvider.swift */; };
+		78F5474425C1F11D00467741 /* FirestoreDataProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78F5474325C1F11D00467741 /* FirestoreDataProvider.swift */; };
+		78F5474D25C2D9DE00467741 /* UIViewController+HideKeyboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78F5474C25C2D9DE00467741 /* UIViewController+HideKeyboard.swift */; };
+		78F5476725C2E59900467741 /* SignUpViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78F5476625C2E59900467741 /* SignUpViewModel.swift */; };
+		78F5477025C9566E00467741 /* ViewModelType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78F5476F25C9566E00467741 /* ViewModelType.swift */; };
+		78F5477525C98EB800467741 /* Validation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78F5477425C98EB800467741 /* Validation.swift */; };
+		78F5477B25C9E76700467741 /* Credential.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78F5477A25C9E76700467741 /* Credential.swift */; };
+		78F7E53325EEBF3300E4030C /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78F7E53225EEBF3300E4030C /* User.swift */; };
+		78FEA08325CC96BE00A7D02C /* XChange.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78FEA08225CC96BE00A7D02C /* XChange.swift */; };
 		C1DBDB6451CA351BC0983F44 /* Pods_xChange_xChangeUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5920153C13C9F2C43911CA45 /* Pods_xChange_xChangeUITests.framework */; };
 		CA5C4EE92E3B1051FCFF6FFE /* Pods_xChange.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9DB6F7A3F88EBACBE66C7025 /* Pods_xChange.framework */; };
 		E847EB396442D63325A1033E /* Pods_xChangeTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DE9AEB07039F5D9DFF49452A /* Pods_xChangeTests.framework */; };
@@ -85,6 +101,8 @@
 		7825556B25C024390031EC64 /* AddXChange.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = AddXChange.storyboard; sourceTree = "<group>"; };
 		7825557025C0244B0031EC64 /* Chat.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Chat.storyboard; sourceTree = "<group>"; };
 		7825557525C024550031EC64 /* Profile.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Profile.storyboard; sourceTree = "<group>"; };
+		7832047425C1B2A10052CA86 /* AuthenticationProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationProvider.swift; sourceTree = "<group>"; };
+		7832047C25C1B3530052CA86 /* FirebaseAuthProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseAuthProvider.swift; sourceTree = "<group>"; };
 		78372DA025BF0254001B82D0 /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
 		78372DB125BF07C8001B82D0 /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
 		78372DB925BF07F8001B82D0 /* MainViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewModel.swift; sourceTree = "<group>"; };
@@ -92,6 +110,9 @@
 		78372DC725BF0876001B82D0 /* FavoritesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesViewModel.swift; sourceTree = "<group>"; };
 		78372DD125BF0A77001B82D0 /* Coordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coordinator.swift; sourceTree = "<group>"; };
 		78372DD625BF0AEA001B82D0 /* MainCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainCoordinator.swift; sourceTree = "<group>"; };
+		7842342825E2C8D300A3D0DC /* ProfileCoordinatorDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileCoordinatorDelegate.swift; sourceTree = "<group>"; };
+		7842343425E2CBC100A3D0DC /* SignUpViewControllerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewControllerDelegate.swift; sourceTree = "<group>"; };
+		7842343925E2CF0100A3D0DC /* LoginViewControllerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewControllerDelegate.swift; sourceTree = "<group>"; };
 		7844953B25BF0187005377A5 /* xChange.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = xChange.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7844953E25BF0187005377A5 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		7844954025BF0187005377A5 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -105,6 +126,8 @@
 		7844955C25BF018A005377A5 /* xChangeUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = xChangeUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		7844956025BF018A005377A5 /* xChangeUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = xChangeUITests.swift; sourceTree = "<group>"; };
 		7844956225BF018A005377A5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		78A23B0025CC0AC600EB0F12 /* ChatProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatProvider.swift; sourceTree = "<group>"; };
+		78A23B0525CC0B4100EB0F12 /* FavoritesProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesProvider.swift; sourceTree = "<group>"; };
 		78F2E4AC25C15F13000E5F9D /* Storyboarded.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Storyboarded.swift; sourceTree = "<group>"; };
 		78F2E4B125C16029000E5F9D /* RootCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootCoordinator.swift; sourceTree = "<group>"; };
 		78F2E4B725C160D4000E5F9D /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
@@ -112,6 +135,15 @@
 		78F2E4C525C1646E000E5F9D /* SignUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewController.swift; sourceTree = "<group>"; };
 		78F2E4CA25C1688D000E5F9D /* LoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewModel.swift; sourceTree = "<group>"; };
 		78F2E4EF25C193DF000E5F9D /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		78F5473B25C1F02700467741 /* DataProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataProvider.swift; sourceTree = "<group>"; };
+		78F5474325C1F11D00467741 /* FirestoreDataProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreDataProvider.swift; sourceTree = "<group>"; };
+		78F5474C25C2D9DE00467741 /* UIViewController+HideKeyboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+HideKeyboard.swift"; sourceTree = "<group>"; };
+		78F5476625C2E59900467741 /* SignUpViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewModel.swift; sourceTree = "<group>"; };
+		78F5476F25C9566E00467741 /* ViewModelType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModelType.swift; sourceTree = "<group>"; };
+		78F5477425C98EB800467741 /* Validation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Validation.swift; sourceTree = "<group>"; };
+		78F5477A25C9E76700467741 /* Credential.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Credential.swift; sourceTree = "<group>"; };
+		78F7E53225EEBF3300E4030C /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		78FEA08225CC96BE00A7D02C /* XChange.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XChange.swift; sourceTree = "<group>"; };
 		909CD7FDAFBB8866D8534048 /* Pods-xChange-xChangeUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-xChange-xChangeUITests.debug.xcconfig"; path = "Target Support Files/Pods-xChange-xChangeUITests/Pods-xChange-xChangeUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		9DB6F7A3F88EBACBE66C7025 /* Pods_xChange.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_xChange.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		9F009FDA7BEF5EDAF3777889 /* Pods-xChangeTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-xChangeTests.release.xcconfig"; path = "Target Support Files/Pods-xChangeTests/Pods-xChangeTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -199,6 +231,36 @@
 			path = Storyboards;
 			sourceTree = "<group>";
 		};
+		7832047125C1B2290052CA86 /* Firebase */ = {
+			isa = PBXGroup;
+			children = (
+				7832047C25C1B3530052CA86 /* FirebaseAuthProvider.swift */,
+				78F5474325C1F11D00467741 /* FirestoreDataProvider.swift */,
+			);
+			path = Firebase;
+			sourceTree = "<group>";
+		};
+		7832047225C1B2390052CA86 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				7832047325C1B2660052CA86 /* Protocols */,
+				7832047125C1B2290052CA86 /* Firebase */,
+				78F5477425C98EB800467741 /* Validation.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		7832047325C1B2660052CA86 /* Protocols */ = {
+			isa = PBXGroup;
+			children = (
+				7832047425C1B2A10052CA86 /* AuthenticationProvider.swift */,
+				78F5473B25C1F02700467741 /* DataProvider.swift */,
+				78A23B0525CC0B4100EB0F12 /* FavoritesProvider.swift */,
+				78A23B0025CC0AC600EB0F12 /* ChatProvider.swift */,
+			);
+			path = Protocols;
+			sourceTree = "<group>";
+		};
 		78372D9F25BF0232001B82D0 /* TabBarController */ = {
 			isa = PBXGroup;
 			children = (
@@ -228,22 +290,37 @@
 		78372DCF25BF0A50001B82D0 /* Coordinators */ = {
 			isa = PBXGroup;
 			children = (
-				78372DD025BF0A68001B82D0 /* Protocols */,
-				78F2E4B125C16029000E5F9D /* RootCoordinator.swift */,
+				7842343025E2CBAF00A3D0DC /* RootCoordinator */,
 				78372DD625BF0AEA001B82D0 /* MainCoordinator.swift */,
 				7825554925C013760031EC64 /* FavoritesCoordinator.swift */,
 				7825555725C01BE60031EC64 /* AddXChangeCoordinator.swift */,
 				7825555C25C01C810031EC64 /* ChatCoordinator.swift */,
-				7825556125C01DE40031EC64 /* ProfileCoordinator.swift */,
+				7842342725E2C8B000A3D0DC /* ProfileCoordinator */,
 			);
 			path = Coordinators;
 			sourceTree = "<group>";
 		};
-		78372DD025BF0A68001B82D0 /* Protocols */ = {
+		7842342725E2C8B000A3D0DC /* ProfileCoordinator */ = {
 			isa = PBXGroup;
 			children = (
-				78372DD125BF0A77001B82D0 /* Coordinator.swift */,
-				78F2E4AC25C15F13000E5F9D /* Storyboarded.swift */,
+				7842343F25E300F000A3D0DC /* Protocols */,
+				7825556125C01DE40031EC64 /* ProfileCoordinator.swift */,
+			);
+			path = ProfileCoordinator;
+			sourceTree = "<group>";
+		};
+		7842343025E2CBAF00A3D0DC /* RootCoordinator */ = {
+			isa = PBXGroup;
+			children = (
+				78F2E4B125C16029000E5F9D /* RootCoordinator.swift */,
+			);
+			path = RootCoordinator;
+			sourceTree = "<group>";
+		};
+		7842343F25E300F000A3D0DC /* Protocols */ = {
+			isa = PBXGroup;
+			children = (
+				7842342825E2C8D300A3D0DC /* ProfileCoordinatorDelegate.swift */,
 			);
 			path = Protocols;
 			sourceTree = "<group>";
@@ -273,20 +350,24 @@
 		7844953D25BF0187005377A5 /* xChange */ = {
 			isa = PBXGroup;
 			children = (
+				78DF0DEB25E1A457001859F3 /* Assemblies */,
+				78F5477925C9E75800467741 /* Models */,
+				78F5476C25C9562A00467741 /* Protocols */,
 				7844953E25BF0187005377A5 /* AppDelegate.swift */,
 				7844954025BF0187005377A5 /* SceneDelegate.swift */,
 				78372DCF25BF0A50001B82D0 /* Coordinators */,
+				7825555325C016860031EC64 /* Storyboards */,
 				78F2E4CF25C1869D000E5F9D /* RootControllers */,
 				78F2E4D125C186E4000E5F9D /* MainControllers */,
 				78F2E4D225C18706000E5F9D /* FavoritesControllers */,
 				78F2E4D325C1871B000E5F9D /* AddXChangeControllers */,
 				78F2E4D425C18730000E5F9D /* ChatControllers */,
 				78F2E4D525C18740000E5F9D /* ProfileControllers */,
-				7825555325C016860031EC64 /* Storyboards */,
+				7832047225C1B2390052CA86 /* Services */,
+				78F5474B25C2D9B900467741 /* Extensions */,
 				7844954725BF0189005377A5 /* Assets.xcassets */,
 				7844954925BF0189005377A5 /* LaunchScreen.storyboard */,
 				7844954C25BF0189005377A5 /* Info.plist */,
-				7825550225BF5A430031EC64 /* SwinjectStoryboard+Coordinators.swift */,
 				78F2E4EF25C193DF000E5F9D /* GoogleService-Info.plist */,
 				78F2E4BF25C162B1000E5F9D /* RootNavigationController.swift */,
 			);
@@ -311,9 +392,17 @@
 			path = xChangeUITests;
 			sourceTree = "<group>";
 		};
+		78DF0DEB25E1A457001859F3 /* Assemblies */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Assemblies;
+			sourceTree = "<group>";
+		};
 		78F2E4B625C160B6000E5F9D /* LoginViewController */ = {
 			isa = PBXGroup;
 			children = (
+				7842343925E2CF0100A3D0DC /* LoginViewControllerDelegate.swift */,
 				78F2E4B725C160D4000E5F9D /* LoginViewController.swift */,
 				78F2E4CA25C1688D000E5F9D /* LoginViewModel.swift */,
 			);
@@ -323,7 +412,9 @@
 		78F2E4C425C16455000E5F9D /* SignUpViewController */ = {
 			isa = PBXGroup;
 			children = (
+				7842343425E2CBC100A3D0DC /* SignUpViewControllerDelegate.swift */,
 				78F2E4C525C1646E000E5F9D /* SignUpViewController.swift */,
+				78F5476625C2E59900467741 /* SignUpViewModel.swift */,
 			);
 			path = SignUpViewController;
 			sourceTree = "<group>";
@@ -376,6 +467,51 @@
 				7825553B25BF5CED0031EC64 /* ProfileController */,
 			);
 			path = ProfileControllers;
+			sourceTree = "<group>";
+		};
+		78F5474B25C2D9B900467741 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				7825550225BF5A430031EC64 /* SwinjectStoryboard+Coordinators.swift */,
+				78F5474C25C2D9DE00467741 /* UIViewController+HideKeyboard.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		78F5476C25C9562A00467741 /* Protocols */ = {
+			isa = PBXGroup;
+			children = (
+				78F5476E25C9564F00467741 /* ViewModel Protocols */,
+				78F5476D25C9563300467741 /* Coordinator Protocols */,
+			);
+			path = Protocols;
+			sourceTree = "<group>";
+		};
+		78F5476D25C9563300467741 /* Coordinator Protocols */ = {
+			isa = PBXGroup;
+			children = (
+				78372DD125BF0A77001B82D0 /* Coordinator.swift */,
+				78F2E4AC25C15F13000E5F9D /* Storyboarded.swift */,
+			);
+			path = "Coordinator Protocols";
+			sourceTree = "<group>";
+		};
+		78F5476E25C9564F00467741 /* ViewModel Protocols */ = {
+			isa = PBXGroup;
+			children = (
+				78F5476F25C9566E00467741 /* ViewModelType.swift */,
+			);
+			path = "ViewModel Protocols";
+			sourceTree = "<group>";
+		};
+		78F5477925C9E75800467741 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				78F5477A25C9E76700467741 /* Credential.swift */,
+				78FEA08225CC96BE00A7D02C /* XChange.swift */,
+				78F7E53225EEBF3300E4030C /* User.swift */,
+			);
+			path = Models;
 			sourceTree = "<group>";
 		};
 		A6128C1A1BE856807FDA9DA0 /* Pods */ = {
@@ -635,26 +771,42 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				78FEA08325CC96BE00A7D02C /* XChange.swift in Sources */,
 				7825550325BF5A430031EC64 /* SwinjectStoryboard+Coordinators.swift in Sources */,
+				78F5474425C1F11D00467741 /* FirestoreDataProvider.swift in Sources */,
 				7825555825C01BE60031EC64 /* AddXChangeCoordinator.swift in Sources */,
 				7825551E25BF5BA50031EC64 /* AddXChangeController.swift in Sources */,
+				78A23B0125CC0AC600EB0F12 /* ChatProvider.swift in Sources */,
 				78F2E4B825C160D4000E5F9D /* LoginViewController.swift in Sources */,
 				78F2E4C625C1646E000E5F9D /* SignUpViewController.swift in Sources */,
+				78A23B0625CC0B4100EB0F12 /* FavoritesProvider.swift in Sources */,
 				78372DD225BF0A77001B82D0 /* Coordinator.swift in Sources */,
+				78F5473C25C1F02700467741 /* DataProvider.swift in Sources */,
 				78372DBA25BF07F8001B82D0 /* MainViewModel.swift in Sources */,
+				7832047D25C1B3530052CA86 /* FirebaseAuthProvider.swift in Sources */,
 				78372DA125BF0254001B82D0 /* TabBarController.swift in Sources */,
+				78F5477025C9566E00467741 /* ViewModelType.swift in Sources */,
+				7832047525C1B2A20052CA86 /* AuthenticationProvider.swift in Sources */,
 				78F2E4CB25C1688D000E5F9D /* LoginViewModel.swift in Sources */,
 				78372DC825BF0876001B82D0 /* FavoritesViewModel.swift in Sources */,
 				7844953F25BF0187005377A5 /* AppDelegate.swift in Sources */,
 				7825556225C01DE40031EC64 /* ProfileCoordinator.swift in Sources */,
+				78F7E53325EEBF3300E4030C /* User.swift in Sources */,
 				7825555D25C01C810031EC64 /* ChatCoordinator.swift in Sources */,
+				78F5474D25C2D9DE00467741 /* UIViewController+HideKeyboard.swift in Sources */,
+				78F5476725C2E59900467741 /* SignUpViewModel.swift in Sources */,
+				7842342925E2C8D300A3D0DC /* ProfileCoordinatorDelegate.swift in Sources */,
 				7825552625BF5BEF0031EC64 /* AddXChangeViewModel.swift in Sources */,
 				7825553725BF5C9B0031EC64 /* ChatViewModel.swift in Sources */,
+				78F5477B25C9E76700467741 /* Credential.swift in Sources */,
+				7842343A25E2CF0100A3D0DC /* LoginViewControllerDelegate.swift in Sources */,
 				7844954125BF0187005377A5 /* SceneDelegate.swift in Sources */,
 				7825553225BF5C800031EC64 /* ChatViewController.swift in Sources */,
 				78372DC025BF085E001B82D0 /* FavoritesViewController.swift in Sources */,
 				7825553D25BF5D020031EC64 /* ProfileViewController.swift in Sources */,
+				78F5477525C98EB800467741 /* Validation.swift in Sources */,
 				78F2E4C025C162B1000E5F9D /* RootNavigationController.swift in Sources */,
+				7842343525E2CBC100A3D0DC /* SignUpViewControllerDelegate.swift in Sources */,
 				78372DD725BF0AEA001B82D0 /* MainCoordinator.swift in Sources */,
 				7825554525BF5D0F0031EC64 /* ProfileViewModel.swift in Sources */,
 				7825554A25C013760031EC64 /* FavoritesCoordinator.swift in Sources */,

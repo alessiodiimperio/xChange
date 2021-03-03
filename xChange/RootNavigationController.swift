@@ -8,10 +8,12 @@
 import UIKit
 
 class RootNavigationController: UINavigationController {
-
     weak var coordinator : RootCoordinator?
     
     override func viewDidLoad() {
         super.viewDidLoad()
+    }
+    override func viewWillDisappear(_ animated: Bool) {
+    
     }
 }

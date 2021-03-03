@@ -269,6 +269,8 @@ PODS:
     - "gRPC-C++ (~> 1.28.0)"
     - leveldb-library (~> 1.22)
     - nanopb (~> 2.30906.0)
+  - FirebaseFirestoreSwift (7.3.0-beta):
+    - FirebaseFirestore (~> 7.0)
   - FirebaseInstallations (7.3.0):
     - FirebaseCore (~> 7.0)
     - GoogleUtilities/Environment (~> 7.0)
@@ -351,6 +353,7 @@ DEPENDENCIES:
   - Firebase/Auth
   - Firebase/Firestore
   - Firebase/Storage
+  - FirebaseFirestoreSwift (~> 7.0-beta)
   - RxCocoa
   - RxSwift
   - Swinject
@@ -366,6 +369,7 @@ SPEC REPOS:
     - FirebaseCore
     - FirebaseCoreDiagnostics
     - FirebaseFirestore
+    - FirebaseFirestoreSwift
     - FirebaseInstallations
     - FirebaseStorage
     - GoogleAppMeasurement
@@ -392,6 +396,7 @@ SPEC CHECKSUMS:
   FirebaseCore: 4d3c72622ce0e2106aaa07bb4b2935ba2c370972
   FirebaseCoreDiagnostics: d50e11039e5984d92c8a512be2395f13df747350
   FirebaseFirestore: 1906bf163afdb7c432d2e3b5c40ceb9dd2df5820
+  FirebaseFirestoreSwift: 55ff644e91dead0338afccb733e63a1ed4c33c74
   FirebaseInstallations: 971df89b48ae5ee4cc2bf6935f3857a525d28550
   FirebaseStorage: 5002b1895bfe74a5ce92ad54f966e6162d0da2e5
   GoogleAppMeasurement: 8d3c0aeede16ab7764144b5a4ca8e1d4323841b7
@@ -409,6 +414,6 @@ SPEC CHECKSUMS:
   Swinject: cf7458774b1b00323080a9c67e47a1ee7f9d2af1
   SwinjectStoryboard: 32512ef16c2b0ff5b8f823b23539c4a50f6d3383
 
-PODFILE CHECKSUM: dccf4f7894690f3792ec244936870c643fdf034a
+PODFILE CHECKSUM: 013ccbba200d299dee0ed58b86068156af540ab2
 
 COCOAPODS: 1.10.0
