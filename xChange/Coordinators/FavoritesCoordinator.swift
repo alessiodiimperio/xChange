@@ -28,12 +28,15 @@ class FavoritesCoordinator:Coordinator {
     func registerDependencies(){
         let favoritesStoryboard = SwinjectStoryboard.create(name: "Favorites", bundle: Bundle.main, container: container)
         
-        container.register(FavoritesViewModel.self) { _ in return FavoritesViewModel()}
+        container.register(FavoritesViewModel.self) { r in
+            let favouritesProvider = r.resolve(FavoritesProvider.self)!
+            return FavoritesViewModel(favouriteProvider: favouritesProvider)
+        }
+        
         container.register(FavoritesViewController.self) { r in
             let controller = favoritesStoryboard.instantiateViewController(withIdentifier: String(describing: FavoritesViewController.self)) as! FavoritesViewController
             controller.viewModel = r.resolve(FavoritesViewModel.self)
             return controller
         }
-        
     }
 }

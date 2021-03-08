@@ -30,9 +30,11 @@ class ProfileViewController: UIViewController {
 }
 //MARK: Bindings
 extension ProfileViewController{
-    func setupObservables(){
+    private func setupObservables(){
         
-        let output = viewModel.transform(ProfileViewModel.Input(signOutTrigger: signOutNavBtn.rx.tap.asDriver()))
+        let input = ProfileViewModel.Input(deleteItemTrigger: userXChangesTableView.rx.itemDeleted.asDriver(),
+                                           signOutTrigger: signOutNavBtn.rx.tap.asDriver())
+        let output = viewModel.transform(input)
     
         output.onUserXChanges
             .drive(userXChangesTableView.rx
@@ -48,19 +50,20 @@ extension ProfileViewController{
         
         output.onUserXChanges
             .drive(onNext: {[weak self] xchanges in
-                print("should hide tableview")
                 xchanges.count > 0 ? self?.showXchangesTableView() : self?.showEmptyView()
             }).disposed(by: disposeBag)
+        
+        output.onDeleteItem.drive().disposed(by: disposeBag)
         
     }
     
     private func showEmptyView() {
-        userXChangesTableView.isHidden = false
-        emptyLabel.isHidden = true
+        userXChangesTableView.isHidden = true
+        emptyLabel.isHidden = false
     }
     
     private func showXchangesTableView() {
-        userXChangesTableView.isHidden = true
-        emptyLabel.isHidden = false
+        userXChangesTableView.isHidden = false
+        emptyLabel.isHidden = true
     }
 }

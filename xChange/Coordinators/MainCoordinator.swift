@@ -27,7 +27,17 @@ class MainCoordinator:Coordinator {
     func registerDependencies(){
         
         let mainStoryboard = SwinjectStoryboard.create(name: "Main", bundle: Bundle.main, container: container)
-        container.register(MainViewModel.self) { _ in return MainViewModel()}
+        
+        container.register(FeedProvider.self) { r in
+            let auth = r.resolve(AuthenticationProvider.self)!
+            return FirebaseFeedProvider(auth: auth)
+        }
+        
+        container.register(MainViewModel.self) { r in
+            let feedprovider = r.resolve(FeedProvider.self)!
+            return MainViewModel(feedProvider: feedprovider)
+        }
+        
         container.register(MainViewController.self) { r in
             let controller = mainStoryboard.instantiateViewController(withIdentifier: String(describing: MainViewController.self)) as! MainViewController
             controller.viewModel = r.resolve(MainViewModel.self)

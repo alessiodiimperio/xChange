@@ -8,6 +8,7 @@
 import Firebase
 import FirebaseFirestoreSwift
 import RxSwift
+import RxCocoa
 
 enum FirestoreCollection {
     case xChange
@@ -22,52 +23,56 @@ enum FirestoreCollection {
     }
 }
 
-struct FirestoreDataProvider:DataProvider {
-    let auth:AuthenticationProvider
-    let firestore = Firestore.firestore()
+class FirestoreDataProvider: DataProvider {
     
-    func getLatestXChanges() -> Observable<[XChange]> {
-        return Observable.create { (observer) -> Disposable in
-            firestore
-                .collection(FirestoreCollection.xChange.path)
-                .limit(toLast: 50).addSnapshotListener { (snapshot, error) in
-                    if let error = error {
-                        observer.onError(error)
-                        return
-                    }
-                    guard let documents = snapshot?.documents else { return }
-                    let xChanges = documents.compactMap({ (snap) -> XChange? in
-                        return try? snap.data(as: XChange.self)
-                    })
-                    observer.onNext(xChanges)
-                }
-            return Disposables.create()
-        }
+    private let auth:AuthenticationProvider
+    private let firestore = Firestore.firestore()
+    
+    private var userSubscription: ListenerRegistration?
+    
+    let userXChanges = BehaviorRelay<[XChange]?>(value: nil)
+   
+    
+    init(auth: AuthenticationProvider) {
+        self.auth = auth
+        
+        subscribeToUserXchanges()
     }
     
-    func getUserXChanges() -> Observable<[XChange]> {
-        return Observable.create { (observer) -> Disposable in
-            guard let userId = auth.currentUserID() else { return Disposables.create() }
-            firestore
-                .collection(FirestoreCollection.xChange.path)
-                .whereField("author", isEqualTo: userId)
-                .addSnapshotListener { snapshot, error in
-                    
-                    if let error = error {
-                        print(error.localizedDescription)
-                        observer.onError(error)
-                        return
-                    }
-                    
-                    guard let documents = snapshot?.documents else { return }
-                    let xChanges = documents.compactMap({ (snap) -> XChange? in
-                        return try? snap.data(as: XChange.self)
-                    })
-                    print(xChanges)
-                    observer.onNext(xChanges)
+    deinit {
+        unsubscribeFromUserXchanges()
+    }
+    
+    private func subscribeToUserXchanges() {
+        
+        guard let userId = auth.currentUserID() else { return }
+        
+        userSubscription = firestore
+            .collection(FirestoreCollection.xChange.path)
+            .whereField("author", isEqualTo: userId)
+            .addSnapshotListener {[weak self] snapshot, error in
+                
+                if let _ = error {
+                    self?.userXChanges.accept([])
+                    return
                 }
-            return Disposables.create()
-        }
+                
+                guard let documents = snapshot?.documents else { return }
+                let xChanges = documents.compactMap({ (snap) -> XChange? in
+                    return try? snap.data(as: XChange.self)
+                })
+                self?.userXChanges.accept(xChanges)
+            }
+    }
+    
+    private func unsubscribeFromUserXchanges() {
+        userSubscription?.remove()
+    }
+
+    func getUsersXchanges() -> Driver<[XChange]> {
+        userXChanges
+            .asDriver()
+            .compactMap { $0 }
     }
     
     func delete(_ xChange: XChange){

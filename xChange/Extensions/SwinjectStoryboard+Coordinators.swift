@@ -36,10 +36,16 @@ extension SwinjectStoryboard {
         defaultContainer.register(AuthenticationProvider.self){_ in
             return FirebaseAuthProvider()
         }.inObjectScope(.container)
+        
         defaultContainer.register(DataProvider.self){r in
             let auth = r.resolve(AuthenticationProvider.self)
             return FirestoreDataProvider(auth: auth!)
         }.inObjectScope(.container)
+        
+        defaultContainer.register(FavoritesProvider.self) {r in
+            let auth = r.resolve(AuthenticationProvider.self)!
+            return FirebaseFavouriteProvider(auth: auth)
+        }
         
         //MARK: Root.storyboard Dependencies
         //ViewModels

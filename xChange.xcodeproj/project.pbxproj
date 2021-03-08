@@ -42,6 +42,9 @@
 		7844954B25BF0189005377A5 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7844954925BF0189005377A5 /* LaunchScreen.storyboard */; };
 		7844955625BF018A005377A5 /* xChangeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7844955525BF018A005377A5 /* xChangeTests.swift */; };
 		7844956125BF018A005377A5 /* xChangeUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7844956025BF018A005377A5 /* xChangeUITests.swift */; };
+		7883B44A25F55E7C000D3441 /* FirebaseFavouriteProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7883B44925F55E7C000D3441 /* FirebaseFavouriteProvider.swift */; };
+		7883B44F25F564DF000D3441 /* FeedProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7883B44E25F564DF000D3441 /* FeedProvider.swift */; };
+		7883B45425F56546000D3441 /* FirebaseFeedProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7883B45325F56546000D3441 /* FirebaseFeedProvider.swift */; };
 		78A23B0125CC0AC600EB0F12 /* ChatProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78A23B0025CC0AC600EB0F12 /* ChatProvider.swift */; };
 		78A23B0625CC0B4100EB0F12 /* FavoritesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78A23B0525CC0B4100EB0F12 /* FavoritesProvider.swift */; };
 		78F2E4AD25C15F13000E5F9D /* Storyboarded.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78F2E4AC25C15F13000E5F9D /* Storyboarded.swift */; };
@@ -126,6 +129,9 @@
 		7844955C25BF018A005377A5 /* xChangeUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = xChangeUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		7844956025BF018A005377A5 /* xChangeUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = xChangeUITests.swift; sourceTree = "<group>"; };
 		7844956225BF018A005377A5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		7883B44925F55E7C000D3441 /* FirebaseFavouriteProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseFavouriteProvider.swift; sourceTree = "<group>"; };
+		7883B44E25F564DF000D3441 /* FeedProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedProvider.swift; sourceTree = "<group>"; };
+		7883B45325F56546000D3441 /* FirebaseFeedProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseFeedProvider.swift; sourceTree = "<group>"; };
 		78A23B0025CC0AC600EB0F12 /* ChatProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatProvider.swift; sourceTree = "<group>"; };
 		78A23B0525CC0B4100EB0F12 /* FavoritesProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesProvider.swift; sourceTree = "<group>"; };
 		78F2E4AC25C15F13000E5F9D /* Storyboarded.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Storyboarded.swift; sourceTree = "<group>"; };
@@ -236,6 +242,8 @@
 			children = (
 				7832047C25C1B3530052CA86 /* FirebaseAuthProvider.swift */,
 				78F5474325C1F11D00467741 /* FirestoreDataProvider.swift */,
+				7883B44925F55E7C000D3441 /* FirebaseFavouriteProvider.swift */,
+				7883B45325F56546000D3441 /* FirebaseFeedProvider.swift */,
 			);
 			path = Firebase;
 			sourceTree = "<group>";
@@ -254,9 +262,10 @@
 			isa = PBXGroup;
 			children = (
 				7832047425C1B2A10052CA86 /* AuthenticationProvider.swift */,
+				78A23B0025CC0AC600EB0F12 /* ChatProvider.swift */,
 				78F5473B25C1F02700467741 /* DataProvider.swift */,
 				78A23B0525CC0B4100EB0F12 /* FavoritesProvider.swift */,
-				78A23B0025CC0AC600EB0F12 /* ChatProvider.swift */,
+				7883B44E25F564DF000D3441 /* FeedProvider.swift */,
 			);
 			path = Protocols;
 			sourceTree = "<group>";
@@ -804,10 +813,13 @@
 				7825553225BF5C800031EC64 /* ChatViewController.swift in Sources */,
 				78372DC025BF085E001B82D0 /* FavoritesViewController.swift in Sources */,
 				7825553D25BF5D020031EC64 /* ProfileViewController.swift in Sources */,
+				7883B44A25F55E7C000D3441 /* FirebaseFavouriteProvider.swift in Sources */,
 				78F5477525C98EB800467741 /* Validation.swift in Sources */,
 				78F2E4C025C162B1000E5F9D /* RootNavigationController.swift in Sources */,
+				7883B44F25F564DF000D3441 /* FeedProvider.swift in Sources */,
 				7842343525E2CBC100A3D0DC /* SignUpViewControllerDelegate.swift in Sources */,
 				78372DD725BF0AEA001B82D0 /* MainCoordinator.swift in Sources */,
+				7883B45425F56546000D3441 /* FirebaseFeedProvider.swift in Sources */,
 				7825554525BF5D0F0031EC64 /* ProfileViewModel.swift in Sources */,
 				7825554A25C013760031EC64 /* FavoritesCoordinator.swift in Sources */,
 				78372DB225BF07C8001B82D0 /* MainViewController.swift in Sources */,

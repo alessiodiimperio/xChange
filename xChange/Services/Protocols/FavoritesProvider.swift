@@ -6,8 +6,10 @@
 //
 
 import Foundation
+import RxCocoa
+
 protocol FavoritesProvider {
-    func getFavorites()
-    func addFavorite()
-    func removeFavorite()
+    func getFavoriteXchanges() -> Driver<[XChange]>
+    func favor(_ xchange: XChange)
+    func unfavor(_ xchange: XChange)
 }
