@@ -12,14 +12,14 @@ import Swinject
 import SwinjectStoryboard
 
 class RootCoordinator: Coordinator {
-    let disposeBag = DisposeBag()
-    let container = SwinjectStoryboard.defaultContainer
+    let container: Container
     var navigationController:UINavigationController
     var childrenCoordinators:[Coordinator] = [Coordinator]()
     let authenticator:AuthenticationProvider?
     
-    init(navigationController:UINavigationController){
+    init(navigationController:UINavigationController, container: Container){
         self.navigationController = navigationController
+        self.container = container
         self.authenticator = container.resolve(AuthenticationProvider.self)
     }
     
@@ -35,13 +35,15 @@ class RootCoordinator: Coordinator {
         loginViewController.delegate = self
         navigationController.setViewControllers([loginViewController], animated: false)
     }
+    
     func goToSignUp(){
         let signUpViewController = SignUpViewController.instatiate(from: .rootStoryboard)
         signUpViewController.delegate = self
         navigationController.present(signUpViewController, animated: true)
     }
+    
     func goToTabBarController(){
-        let tabBarController = TabBarController.instatiate(from: .rootStoryboard)
+        let tabBarController = container.resolve(TabBarController.self)!
         tabBarController.profileCoordinator.parentCoordinator = self
         navigationController.setViewControllers([tabBarController], animated: true)
     }

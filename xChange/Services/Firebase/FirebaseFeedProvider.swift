@@ -30,7 +30,6 @@ class FirebaseFeedProvider: FeedProvider {
     private func subscribeToLatestXchanges() {
         latestSubscription = firestore
             .collection(FirestoreCollection.xChange.path)
-            .limit(toLast: 50)
             .addSnapshotListener {[weak self] snapshot, error in
                 if let error = error {
                     self?.feed.accept([])

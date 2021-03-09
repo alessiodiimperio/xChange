@@ -11,6 +11,7 @@ import RxCocoa
 
 class MainViewModel: ViewModelType {
     private var feedProvider: FeedProvider
+    private var favoriteProvider: FavoritesProvider
     
     struct Input {
         let searchTrigger: Driver<String>
@@ -19,11 +20,12 @@ class MainViewModel: ViewModelType {
     
     struct Output {
         let onFeed: Driver<[XChange]>
-        let onItemSelect: Driver<XChange>
+        let onItemSelect: Driver<Void>
     }
     
-    init(feedProvider:FeedProvider){
+    init(feedProvider:FeedProvider, favoriteProvider: FavoritesProvider){
         self.feedProvider = feedProvider
+        self.favoriteProvider = favoriteProvider
     }
     
     func transform(_ input: Input) -> Output {
@@ -35,11 +37,10 @@ class MainViewModel: ViewModelType {
         feedProvider.getFeed()
     }
     
-    private func itemSelectedAsDriver(_ input: Input) -> Driver<XChange> {
-        input.selectItemTrigger.withLatestFrom(feedProvider.getFeed()) { indexPath, xChanges in
+    private func itemSelectedAsDriver(_ input: Input) -> Driver<Void> {
+        input.selectItemTrigger.withLatestFrom(feedProvider.getFeed()) {[weak self] indexPath, xChanges in
             let xChange = xChanges[indexPath.row]
-            print(xChange.title)
-            return XChange(id: "test", timestamp: Date(), title: "title", description: "description", author: "author", followers: [])
+            self?.favoriteProvider.favor(xChange)
         }
     }
 }

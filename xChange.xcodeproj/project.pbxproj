@@ -45,6 +45,15 @@
 		7883B44A25F55E7C000D3441 /* FirebaseFavouriteProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7883B44925F55E7C000D3441 /* FirebaseFavouriteProvider.swift */; };
 		7883B44F25F564DF000D3441 /* FeedProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7883B44E25F564DF000D3441 /* FeedProvider.swift */; };
 		7883B45425F56546000D3441 /* FirebaseFeedProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7883B45325F56546000D3441 /* FirebaseFeedProvider.swift */; };
+		7883B46825F6B14A000D3441 /* AppAssembler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7883B46725F6B149000D3441 /* AppAssembler.swift */; };
+		7883B46D25F6B222000D3441 /* RootAssembly.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7883B46C25F6B222000D3441 /* RootAssembly.swift */; };
+		7883B47225F6B43C000D3441 /* ServiceAssembly.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7883B47125F6B43C000D3441 /* ServiceAssembly.swift */; };
+		7883B47725F757A5000D3441 /* MainAssembly.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7883B47625F757A5000D3441 /* MainAssembly.swift */; };
+		7883B47C25F757F9000D3441 /* CoordinatorAssembly.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7883B47B25F757F9000D3441 /* CoordinatorAssembly.swift */; };
+		7883B48125F75862000D3441 /* FavouritesAssembly.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7883B48025F75862000D3441 /* FavouritesAssembly.swift */; };
+		7883B48625F758A0000D3441 /* AddXChangeAssembly.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7883B48525F758A0000D3441 /* AddXChangeAssembly.swift */; };
+		7883B48B25F758E3000D3441 /* ChatAssembly.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7883B48A25F758E3000D3441 /* ChatAssembly.swift */; };
+		7883B49025F75910000D3441 /* ProfileAssembly.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7883B48F25F75910000D3441 /* ProfileAssembly.swift */; };
 		78A23B0125CC0AC600EB0F12 /* ChatProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78A23B0025CC0AC600EB0F12 /* ChatProvider.swift */; };
 		78A23B0625CC0B4100EB0F12 /* FavoritesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78A23B0525CC0B4100EB0F12 /* FavoritesProvider.swift */; };
 		78F2E4AD25C15F13000E5F9D /* Storyboarded.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78F2E4AC25C15F13000E5F9D /* Storyboarded.swift */; };
@@ -132,6 +141,15 @@
 		7883B44925F55E7C000D3441 /* FirebaseFavouriteProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseFavouriteProvider.swift; sourceTree = "<group>"; };
 		7883B44E25F564DF000D3441 /* FeedProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedProvider.swift; sourceTree = "<group>"; };
 		7883B45325F56546000D3441 /* FirebaseFeedProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseFeedProvider.swift; sourceTree = "<group>"; };
+		7883B46725F6B149000D3441 /* AppAssembler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppAssembler.swift; sourceTree = "<group>"; };
+		7883B46C25F6B222000D3441 /* RootAssembly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootAssembly.swift; sourceTree = "<group>"; };
+		7883B47125F6B43C000D3441 /* ServiceAssembly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceAssembly.swift; sourceTree = "<group>"; };
+		7883B47625F757A5000D3441 /* MainAssembly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainAssembly.swift; sourceTree = "<group>"; };
+		7883B47B25F757F9000D3441 /* CoordinatorAssembly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoordinatorAssembly.swift; sourceTree = "<group>"; };
+		7883B48025F75862000D3441 /* FavouritesAssembly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavouritesAssembly.swift; sourceTree = "<group>"; };
+		7883B48525F758A0000D3441 /* AddXChangeAssembly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddXChangeAssembly.swift; sourceTree = "<group>"; };
+		7883B48A25F758E3000D3441 /* ChatAssembly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatAssembly.swift; sourceTree = "<group>"; };
+		7883B48F25F75910000D3441 /* ProfileAssembly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileAssembly.swift; sourceTree = "<group>"; };
 		78A23B0025CC0AC600EB0F12 /* ChatProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatProvider.swift; sourceTree = "<group>"; };
 		78A23B0525CC0B4100EB0F12 /* FavoritesProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesProvider.swift; sourceTree = "<group>"; };
 		78F2E4AC25C15F13000E5F9D /* Storyboarded.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Storyboarded.swift; sourceTree = "<group>"; };
@@ -404,6 +422,15 @@
 		78DF0DEB25E1A457001859F3 /* Assemblies */ = {
 			isa = PBXGroup;
 			children = (
+				7883B46725F6B149000D3441 /* AppAssembler.swift */,
+				7883B48A25F758E3000D3441 /* ChatAssembly.swift */,
+				7883B48F25F75910000D3441 /* ProfileAssembly.swift */,
+				7883B48025F75862000D3441 /* FavouritesAssembly.swift */,
+				7883B48525F758A0000D3441 /* AddXChangeAssembly.swift */,
+				7883B47B25F757F9000D3441 /* CoordinatorAssembly.swift */,
+				7883B47625F757A5000D3441 /* MainAssembly.swift */,
+				7883B46C25F6B222000D3441 /* RootAssembly.swift */,
+				7883B47125F6B43C000D3441 /* ServiceAssembly.swift */,
 			);
 			path = Assemblies;
 			sourceTree = "<group>";
@@ -782,17 +809,22 @@
 			files = (
 				78FEA08325CC96BE00A7D02C /* XChange.swift in Sources */,
 				7825550325BF5A430031EC64 /* SwinjectStoryboard+Coordinators.swift in Sources */,
+				7883B47C25F757F9000D3441 /* CoordinatorAssembly.swift in Sources */,
 				78F5474425C1F11D00467741 /* FirestoreDataProvider.swift in Sources */,
 				7825555825C01BE60031EC64 /* AddXChangeCoordinator.swift in Sources */,
 				7825551E25BF5BA50031EC64 /* AddXChangeController.swift in Sources */,
+				7883B48625F758A0000D3441 /* AddXChangeAssembly.swift in Sources */,
 				78A23B0125CC0AC600EB0F12 /* ChatProvider.swift in Sources */,
 				78F2E4B825C160D4000E5F9D /* LoginViewController.swift in Sources */,
 				78F2E4C625C1646E000E5F9D /* SignUpViewController.swift in Sources */,
 				78A23B0625CC0B4100EB0F12 /* FavoritesProvider.swift in Sources */,
+				7883B47725F757A5000D3441 /* MainAssembly.swift in Sources */,
 				78372DD225BF0A77001B82D0 /* Coordinator.swift in Sources */,
 				78F5473C25C1F02700467741 /* DataProvider.swift in Sources */,
+				7883B48125F75862000D3441 /* FavouritesAssembly.swift in Sources */,
 				78372DBA25BF07F8001B82D0 /* MainViewModel.swift in Sources */,
 				7832047D25C1B3530052CA86 /* FirebaseAuthProvider.swift in Sources */,
+				7883B49025F75910000D3441 /* ProfileAssembly.swift in Sources */,
 				78372DA125BF0254001B82D0 /* TabBarController.swift in Sources */,
 				78F5477025C9566E00467741 /* ViewModelType.swift in Sources */,
 				7832047525C1B2A20052CA86 /* AuthenticationProvider.swift in Sources */,
@@ -803,6 +835,7 @@
 				78F7E53325EEBF3300E4030C /* User.swift in Sources */,
 				7825555D25C01C810031EC64 /* ChatCoordinator.swift in Sources */,
 				78F5474D25C2D9DE00467741 /* UIViewController+HideKeyboard.swift in Sources */,
+				7883B46D25F6B222000D3441 /* RootAssembly.swift in Sources */,
 				78F5476725C2E59900467741 /* SignUpViewModel.swift in Sources */,
 				7842342925E2C8D300A3D0DC /* ProfileCoordinatorDelegate.swift in Sources */,
 				7825552625BF5BEF0031EC64 /* AddXChangeViewModel.swift in Sources */,
@@ -812,10 +845,12 @@
 				7844954125BF0187005377A5 /* SceneDelegate.swift in Sources */,
 				7825553225BF5C800031EC64 /* ChatViewController.swift in Sources */,
 				78372DC025BF085E001B82D0 /* FavoritesViewController.swift in Sources */,
+				7883B47225F6B43C000D3441 /* ServiceAssembly.swift in Sources */,
 				7825553D25BF5D020031EC64 /* ProfileViewController.swift in Sources */,
 				7883B44A25F55E7C000D3441 /* FirebaseFavouriteProvider.swift in Sources */,
 				78F5477525C98EB800467741 /* Validation.swift in Sources */,
 				78F2E4C025C162B1000E5F9D /* RootNavigationController.swift in Sources */,
+				7883B46825F6B14A000D3441 /* AppAssembler.swift in Sources */,
 				7883B44F25F564DF000D3441 /* FeedProvider.swift in Sources */,
 				7842343525E2CBC100A3D0DC /* SignUpViewControllerDelegate.swift in Sources */,
 				78372DD725BF0AEA001B82D0 /* MainCoordinator.swift in Sources */,
@@ -825,6 +860,7 @@
 				78372DB225BF07C8001B82D0 /* MainViewController.swift in Sources */,
 				78F2E4B225C16029000E5F9D /* RootCoordinator.swift in Sources */,
 				78F2E4AD25C15F13000E5F9D /* Storyboarded.swift in Sources */,
+				7883B48B25F758E3000D3441 /* ChatAssembly.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
