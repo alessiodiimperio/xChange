@@ -53,7 +53,10 @@ class AddXChangeViewModel {
                   let userID = self?.authenticationService.currentUserID() else {
                 return nil
             }
-            return XChange(title: title, description: description, author: userID)
+            return XChange(title: title,
+                           description: description,
+                           author: userID,
+                           followers: [])
         }
     }
 

@@ -14,11 +14,13 @@ class ProfileViewModel: ViewModelType {
     private var dataProvider: DataProvider
     
     struct Input {
+        let deleteItemTrigger: Driver<IndexPath>
         let signOutTrigger:Driver<Void>
     }
     struct Output {
         let onsignOutTapped:Driver<Void>
         let onUserXChanges:Driver<[XChange]>
+        let onDeleteItem: Driver<Void>
     }
     
     init(dataProvider:DataProvider){
@@ -26,8 +28,10 @@ class ProfileViewModel: ViewModelType {
     }
     
     func transform(_ input: Input) -> Output {
+        
         Output(onsignOutTapped: input.signOutTrigger.asDriver(),
-               onUserXChanges: getUserXChangesAsDriver()
+               onUserXChanges: getUserXChangesAsDriver(),
+               onDeleteItem: onDeleteXchangeAsDriver(input)
         )
     }
 
@@ -36,6 +40,13 @@ class ProfileViewModel: ViewModelType {
     }
     
     private func getUserXChangesAsDriver() -> Driver<[XChange]>{
-        dataProvider.getLatestXChanges().asDriver(onErrorJustReturn: [XChange(id: "lkj", timestamp: nil, title: "test", description: "error", author: "noone")])
+        dataProvider.getUsersXchanges()
+    }
+    
+    private func onDeleteXchangeAsDriver(_ input: Input) -> Driver<Void> {
+        input.deleteItemTrigger.withLatestFrom(dataProvider.getUsersXchanges()) {[weak self] indexPath, xChanges in
+            let xChange = xChanges[indexPath.row]
+            self?.dataProvider.delete(xChange)
+        }
     }
 }
