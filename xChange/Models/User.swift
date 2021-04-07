@@ -11,4 +11,5 @@ import FirebaseFirestoreSwift
 struct User: Identifiable, Codable {
     @DocumentID var id: String?
     var username: String
+    var email: String
 }

@@ -15,5 +15,6 @@ struct XChange: Identifiable, Codable {
     var description: String
     let author:String
     var followers: [String]
-//    var available:Bool
+    var price: String?
+    var image: String?
 }

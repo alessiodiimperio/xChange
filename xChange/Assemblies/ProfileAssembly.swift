@@ -24,7 +24,8 @@ final class ProfileAssembly: Assembly {
     private func assembleViewModels(_ container: Container){
         container.register(ProfileViewModel.self){r in
             let dataProvider = r.resolve(DataProvider.self)!
-            return ProfileViewModel(dataProvider: dataProvider)
+            let auth = r.resolve(AuthenticationProvider.self)!
+            return ProfileViewModel(dataProvider: dataProvider, auth: auth)
         }
     }
     

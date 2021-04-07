@@ -20,7 +20,7 @@ class MainViewModel: ViewModelType {
     
     struct Output {
         let onFeed: Driver<[XChange]>
-        let onItemSelect: Driver<Void>
+        let onItemSelect: Driver<XChange>
     }
     
     init(feedProvider:FeedProvider, favoriteProvider: FavoritesProvider){
@@ -37,10 +37,9 @@ class MainViewModel: ViewModelType {
         feedProvider.getFeed()
     }
     
-    private func itemSelectedAsDriver(_ input: Input) -> Driver<Void> {
-        input.selectItemTrigger.withLatestFrom(feedProvider.getFeed()) {[weak self] indexPath, xChanges in
-            let xChange = xChanges[indexPath.row]
-            self?.favoriteProvider.favor(xChange)
+    private func itemSelectedAsDriver(_ input: Input) -> Driver<XChange> {
+        input.selectItemTrigger.withLatestFrom(feedProvider.getFeed()) { indexPath, xChanges in
+            xChanges[indexPath.row]
         }
     }
 }

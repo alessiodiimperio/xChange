@@ -17,6 +17,8 @@ class ProfileViewController: UIViewController {
     @IBOutlet weak var signOutNavBtn: UIBarButtonItem!
     @IBOutlet weak var emptyLabel: UILabel!
     @IBOutlet weak var userXChangesTableView: UITableView!
+    @IBOutlet weak var userNameLabel: UILabel!
+    @IBOutlet weak var emailLabel: UILabel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -38,8 +40,11 @@ extension ProfileViewController{
     
         output.onUserXChanges
             .drive(userXChangesTableView.rx
-                .items(cellIdentifier: "XChangeCell")){ index, xChange, cell in
-                cell.textLabel?.text = xChange.title
+                    .items(cellIdentifier: XChangeProfileTableViewCell.reuseIdentifier)){ index, xChange, cell in
+                
+                guard let cell = cell as? XChangeProfileTableViewCell else { return }
+                cell.setup(with: xChange)
+                
         }.disposed(by: disposeBag)
         
         output.onsignOutTapped
@@ -54,6 +59,26 @@ extension ProfileViewController{
             }).disposed(by: disposeBag)
         
         output.onDeleteItem.drive().disposed(by: disposeBag)
+        
+        output.onUser
+            .map { $0 == nil }
+            .drive(emailLabel.rx.isHidden)
+            .disposed(by: disposeBag)
+        
+        output.onUser
+            .map { $0 == nil }
+            .drive(userNameLabel.rx.isHidden)
+            .disposed(by: disposeBag)
+        
+        output.onUser
+            .drive(onNext: {[weak self] user in
+                guard let user = user else {
+                    return
+                }
+                self?.emailLabel.text = user.email
+                self?.userNameLabel.text = user.username
+            })
+            .disposed(by: disposeBag)
         
     }
     

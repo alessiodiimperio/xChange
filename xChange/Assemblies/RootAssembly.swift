@@ -21,26 +21,27 @@ final class RootAssembly: Assembly {
     }
     
     private func assembleViewModels(_ container: Container){
-        container.register(LoginViewModel.self){r in
-            return LoginViewModel()
+        container.register(LoginViewModel.self){_ in
+            LoginViewModel()
         }
-        container.register(SignUpViewModel.self){r in
-            return SignUpViewModel()
+        
+        container.register(SignUpViewModel.self){_ in
+            SignUpViewModel()
         }
     }
     
     private func assembleViewControllers(_ container: Container){
-        let rootStoryboard = SwinjectStoryboard.create(name: "Root", bundle: Bundle.main, container: container)
+        let rootStoryboard = SwinjectStoryboard.create(name: StoryboardType.rootStoryboard.rawValue, bundle: Bundle.main, container: container)
 
         container.register(LoginViewController.self) { r in
             let controller = rootStoryboard.instantiateViewController(withIdentifier: String(describing: LoginViewController.self)) as! LoginViewController
-            controller.viewModel = r.resolve(LoginViewModel.self)
+            controller.viewModel = r.resolve(LoginViewModel.self)!
             return controller
         }
         
         container.register(SignUpViewController.self) { r in
-            let controller = rootStoryboard.instantiateViewController(identifier: String(describing: SignUpViewController.self)) as! SignUpViewController
-            controller.viewModel = r.resolve(SignUpViewModel.self)
+            let controller = rootStoryboard.instantiateViewController(withIdentifier: String(describing: SignUpViewController.self)) as! SignUpViewController
+            controller.viewModel = r.resolve(SignUpViewModel.self)!
             return controller
         }
         

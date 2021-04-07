@@ -26,18 +26,17 @@ class RootCoordinator: Coordinator {
     func start() {
         navigationController.navigationBar.isHidden = true
         guard let auth = authenticator else { fatalError() }
-        
         auth.isSignedIn() ? goToTabBarController() : goToLoginScreen()
     }
     
     func goToLoginScreen(){
-        let loginViewController = LoginViewController.instatiate(from: .rootStoryboard)
+        let loginViewController = container.resolve(LoginViewController.self)!
         loginViewController.delegate = self
         navigationController.setViewControllers([loginViewController], animated: false)
     }
     
     func goToSignUp(){
-        let signUpViewController = SignUpViewController.instatiate(from: .rootStoryboard)
+        let signUpViewController = container.resolve(SignUpViewController.self)!
         signUpViewController.delegate = self
         navigationController.present(signUpViewController, animated: true)
     }
@@ -76,9 +75,7 @@ extension RootCoordinator: LoginViewControllerDelegate {
     }
     
     func didSelectSignUp() {
-        let signUpViewController = SignUpViewController.instatiate(from: .rootStoryboard)
-        signUpViewController.delegate = self
-        navigationController.present(signUpViewController, animated: true)
+        goToSignUp()
     }
 }
 

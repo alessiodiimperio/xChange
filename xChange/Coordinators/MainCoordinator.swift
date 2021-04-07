@@ -20,8 +20,20 @@ class MainCoordinator:Coordinator {
     
     func start() {
         let vc = container.resolve(MainViewController.self)!
+        vc.delegate = self
         vc.tabBarItem.image = UIImage(systemName: "house.fill")
         vc.tabBarItem.title = "Home"
         navigationController.pushViewController(vc, animated: false)
+    }
+    
+    func goToMainDetailView(for xChange: XChange) {
+        let vc = container.resolve(MainDetailViewController.self, argument: xChange)!
+        navigationController.pushViewController(vc, animated: true)
+    }
+}
+
+extension MainCoordinator: MainViewControllerDelegate {
+    func handleDidSelectTableViewItem(xChange: XChange) {
+        self.goToMainDetailView(for: xChange)
     }
 }

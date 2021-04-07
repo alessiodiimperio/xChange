@@ -12,13 +12,15 @@ import RxCocoa
 class FirebaseFavouriteProvider: FavoritesProvider {
     
     private let auth:AuthenticationProvider
-    private let firestore = Firestore.firestore()
+    private let firestore: Firestore
     
     private var favoriteSubscription: ListenerRegistration?
     let favoriteXChanges = BehaviorRelay<[XChange]?>(value: nil)
     
-    init(auth: AuthenticationProvider) {
+    init(auth: AuthenticationProvider, firestore: Firestore) {
         self.auth = auth
+        self.firestore = firestore
+        
         subscribeToFavoriteXchanges()
     }
     
@@ -83,8 +85,8 @@ class FirebaseFavouriteProvider: FavoritesProvider {
     }
     
     func getFavoriteXchanges() -> Driver<[XChange]> {
-       favoriteXChanges
-        .asDriver()
-        .compactMap { $0 }
+        favoriteXChanges
+            .asDriver()
+            .compactMap { $0 }
     }
 }

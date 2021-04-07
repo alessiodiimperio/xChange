@@ -13,11 +13,17 @@ class AddXChangeViewModel {
     var authenticationService: AuthenticationProvider
     var xChangeService: DataProvider
     
+    private let image = BehaviorRelay<UIImage>(value: UIImageView().placeHolderPhoto())
+    private let placeholderUpdated = BehaviorRelay<Bool>(value: false)
+    
     struct Input {
         let titleTextfieldTrigger: Driver<String?>
         let descriptionTextViewTrigger: Driver<String?>
         let createButtonTrigger: Driver<Void>
+        let imageViewTappedTrigger: Driver<Void>
+        let priceTextFieldTrigger: Driver<String?>
     }
+    
     struct Output {
         let onImageViewImage: Driver<UIImage>
         let onTitleTextFieldText: Driver<String?>
@@ -25,6 +31,8 @@ class AddXChangeViewModel {
         let onDescriptionPlaceholder: Driver<Bool>
         let onCreateButtonTapped: Driver<Void>
         let onCreateButtonEnabled: Driver<Bool>
+        let onImageViewTapped: Driver<Void>
+        let onPlaceHolderUpdated: Driver<Bool>
     }
     
     init(xChangeService: DataProvider, authenticationService: AuthenticationProvider){
@@ -33,33 +41,23 @@ class AddXChangeViewModel {
     }
     
     func transform(_ input: Input) -> Output{
-                Output(onImageViewImage: imageViewImageAsDriver(),
+        Output(onImageViewImage: image.asDriver(),
                       onTitleTextFieldText: input.titleTextfieldTrigger.asDriver(),
                       onDescriptionTextViewText: input.descriptionTextViewTrigger.asDriver(),
                       onDescriptionPlaceholder: placeholderHiddenAsDriver(descriptionTextViewTextTrigger: input.descriptionTextViewTrigger),
                       onCreateButtonTapped: createButtonTappedAsDriver(input),
-                      onCreateButtonEnabled: createButtonEnabledAsDriver(input)
+                      onCreateButtonEnabled: createButtonEnabledAsDriver(input),
+                      onImageViewTapped: input.imageViewTappedTrigger.asDriver(),
+                      onPlaceHolderUpdated: placeholderUpdated.asDriver()
         )
     }
     
-    private func imageViewImageAsDriver() -> Driver<UIImage> {
-        Driver.just(UIImage(named: "banner") ?? UIImage())
+    func setImageViewImage(to image: UIImage?) {
+        guard let image = image else { return }
+        self.image.accept(image)
+        placeholderUpdated.accept(true)
     }
     
-    private func xChangeStreamAsDriver(titleTextfieldTrigger: Driver<String?>, descriptionTextViewTrigger: Driver<String?>) -> Driver<XChange?>{
-        Driver.combineLatest(titleTextfieldTrigger, descriptionTextViewTrigger).map {[weak self] (title, description) -> XChange? in
-            guard let title = title,
-                  let description = description,
-                  let userID = self?.authenticationService.currentUserID() else {
-                return nil
-            }
-            return XChange(title: title,
-                           description: description,
-                           author: userID,
-                           followers: [])
-        }
-    }
-
     private func placeholderHiddenAsDriver(descriptionTextViewTextTrigger: Driver<String?>) -> Driver<Bool> {
         descriptionTextViewTextTrigger.map { text -> Bool in
             guard let text = text else { return false }
@@ -68,27 +66,56 @@ class AddXChangeViewModel {
     }
     
     private func createButtonEnabledAsDriver(_ input: Input) -> Driver<Bool> {
-        Driver.combineLatest(input.titleTextfieldTrigger.asDriver(), input.descriptionTextViewTrigger.asDriver()).map { title, description -> Bool in
-            guard let title = title,
-                  let description = description else { return false }
-            return !title.isEmpty && !description.isEmpty
-        }
+        Driver.combineLatest(input.titleTextfieldTrigger.asDriver(),
+                             input.descriptionTextViewTrigger.asDriver(),
+                             input.priceTextFieldTrigger.asDriver()).map { title, description, price -> Bool in
+                                guard let title = title,
+                                      let description = description,
+                                      let price = price else { return false }
+                                return !title.isEmpty && !description.isEmpty && !price.isEmpty
+                             }
+    }
+    
+    private func createXChangeDriver(from input: Input) -> Driver<XChange?> {
+        Driver.combineLatest(input.titleTextfieldTrigger,
+                             input.descriptionTextViewTrigger,
+                             input.priceTextFieldTrigger).map {[weak self] (title,
+                                                                           description,
+                                                                           price) -> XChange? in
+                                guard let title = title,
+                                      let description = description,
+                                      let price = price,
+                                      let userID = self?.authenticationService.currentUserID() else { return nil }
+                                
+                                
+                                return XChange(title: title,
+                                               description: description,
+                                               author: userID,
+                                               followers: [],
+                                               price: price,
+                                               image: nil)
+                                
+                             }
     }
     
     private func createButtonTappedAsDriver(_ input: Input) -> Driver<Void> {
-        let xChangeStream = xChangeStreamAsDriver(titleTextfieldTrigger: input.titleTextfieldTrigger,
-                                                  descriptionTextViewTrigger: input.descriptionTextViewTrigger
-        )
-       
-        return input.createButtonTrigger.withLatestFrom(xChangeStream).map {[weak self] xChange -> Void in
-            guard let xChange = xChange else { return ()}
-            self?.createXchange(with: xChange)
-            return ()
-        }
-    }
-    
-    private func createXchange(with xChange: XChange?){
-        guard let xChange = xChange else { return }
-        xChangeService.add(xChange)
+        input.createButtonTrigger.withLatestFrom(createXChangeDriver(from: input))
+            .compactMap { $0 }
+            .map { [weak self] xChange -> Void in
+                
+                guard let image = self?.image.value,
+                      image != UIImageView().placeHolderPhoto() else {
+                    self?.xChangeService.add(xChange)
+                    return
+                }
+                self?.xChangeService.uploadImage(image) { imageLink in
+                    self?.xChangeService.add(XChange(title: xChange.title,
+                                                     description: xChange.description,
+                                                     author: xChange.author,
+                                                     followers: xChange.followers,
+                                                     price: xChange.price,
+                                                     image: imageLink))
+                }
+            }
     }
 }

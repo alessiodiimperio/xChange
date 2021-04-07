@@ -13,12 +13,16 @@ import RxCocoa
 enum FirestoreCollection {
     case xChange
     case users
+    case chat
+    
     var path: String {
         switch self {
         case .users:
             return "users"
         case .xChange:
             return "xchanges"
+        case .chat:
+            return "chats"
         }
     }
 }
@@ -26,15 +30,17 @@ enum FirestoreCollection {
 class FirestoreDataProvider: DataProvider {
     
     private let auth:AuthenticationProvider
-    private let firestore = Firestore.firestore()
+    private let firestore: Firestore
     
     private var userSubscription: ListenerRegistration?
+    private var xChangeDetailSubscription: ListenerRegistration?
     
     let userXChanges = BehaviorRelay<[XChange]?>(value: nil)
-   
+    let xChangeDetail = BehaviorRelay<XChange?>(value: nil)
     
-    init(auth: AuthenticationProvider) {
+    init(auth: AuthenticationProvider, firestore: Firestore) {
         self.auth = auth
+        self.firestore = firestore
         
         subscribeToUserXchanges()
     }
@@ -68,7 +74,7 @@ class FirestoreDataProvider: DataProvider {
     private func unsubscribeFromUserXchanges() {
         userSubscription?.remove()
     }
-
+    
     func getUsersXchanges() -> Driver<[XChange]> {
         userXChanges
             .asDriver()
@@ -91,5 +97,39 @@ class FirestoreDataProvider: DataProvider {
         } catch {
             print(error.localizedDescription)
         }
+    }
+    
+    func uploadImage(_ image: UIImage, _ completion: @escaping (String?) -> Void) {
+        
+        
+        let storage = Firebase.Storage.storage().reference(withPath: "images")
+        let imageRef = storage.child("\(UUID().uuidString).jpg")
+        
+        if let uploadData = image.jpegData(compressionQuality: 0.8) {
+            imageRef.putData(uploadData, metadata: nil, completion: { (metadata, error) in
+                if let error = error {
+                    print(error.localizedDescription)
+                    completion(nil)
+                    return
+                }
+                imageRef.downloadURL(completion: { (url, error) in
+                    if let error = error {
+                        print(error.localizedDescription)
+                        completion(nil)
+                    }
+                    completion(url?.absoluteString)
+                })
+            })
+        }
+    }
+    
+    func subscribeToChanges(in xChange: XChange) -> Driver<Void> {
+        guard let id = xChange.id else { return Driver.empty() }
+        
+        return Driver.just(())
+    }
+    
+    func unsubscribeToChanges(in xChange: XChange) {
+        
     }
 }

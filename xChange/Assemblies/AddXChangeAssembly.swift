@@ -32,9 +32,12 @@ final class AddXChangeAssembly: Assembly {
     private func assembleViewControllers(_ container: Container){
         let addXChangeStoryboard = SwinjectStoryboard.create(name: "AddXChange", bundle: Bundle.main, container: container)
         
-        container.register(AddXChangeController.self) { r in
+        container.register(AddXChangeController.self) { (r, delegate: AddXChangeViewControllerDelegate?) in
+            
             let controller = addXChangeStoryboard.instantiateViewController(withIdentifier: String(describing: AddXChangeController.self)) as! AddXChangeController
+            
             controller.viewModel = r.resolve(AddXChangeViewModel.self)
+            controller.delegate = delegate
             return controller
         }
     }

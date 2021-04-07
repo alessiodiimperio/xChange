@@ -7,10 +7,20 @@
 
 import Firebase
 import RxSwift
+import RxCocoa
 
 struct FirebaseAuthProvider:AuthenticationProvider {
     let auth = Auth.auth()
-    let db = Firestore.firestore()
+    let firestore: Firestore
+    let currentUser = BehaviorRelay<User?>(value: nil)
+    
+    init(firestore: Firestore){
+        self.firestore = firestore
+        
+        if let _ = auth.currentUser {
+            fetchCurrentUserData()
+        }
+    }
     
     func isSignedIn() -> Bool {
         return auth.currentUser != nil
@@ -43,9 +53,14 @@ struct FirebaseAuthProvider:AuthenticationProvider {
             guard let data = data else { return }
             
             do {
-                try db.collection(FirestoreCollection.users.path)
-                    .document(data.user.uid).setData(from: User(id: data.user.uid,
-                                                                username: username))
+                let user = User(id: data.user.uid,
+                                username: username,
+                                email: email)
+                
+                try firestore.collection(FirestoreCollection.users.path)
+                    .document(data.user.uid).setData(from: user)
+                
+                currentUser.accept(user)
             } catch {
                 print(error.localizedDescription)
             }
@@ -56,6 +71,30 @@ struct FirebaseAuthProvider:AuthenticationProvider {
     func requestPasswordReset(for email:String, completion: @escaping (_ error:Error?) -> Void) {
         auth.sendPasswordReset(withEmail: email){ error in
             completion(error)
+        }
+    }
+    
+    private func fetchCurrentUserData(){
+        guard let user = auth.currentUser else { return }
+        getUser(for: user.uid) { user in
+            if let user = user {
+                currentUser.accept(user)
+            }
+        }
+    }
+    
+    func getUser(for userId: String, completion: @escaping (User?) -> Void) {
+        firestore.collection(FirestoreCollection.users.path).document(userId).getDocument { (doc, error) in
+            if let error = error {
+                print(error.localizedDescription)
+                return
+            }
+    
+            if let user = try? doc?.data(as: User.self) {
+                completion(user)
+            } else {
+                completion(nil)
+            }
         }
     }
 }

@@ -6,8 +6,11 @@
 //
 
 import Foundation
+import RxSwift
+import RxCocoa
+
 protocol ChatProvider {
-    func getConversations()
+    func getConversations() -> Driver<[Chat]>
     func deleteConversation()
-    func sendMsg()
+    func sendMessage()
 }

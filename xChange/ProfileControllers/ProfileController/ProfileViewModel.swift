@@ -11,6 +11,7 @@ import Foundation
 
 class ProfileViewModel: ViewModelType {
     
+    private var auth: AuthenticationProvider
     private var dataProvider: DataProvider
     
     struct Input {
@@ -21,17 +22,19 @@ class ProfileViewModel: ViewModelType {
         let onsignOutTapped:Driver<Void>
         let onUserXChanges:Driver<[XChange]>
         let onDeleteItem: Driver<Void>
+        let onUser: Driver<User?>
     }
     
-    init(dataProvider:DataProvider){
+    init(dataProvider:DataProvider, auth: AuthenticationProvider){
         self.dataProvider = dataProvider
+        self.auth = auth
     }
     
     func transform(_ input: Input) -> Output {
-        
         Output(onsignOutTapped: input.signOutTrigger.asDriver(),
                onUserXChanges: getUserXChangesAsDriver(),
-               onDeleteItem: onDeleteXchangeAsDriver(input)
+               onDeleteItem: onDeleteXchangeAsDriver(input),
+               onUser: userAsDriver()
         )
     }
 
@@ -48,5 +51,10 @@ class ProfileViewModel: ViewModelType {
             let xChange = xChanges[indexPath.row]
             self?.dataProvider.delete(xChange)
         }
+    }
+    
+    private func userAsDriver() -> Driver<User?> {
+        auth.currentUser
+            .asDriver()
     }
 }

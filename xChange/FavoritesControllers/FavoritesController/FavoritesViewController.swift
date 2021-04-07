@@ -19,6 +19,7 @@ class FavoritesViewController: UIViewController {
         setupLayout()
         setupObservables()
     }
+    
     private func setupLayout() {
         
     }
@@ -35,8 +36,11 @@ extension FavoritesViewController {
         let output = viewModel.transform(input)
         
         output.onFavourites
-            .drive(favoritesTableView.rx.items(cellIdentifier: "favouriteCell")) { _, item, cell in
-                cell.textLabel?.text = item.title
+            .drive(favoritesTableView.rx.items(cellIdentifier: XChangeFavoriteTableViewCell.reuseIdentifier)) { _, xChange, cell in
+                
+                guard let cell = cell as? XChangeFavoriteTableViewCell else { return }
+                cell.setup(with: xChange)
+                
             }.disposed(by: disposeBag)
         
         output.onFavoredItem

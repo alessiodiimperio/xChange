@@ -24,7 +24,7 @@ class LoginViewController: UIViewController, Storyboarded {
     @IBOutlet weak var signInBtn: UIButton!
     @IBOutlet weak var signUpBtn: UIButton!
     @IBOutlet weak var forgotPasswordBtn: UIButton!
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         setupObservables()
@@ -33,8 +33,6 @@ class LoginViewController: UIViewController, Storyboarded {
 }
 extension LoginViewController {
     private func setupObservables(){
-        
-        
         
         let output = viewModel.transform(LoginViewModel.Input(emailTrigger: emailTextField.rx.text.asDriver(),
                                                               passwordTrigger: passwordTextField.rx.text.asDriver(),

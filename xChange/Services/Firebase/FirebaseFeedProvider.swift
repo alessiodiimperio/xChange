@@ -11,14 +11,15 @@ import RxCocoa
 
 class FirebaseFeedProvider: FeedProvider {
     private let auth:AuthenticationProvider
-    private let firestore = Firestore.firestore()
+    private let firestore: Firestore
     
     private var latestSubscription: ListenerRegistration?
     
     let feed = BehaviorRelay<[XChange]?>(value: nil)
 
-    init(auth: AuthenticationProvider) {
+    init(auth: AuthenticationProvider, firestore: Firestore) {
         self.auth = auth
+        self.firestore = firestore
         
         subscribeToLatestXchanges()
     }

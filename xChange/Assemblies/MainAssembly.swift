@@ -25,6 +25,14 @@ final class MainAssembly: Assembly {
             let favouriteProvider = r.resolve(FavoritesProvider.self)!
             return MainViewModel(feedProvider: feedprovider, favoriteProvider: favouriteProvider)
         }
+        
+        container.register(MainDetailViewModel.self) { (r: Resolver, xChange: XChange) in
+            let authProvider = r.resolve(AuthenticationProvider.self)!
+            let favoriteProvider = r.resolve(FavoritesProvider.self)!
+            return MainDetailViewModel(xChange,
+                                       auth: authProvider,
+                                       favoriteProvider: favoriteProvider)
+        }
     }
     
     private func assembleViewControllers(_ container: Container){
@@ -33,6 +41,12 @@ final class MainAssembly: Assembly {
         container.register(MainViewController.self) { r in
             let controller = mainStoryboard.instantiateViewController(withIdentifier: String(describing: MainViewController.self)) as! MainViewController
             controller.viewModel = r.resolve(MainViewModel.self)
+            return controller
+        }
+        
+        container.register(MainDetailViewController.self) { (r: Resolver, xChange: XChange) in
+            let controller = mainStoryboard.instantiateViewController(withIdentifier: String(describing: MainDetailViewController.self)) as! MainDetailViewController
+            controller.viewModel = r.resolve(MainDetailViewModel.self, argument: xChange)
             return controller
         }
     }

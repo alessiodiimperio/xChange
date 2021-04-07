@@ -21,8 +21,9 @@ final class ChatAssembly: Assembly {
     }
     
     private func assembleViewModels(_ container: Container){
-        container.register(ChatViewModel.self){_ in
-            return ChatViewModel()
+        container.register(ChatViewModel.self){r in
+            let chatProvider = r.resolve(ChatProvider.self)!
+            return ChatViewModel(chatProvider: chatProvider)
         }
     }
     
