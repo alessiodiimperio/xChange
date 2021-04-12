@@ -123,13 +123,27 @@ class FirestoreDataProvider: DataProvider {
         }
     }
     
-    func subscribeToChanges(in xChange: XChange) -> Driver<Void> {
+    func subscribeToChanges(in xChange: XChange) -> Driver<XChange?> {
         guard let id = xChange.id else { return Driver.empty() }
         
-        return Driver.just(())
+        xChangeDetailSubscription = firestore
+            .collection(FirestoreCollection.xChange.path)
+            .document(id)
+            .addSnapshotListener {[weak self] snapshot, error in
+                
+                if let error = error {
+                    print(error.localizedDescription)
+                    return
+                }
+                
+                guard let snapshot = snapshot,
+                      let xChange = try? snapshot.data(as: XChange.self) else { return }
+                self?.xChangeDetail.accept(xChange)
+            }
+        return xChangeDetail.asDriver()
     }
     
-    func unsubscribeToChanges(in xChange: XChange) {
-        
+    func unsubscribeToChanges() {
+        xChangeDetailSubscription?.remove()
     }
 }

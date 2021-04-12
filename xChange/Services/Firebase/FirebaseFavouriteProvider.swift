@@ -28,7 +28,7 @@ class FirebaseFavouriteProvider: FavoritesProvider {
         unsubscribeFromFavoriteXchanges()
     }
     
-    func favor(_ xchange: XChange) {
+    func toggleFavorite(_ xchange: XChange) {
         guard let userId = auth.currentUserID() else { return }
         guard let docId = xchange.id else { return }
         
@@ -36,20 +36,9 @@ class FirebaseFavouriteProvider: FavoritesProvider {
         
         if !followers.contains(userId) {
             followers.append(userId)
-        }
-        
-        firestore
-            .collection(FirestoreCollection.xChange.path)
-            .document(docId)
-            .updateData(["followers":followers])
-    }
-    
-    func unfavor(_ xchange: XChange) {
-        guard let userId = auth.currentUserID() else { return }
-        guard let docId = xchange.id else { return }
-        
-        let followers = xchange.followers.filter { follower -> Bool in
-            follower != userId
+        } else {
+            guard let index = followers.firstIndex(of: userId) else { return }
+            followers.remove(at: index)
         }
         
         firestore

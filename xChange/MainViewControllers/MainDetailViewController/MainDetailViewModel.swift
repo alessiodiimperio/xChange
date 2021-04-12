@@ -10,9 +10,11 @@ import Foundation
 
 final class MainDetailViewModel: ViewModelType {
     private let authProvider: AuthenticationProvider
-    private var favoriteProvider: FavoritesProvider
-
-    private let xChange: BehaviorRelay<XChange>
+    private let favoriteProvider: FavoritesProvider
+    private let dataProvider: DataProvider
+    
+    private let xChange = BehaviorRelay<XChange?>(value: nil)
+    private let xChangeDetail: Driver<XChange?>
     
     struct Input {
         let favButtonTrigger: Driver<Void>
@@ -26,66 +28,112 @@ final class MainDetailViewModel: ViewModelType {
         let onDescription: Driver<String>
         let onDate: Driver<String>
         let onAuthor: Driver<String>
+        let onIsFavourite: Driver<Bool>
         let onFavButtonClicked: Driver<Void>
         let onChatButtonClicked: Driver<XChange>
     }
     
     init(_ xChange: XChange,
-         auth: AuthenticationProvider,
-         favoriteProvider: FavoritesProvider) {
-        self.xChange = BehaviorRelay<XChange>(value: xChange)
-        self.authProvider = auth
+         authProvider: AuthenticationProvider,
+         favoriteProvider: FavoritesProvider,
+         dataProvider: DataProvider) {
+        
+        self.dataProvider = dataProvider
+        self.authProvider = authProvider
         self.favoriteProvider = favoriteProvider
+        
+        self.xChangeDetail = dataProvider.subscribeToChanges(in: xChange)
+    }
+    
+    deinit {
+        dataProvider.unsubscribeToChanges()
     }
     
     func transform(_ input: Input) -> Output {
         Output(onImage: imageUrlAsDriver(),
-               onTitle: Driver.just(xChange.value.title),
+               onTitle: titleLabelAsDriver(),
                onPrice: priceLabelAsDriver(),
-               onDescription: Driver.just(xChange.value.description),
+               onDescription: descriptionLabelAsDriver(),
                onDate: dateLabelAsDriver(),
                onAuthor: authorLabelAsDriver(),
+               onIsFavourite: onIsFavouriteAsDriver(),
                onFavButtonClicked: onFavoriteButtonTappedAsDriver(input),
                onChatButtonClicked: onChatButtonTappedAsDriver(input))
     }
     
+    private func titleLabelAsDriver() -> Driver<String> {
+        xChangeDetail.compactMap { $0 }
+            .map { xChange -> String in
+                return xChange.title
+            }.asDriver()
+    }
+    
+    private func descriptionLabelAsDriver() -> Driver<String> {
+        xChangeDetail.compactMap { $0 }
+            .map { xChange -> String in
+                return xChange.description
+            }.asDriver()
+    }
+    
     private func imageUrlAsDriver() -> Driver<URL?> {
-        if let link = xChange.value.image,
-           let url = URL(string: link) {
-            return Driver.just(url)
-        }
-        return Driver.just(nil)
+        xChangeDetail.compactMap { $0 }
+            .map { xChange -> URL? in
+                if let link = xChange.image,
+                   let url = URL(string: link) {
+                    return url
+                }
+                return nil
+            }.asDriver()
     }
     
     private func dateLabelAsDriver() -> Driver<String> {
-        Driver.just(DateFormat.mediumDateLabel(for: xChange.value.timestamp))
+        xChangeDetail.compactMap { $0 }
+            .map { xChange -> String in
+                DateFormat.mediumDateLabel(for: xChange.timestamp)
+            }.asDriver()
     }
     
     private func priceLabelAsDriver() -> Driver<String> {
-        Driver.just(TextFormatter.formatForPrice(xChange.value.price))
+        xChangeDetail.compactMap { $0 }
+            .map { xChange -> String in
+                TextFormatter.formatForPrice(xChange.price)
+            }
     }
     
     private func authorLabelAsDriver() -> Driver<String> {
-        let authorLabel = BehaviorSubject(value: "")
+        let authorLabel = BehaviorRelay(value: "")
         
-        authProvider.getUser(for: xChange.value.author) { user in
-            if let user = user {
-                authorLabel.onNext(user.username)
-            }
-        }
-        
-        return authorLabel.asDriver(onErrorJustReturn: "")
+        return xChangeDetail.compactMap { $0 }
+            .map { [weak self] xChange -> String in
+                self?.authProvider.getUser(for: xChange.author) { user in
+                    if let user = user {
+                        authorLabel.accept(user.username)
+                    }
+                }
+                return authorLabel.value
+            }.asDriver()
+    }
+    
+    private func onIsFavouriteAsDriver() -> Driver<Bool> {
+        xChangeDetail.compactMap { $0 }
+            .map { [weak self] xChange -> Bool in
+                guard let userId = self?.authProvider.currentUserID() else { return false }
+                return xChange.followers.contains(userId)
+            }.asDriver()
     }
     
     private func onFavoriteButtonTappedAsDriver(_ input: Input) -> Driver<Void> {
         input.favButtonTrigger
-            .withLatestFrom(xChange.asDriver())
+            .withLatestFrom(xChangeDetail)
             .map { [weak self] xChange -> Void in
-                self?.favoriteProvider.favor(xChange)
+                print("fav pressed")
+                if let xChange = xChange {
+                    self?.favoriteProvider.toggleFavorite(xChange)
+                }
             }
     }
     
     private func onChatButtonTappedAsDriver(_ input: Input) -> Driver<XChange> {
-        input.chatButtonTrigger.withLatestFrom(xChange.asDriver())
+        return input.chatButtonTrigger.withLatestFrom(xChangeDetail.compactMap { $0 })
     }
 }

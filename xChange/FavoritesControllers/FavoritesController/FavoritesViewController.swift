@@ -29,8 +29,7 @@ extension FavoritesViewController {
     private func setupObservables() {
         
         let input = FavoritesViewModel.Input(favoredItemTrigger: favoritesTableView.rx.itemSelected.asDriver(),
-                                             unfavorItemTrigger: favoritesTableView.rx.itemDeleted.asDriver(),
-                                             selectItemnTrigger: favoritesTableView.rx.itemSelected.asDriver()
+                                             favouriteToggleTrigger: favoritesTableView.rx.itemDeleted.asDriver()
         )
         
         let output = viewModel.transform(input)
@@ -43,16 +42,6 @@ extension FavoritesViewController {
                 
             }.disposed(by: disposeBag)
         
-        output.onFavoredItem
-            .drive(onNext: {
-                print("Favored")
-            })
-            .disposed(by: disposeBag)
-        
-        output.onUnfavouredItem
-            .drive(onNext: {
-                print("Unfavored")
-            })
-            .disposed(by: disposeBag)
+        output.onFavoriteToggle.drive().disposed(by: disposeBag)
     }
 }

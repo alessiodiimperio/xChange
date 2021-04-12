@@ -11,8 +11,8 @@ import RxCocoa
 
 protocol DataProvider{
     func getUsersXchanges() -> Driver<[XChange]>
-    func subscribeToChanges(in xChange: XChange) -> Driver<Void>
-    func unsubscribeToChanges(in xChange: XChange)
+    func subscribeToChanges(in xChange: XChange) -> Driver<XChange?>
+    func unsubscribeToChanges()
     func add(_ xChange: XChange)
     func delete(_ xChange: XChange)
     func uploadImage(_ image: UIImage, _ completion: @escaping (String?) -> Void)

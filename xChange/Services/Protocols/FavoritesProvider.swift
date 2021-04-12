@@ -10,6 +10,5 @@ import RxCocoa
 
 protocol FavoritesProvider {
     func getFavoriteXchanges() -> Driver<[XChange]>
-    func favor(_ xchange: XChange)
-    func unfavor(_ xchange: XChange)
+    func toggleFavorite(_ xchange: XChange)
 }

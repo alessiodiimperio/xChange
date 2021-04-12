@@ -69,10 +69,20 @@ class MainDetailViewController: UIViewController {
             .drive(priceLabel.rx.text)
             .disposed(by: disposeBag)
         
-        output.onFavButtonClicked.drive().disposed(by: disposeBag)
+        output.onIsFavourite
+            .drive(onNext: {[weak self] isFavorite in
+                isFavorite ?
+                    self?.favoriteButton.setImage(UIImage(systemName: "heart.fill"), for: .normal)
+                    :
+                    self?.favoriteButton.setImage(UIImage(systemName: "heart"), for: .normal    )
+            })
+            .disposed(by: disposeBag)
+        
+        output.onFavButtonClicked.drive()
+        .disposed(by: disposeBag)
         
         output.onChatButtonClicked.drive(onNext: {[weak self] xChange in
-            
+            print("Start chatting about xchange:", xChange.id)
         }).disposed(by: disposeBag)
     }
 }

@@ -14,13 +14,11 @@ class FavoritesViewModel: ViewModelType {
     
     struct Input {
         let favoredItemTrigger: Driver<IndexPath>
-        let unfavorItemTrigger: Driver<IndexPath>
-        let selectItemnTrigger: Driver<IndexPath>
+        let favouriteToggleTrigger: Driver<IndexPath>
     }
     struct Output {
         let onFavourites: Driver<[XChange]>
-        let onFavoredItem: Driver<Void>
-        let onUnfavouredItem: Driver<Void>
+        let onFavoriteToggle: Driver<Void>
     }
     
     init(favouriteProvider:FavoritesProvider){
@@ -29,25 +27,17 @@ class FavoritesViewModel: ViewModelType {
     
     func transform(_ input: Input) -> Output {
         Output(onFavourites: getUserFavouritesAsDriver(),
-               onFavoredItem: onFavoredXchangeAsDriver(input),
-               onUnfavouredItem: onUnfavoredXchangeAsDriver(input))
+               onFavoriteToggle: onFavoriteToggledAsDriver(input))
     }
 
     private func getUserFavouritesAsDriver() -> Driver<[XChange]> {
         favouriteProvider.getFavoriteXchanges()
     }
     
-    private func onFavoredXchangeAsDriver(_ input: Input) -> Driver<Void> {
-        input.favoredItemTrigger.withLatestFrom(favouriteProvider.getFavoriteXchanges()) {[weak self] indexPath, favourites in
-            let xChange = favourites[indexPath.row]
-            self?.favouriteProvider.favor(xChange)
-        }
-    }
-    
-    private func onUnfavoredXchangeAsDriver(_ input: Input) -> Driver<Void> {
-        input.unfavorItemTrigger.withLatestFrom(favouriteProvider.getFavoriteXchanges()) {[weak self] indexPath, favourites in
-            let xChange = favourites[indexPath.row]
-            self?.favouriteProvider.unfavor(xChange)
-        }
+    private func onFavoriteToggledAsDriver(_ input: Input) -> Driver<Void> {
+        input.favouriteToggleTrigger.withLatestFrom(favouriteProvider.getFavoriteXchanges()) { [weak self] indexPath, favorites in
+            let xChange = favorites[indexPath.row]
+            self?.favouriteProvider.toggleFavorite(xChange)
+        }.asDriver()
     }
 }

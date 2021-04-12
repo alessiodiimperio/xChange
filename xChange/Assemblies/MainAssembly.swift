@@ -29,9 +29,11 @@ final class MainAssembly: Assembly {
         container.register(MainDetailViewModel.self) { (r: Resolver, xChange: XChange) in
             let authProvider = r.resolve(AuthenticationProvider.self)!
             let favoriteProvider = r.resolve(FavoritesProvider.self)!
+            let dataProvider = r.resolve(DataProvider.self)!
             return MainDetailViewModel(xChange,
-                                       auth: authProvider,
-                                       favoriteProvider: favoriteProvider)
+                                       authProvider: authProvider,
+                                       favoriteProvider: favoriteProvider,
+                                       dataProvider: dataProvider)
         }
     }
     
