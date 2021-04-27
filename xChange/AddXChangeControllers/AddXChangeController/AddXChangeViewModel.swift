@@ -92,6 +92,7 @@ class AddXChangeViewModel {
                                                description: description,
                                                author: userID,
                                                followers: [],
+                                               chatters: [],
                                                price: price,
                                                image: nil)
                                 
@@ -113,6 +114,7 @@ class AddXChangeViewModel {
                                                      description: xChange.description,
                                                      author: xChange.author,
                                                      followers: xChange.followers,
+                                                     chatters: [],
                                                      price: xChange.price,
                                                      image: imageLink))
                 }

@@ -25,6 +25,6 @@ class ChatViewModel {
     }
     
     func transform(_ Input: Input) -> Output {
-        Output(chats: Driver.just([Chat]()))
+        Output(chats: chatProvider.getConversations())
     }
 }

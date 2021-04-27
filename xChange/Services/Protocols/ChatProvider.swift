@@ -11,6 +11,6 @@ import RxCocoa
 
 protocol ChatProvider {
     func getConversations() -> Driver<[Chat]>
-    func deleteConversation()
-    func sendMessage()
+    func removeConversation(_ id: String)
+    func sendMessage(to usaerId: String, about xChange: String)
 }

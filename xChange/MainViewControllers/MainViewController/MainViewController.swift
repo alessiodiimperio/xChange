@@ -19,7 +19,7 @@ class MainViewController: UIViewController {
     var viewModel: MainViewModel!
     
     weak var delegate: MainViewControllerDelegate?
-        
+    
     @IBOutlet weak var tableView: UITableView!
     
     override func viewDidLoad() {
@@ -29,7 +29,6 @@ class MainViewController: UIViewController {
     }
     
     private func setupLayout() {
-       
     }
     
     private func setupObservers() {

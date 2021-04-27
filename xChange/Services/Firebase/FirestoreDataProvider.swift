@@ -4,8 +4,8 @@
 //
 //  Created by Alessio on 2021-01-27.
 //
-
-import Firebase
+import FirebaseStorage
+import FirebaseFirestore
 import FirebaseFirestoreSwift
 import RxSwift
 import RxCocoa
@@ -14,6 +14,7 @@ enum FirestoreCollection {
     case xChange
     case users
     case chat
+    case privateMessages
     
     var path: String {
         switch self {
@@ -23,6 +24,8 @@ enum FirestoreCollection {
             return "xchanges"
         case .chat:
             return "chats"
+        case .privateMessages:
+            return "privatemessages"
         }
     }
 }
@@ -31,6 +34,7 @@ class FirestoreDataProvider: DataProvider {
     
     private let auth:AuthenticationProvider
     private let firestore: Firestore
+    private let storage: Storage
     
     private var userSubscription: ListenerRegistration?
     private var xChangeDetailSubscription: ListenerRegistration?
@@ -38,9 +42,10 @@ class FirestoreDataProvider: DataProvider {
     let userXChanges = BehaviorRelay<[XChange]?>(value: nil)
     let xChangeDetail = BehaviorRelay<XChange?>(value: nil)
     
-    init(auth: AuthenticationProvider, firestore: Firestore) {
+    init(auth: AuthenticationProvider, firestore: Firestore, storage: Storage) {
         self.auth = auth
         self.firestore = firestore
+        self.storage = storage
         
         subscribeToUserXchanges()
     }
@@ -102,8 +107,8 @@ class FirestoreDataProvider: DataProvider {
     func uploadImage(_ image: UIImage, _ completion: @escaping (String?) -> Void) {
         
         
-        let storage = Firebase.Storage.storage().reference(withPath: "images")
-        let imageRef = storage.child("\(UUID().uuidString).jpg")
+        let imagesPath = storage.reference(withPath: "images")
+        let imageRef = imagesPath.child("\(UUID().uuidString).jpg")
         
         if let uploadData = image.jpegData(compressionQuality: 0.8) {
             imageRef.putData(uploadData, metadata: nil, completion: { (metadata, error) in

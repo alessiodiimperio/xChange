@@ -4,7 +4,9 @@
 //
 //  Created by Alessio on 2021-03-08.
 //
-import Firebase
+import FirebaseStorage
+import FirebaseAuth
+import FirebaseFirestore
 import Swinject
 
 final class ServiceAssembly: Assembly {
@@ -30,6 +32,10 @@ final class ServiceAssembly: Assembly {
         container.register(Firestore.self){_ in
             Firestore.firestore()
         }
+        
+        container.register(Storage.self) {_ in
+            FirebaseStorage.Storage.storage()
+        }
     }
     
     private func assembleAuthenticationProvider(_ container: Container){
@@ -43,7 +49,10 @@ final class ServiceAssembly: Assembly {
         container.register(DataProvider.self){r in
             let auth = r.resolve(AuthenticationProvider.self)!
             let firestore = r.resolve(Firestore.self)!
-            return FirestoreDataProvider(auth: auth, firestore: firestore)
+            let storage = r.resolve(Storage.self)!
+            return FirestoreDataProvider(auth: auth,
+                                         firestore: firestore,
+                                         storage: storage)
         }.inObjectScope(.container)
     }
    

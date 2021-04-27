@@ -4,7 +4,7 @@
 //
 //  Created by Alessio on 2021-03-07.
 //
-import Firebase
+import FirebaseFirestore
 import Foundation
 import RxSwift
 import RxCocoa

@@ -11,7 +11,8 @@ import FirebaseFirestoreSwift
 struct Chat: Identifiable, Codable {
     @DocumentID var id: String?
     @ServerTimestamp var timestamp: Date?
-    let xChange: String
-    let members: [String]
-    let archivedMembers: [String]
+    let xChangeId: String
+    let recieverId: String
+    let senderId: String
+    let active: Bool
 }
