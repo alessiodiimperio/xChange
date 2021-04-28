@@ -1,5 +1,5 @@
 //
-//  FieldLabel.swift
+//  FieldTextView.swift
 //  xChange
 //
 //  Created by Alessio on 2021-04-27.
@@ -7,15 +7,15 @@
 
 import UIKit
 
-final class FieldLabel: BaseView {
-    
+class FieldTextView: BaseView {
+
     let titleLabel = UILabel()
-    let textLabel = UILabel()
+    let textView = UITextView()
     
-    init(title: String? = nil, text: String? = nil) {
-        self.titleLabel.text = title
-        self.textLabel.text = text
+    init(title: String? = nil, description: String? = nil) {
         super.init()
+        titleLabel.text = title
+        textView.text = description
     }
     
     required init?(coder: NSCoder) {
@@ -26,28 +26,28 @@ final class FieldLabel: BaseView {
         super.addSubviews()
         
         addSubviews(titleLabel,
-                    textLabel)
+                    textView)
     }
-    
+
     override func setupStyling() {
         super.setupStyling()
+        textView.isUserInteractionEnabled = false
+        textView.isEditable = false
         
         titleLabel.setupUI(font: .semiboldText)
-        textLabel.setupUI(font: .regularText)
+        textView.font = .regularText
     }
     
     override func setupConstraints() {
         super.setupConstraints()
         
         titleLabel.snp.makeConstraints { make in
-            make.top.equalToSuperview()
-            make.left.right.equalToSuperview()
+            make.top.left.equalToSuperview()
         }
         
-        textLabel.snp.makeConstraints { make in
-            make.top.equalTo(titleLabel.snp.bottom).offset(.tinyMargin)
-            make.left.right.equalTo(titleLabel)
-            make.bottom.equalToSuperview()
+        textView.snp.makeConstraints { make in
+            make.top.equalTo(titleLabel.snp.bottom).offset(.smallMargin)
+            make.left.right.bottom.equalToSuperview()
         }
     }
 }

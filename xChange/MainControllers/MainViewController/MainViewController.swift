@@ -1,19 +1,25 @@
 //
-//  FavoritesViewController.swift
+//  MainViewController.swift
 //  xChange
 //
 //  Created by Alessio on 2021-01-25.
 //
+import Alamofire
+import AlamofireImage
 import RxSwift
 import RxCocoa
 import UIKit
 
-class FavoritesViewController: BaseViewController {
+protocol MainViewControllerDelegate: class {
+    func handleDidSelectTableViewItem(xChange: XChange)
+}
 
-    let viewModel:FavoritesViewModel
-    let contentView = FavoritesView()
-    
-    init(viewModel: FavoritesViewModel) {
+final class MainViewController: BaseViewController {
+    var viewModel: MainViewModel
+    let contentView = MainView()
+    weak var delegate: MainViewControllerDelegate?
+        
+    init(viewModel: MainViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
@@ -28,32 +34,28 @@ class FavoritesViewController: BaseViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupLayout()
         setupObservables()
     }
     
-    private func setupLayout() {
-        
-    }
-}
-
-extension FavoritesViewController {
     private func setupObservables() {
-        
-        let input = FavoritesViewModel.Input(favoredItemTrigger: contentView.tableView.rx.itemSelected.asDriver(),
-                                             favouriteToggleTrigger: contentView.tableView.rx.itemDeleted.asDriver()
+        let input = MainViewModel.Input(searchTrigger: Driver.empty(),
+                                        selectItemTrigger: contentView.tableView.rx.itemSelected.asDriver()
         )
         
         let output = viewModel.transform(input)
         
-        output.onFavourites
+        output.onFeed
             .drive(contentView.tableView.rx.items(cellIdentifier: XChangeTableViewCell.reuseIdentifier)) { _, xChange, cell in
                 
                 guard let cell = cell as? XChangeTableViewCell else { return }
                 cell.setup(with: XChangeCellViewModel(from: xChange))
-                
+
             }.disposed(by: disposeBag)
         
-        output.onFavoriteToggle.drive().disposed(by: disposeBag)
+        output.onItemSelect
+            .drive(onNext: { [weak self] xChange in
+                self?.delegate?.handleDidSelectTableViewItem(xChange: xChange)
+            })
+            .disposed(by: disposeBag)
     }
 }

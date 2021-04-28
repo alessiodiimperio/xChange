@@ -28,12 +28,9 @@ final class FavouritesAssembly: Assembly {
     }
     
     private func assembleViewControllers(_ container: Container){
-        let favoritesStoryboard = SwinjectStoryboard.create(name: "Favorites", bundle: Bundle.main, container: container)
-        
         container.register(FavoritesViewController.self) { r in
-            let controller = favoritesStoryboard.instantiateViewController(withIdentifier: String(describing: FavoritesViewController.self)) as! FavoritesViewController
-            controller.viewModel = r.resolve(FavoritesViewModel.self)
-            return controller
+            let viewModel = r.resolve(FavoritesViewModel.self)!
+            return FavoritesViewController(viewModel: viewModel)
         }
     }
 }

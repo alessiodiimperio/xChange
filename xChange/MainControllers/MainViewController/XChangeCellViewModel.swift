@@ -7,7 +7,7 @@
 
 import Foundation
 
-class MainCellViewModel {
+class XChangeCellViewModel {
 
     let image: URL?
     let title: String

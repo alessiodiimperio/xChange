@@ -30,12 +30,9 @@ final class ProfileAssembly: Assembly {
     }
     
     private func assembleViewControllers(_ container: Container){
-        let profileStoryboard = SwinjectStoryboard.create(name: "Profile", bundle: Bundle.main, container: container)
-        
-        container.register(ProfileViewController.self) { r in
-            let controller = profileStoryboard.instantiateViewController(withIdentifier: String(describing: ProfileViewController.self)) as! ProfileViewController
-            controller.viewModel = r.resolve(ProfileViewModel.self)
-            return controller
+        container.register(ProfileViewController.self) { (r: Resolver, delegate: ProfileViewControllerDelegate?) in
+            let viewModel = r.resolve(ProfileViewModel.self)!
+            return ProfileViewController(viewModel: viewModel, delegate: delegate)
         }
     }
 }

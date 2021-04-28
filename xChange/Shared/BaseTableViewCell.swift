@@ -33,7 +33,7 @@ class BaseTableViewCell: UITableViewCell {
         separator.snp.makeConstraints { make in
             make.left.right.equalToSuperview().inset(.mediumMargin)
             make.height.equalTo(.point)
-            make.bottom.equalToSuperview().inset(.mediumMargin)
+            make.bottom.equalToSuperview()
         }
     }
 }

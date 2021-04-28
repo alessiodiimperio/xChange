@@ -38,18 +38,15 @@ final class MainAssembly: Assembly {
     }
     
     private func assembleViewControllers(_ container: Container){
-        let mainStoryboard = SwinjectStoryboard.create(name: "Main", bundle: Bundle.main, container: container)
         
         container.register(MainViewController.self) { r in
-            let controller = mainStoryboard.instantiateViewController(withIdentifier: String(describing: MainViewController.self)) as! MainViewController
-            controller.viewModel = r.resolve(MainViewModel.self)
-            return controller
+            let viewModel = r.resolve(MainViewModel.self)!
+            return MainViewController(viewModel: viewModel)
         }
         
         container.register(MainDetailViewController.self) { (r: Resolver, xChange: XChange) in
-            let controller = mainStoryboard.instantiateViewController(withIdentifier: String(describing: MainDetailViewController.self)) as! MainDetailViewController
-            controller.viewModel = r.resolve(MainDetailViewModel.self, argument: xChange)
-            return controller
+            let viewModel = r.resolve(MainDetailViewModel.self, argument: xChange)!
+            return MainDetailViewController(viewModel: viewModel)
         }
     }
 }

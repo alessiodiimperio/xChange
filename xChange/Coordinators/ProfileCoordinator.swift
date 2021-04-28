@@ -24,15 +24,15 @@ class ProfileCoordinator:Coordinator {
     }
     
     func start() {
-        let profileViewController = container.resolve(ProfileViewController.self)!
-        profileViewController.coordinator = self
+        let delegate: ProfileViewControllerDelegate? = self
+        let profileViewController = container.resolve(ProfileViewController.self, argument: delegate)!
         profileViewController.tabBarItem.image = UIImage(systemName: "person.fill")
         profileViewController.tabBarItem.title = "Profile"
         navigationController.pushViewController(profileViewController, animated: false)
     }
 }
 
-extension ProfileCoordinator: ProfileCoordinatorDelegate {
+extension ProfileCoordinator: ProfileViewControllerDelegate {
     func didSelectSignOut() {
         parentCoordinator?.signOut()
     }

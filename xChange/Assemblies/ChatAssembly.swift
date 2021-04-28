@@ -28,12 +28,9 @@ final class ChatAssembly: Assembly {
     }
     
     private func assembleViewControllers(_ container: Container){
-        let chatStoryboard = SwinjectStoryboard.create(name: "Chat", bundle: Bundle.main, container: container)
-        
         container.register(ChatViewController.self) { r in
-            let controller = chatStoryboard.instantiateViewController(withIdentifier: String(describing: ChatViewController.self)) as! ChatViewController
-            controller.viewModel = r.resolve(ChatViewModel.self)
-            return controller
+            let viewModel = r.resolve(ChatViewModel.self)!
+            return ChatViewController(viewModel: viewModel)
         }
     }
 }

@@ -19,7 +19,11 @@ class BaseView: UIView {
     }
     
     func addSubviews() { }
-    func setupStyling() { }
+    
+    func setupStyling() {
+        backgroundColor = .white
+    }
+    
     func setupConstraints() { }
 
 }
