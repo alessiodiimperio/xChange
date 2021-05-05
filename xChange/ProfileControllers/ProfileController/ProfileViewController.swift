@@ -18,7 +18,7 @@ class ProfileViewController: BaseViewController {
     weak var delegate: ProfileViewControllerDelegate?
     var viewModel:ProfileViewModel
     let contentView = ProfileView()
-    let signOutButton = UIBarButtonItem()
+    let signOutButton = UIButton()
     
     init(viewModel: ProfileViewModel, delegate: ProfileViewControllerDelegate?) {
         self.viewModel = viewModel
@@ -36,16 +36,18 @@ class ProfileViewController: BaseViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupObservables()
-        let signOutLabel = UILabel()
-        signOutLabel.text = "Sign Out"
-        signOutButton.customView = signOutLabel
-        navigationItem.rightBarButtonItem = signOutButton
+        setupSignOutButtonInNavigationBar()
     }
-}
-//MARK: Bindings
-extension ProfileViewController{
-    private func setupObservables(){
+    
+    private func setupSignOutButtonInNavigationBar() {
+        signOutButton.setTitle("Sign Out", for: .normal)
+        signOutButton.setTitleColor(.systemBlue, for: .normal)
+        let barButtonItem = UIBarButtonItem(customView: signOutButton)
+        navigationItem.rightBarButtonItem = barButtonItem
+    }
+    
+    override func setupObservables(){
+        super.setupObservables()
         
         let input = ProfileViewModel.Input(deleteItemTrigger: contentView.tableView.rx.itemDeleted.asDriver(),
                                            signOutTrigger: signOutButton.rx.tap.asDriver())
@@ -74,20 +76,12 @@ extension ProfileViewController{
         output.onDeleteItem.drive().disposed(by: disposeBag)
         
         output.onUser
-            .map { $0 == nil }
-            .drive(contentView.emailLabel.rx.isHidden)
-            .disposed(by: disposeBag)
-        
-        output.onUser
-            .map { $0 == nil }
-            .drive(contentView.userNameLabel.rx.isHidden)
-            .disposed(by: disposeBag)
-        
-        output.onUser
             .drive(onNext: {[weak self] user in
                 guard let user = user else {
+                    self?.contentView.hideUserLabels()
                     return
                 }
+                self?.contentView.showUserLabels()
                 self?.contentView.emailLabel.text = user.email
                 self?.contentView.userNameLabel.text = user.username
             })

@@ -12,9 +12,11 @@ final class MainDetailViewModel: ViewModelType {
     private let authProvider: AuthenticationProvider
     private let favoriteProvider: FavoritesProvider
     private let dataProvider: DataProvider
+    private let chatProvider: ChatProvider
     
     private let xChange = BehaviorRelay<XChange?>(value: nil)
     private let xChangeDetail: Driver<XChange?>
+    private let chatIdRelay = BehaviorRelay<String?>(value: nil)
     
     struct Input {
         let favButtonTrigger: Driver<Void>
@@ -30,17 +32,19 @@ final class MainDetailViewModel: ViewModelType {
         let onAuthor: Driver<String>
         let onIsFavourite: Driver<Bool>
         let onFavButtonClicked: Driver<Void>
-        let onChatButtonClicked: Driver<XChange>
+        let onChatButtonClicked: Driver<String?>
     }
     
     init(_ xChange: XChange,
          authProvider: AuthenticationProvider,
          favoriteProvider: FavoritesProvider,
-         dataProvider: DataProvider) {
+         dataProvider: DataProvider,
+         chatProvider: ChatProvider) {
         
         self.dataProvider = dataProvider
         self.authProvider = authProvider
         self.favoriteProvider = favoriteProvider
+        self.chatProvider = chatProvider
         
         self.xChangeDetail = dataProvider.subscribeToChanges(in: xChange)
     }
@@ -126,14 +130,19 @@ final class MainDetailViewModel: ViewModelType {
         input.favButtonTrigger
             .withLatestFrom(xChangeDetail)
             .map { [weak self] xChange -> Void in
-                print("fav pressed")
                 if let xChange = xChange {
                     self?.favoriteProvider.toggleFavorite(xChange)
                 }
             }
     }
     
-    private func onChatButtonTappedAsDriver(_ input: Input) -> Driver<XChange> {
-        return input.chatButtonTrigger.withLatestFrom(xChangeDetail.compactMap { $0 })
+    private func onChatButtonTappedAsDriver(_ input: Input) -> Driver<String?> {
+        input.chatButtonTrigger.withLatestFrom(xChangeDetail.compactMap({ $0 }))
+            .map { [weak self] xChange -> String? in
+                self?.chatProvider.contactSeller(about: xChange) { [weak self] chatId in
+                    self?.chatIdRelay.accept(chatId)
+                }
+                return self?.chatIdRelay.value
+            }
     }
 }

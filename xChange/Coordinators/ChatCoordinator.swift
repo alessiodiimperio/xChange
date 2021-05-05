@@ -9,20 +9,36 @@ import UIKit
 import Swinject
 import SwinjectStoryboard
 
+protocol ChatCoordinatorDelegate: AnyObject {
+}
+
 class ChatCoordinator:Coordinator {
     let container: Container
     var childrenCoordinators = [Coordinator]()
     var navigationController:UINavigationController
+    weak var delegate: ChatCoordinatorDelegate?
     
-    init(navigationController:UINavigationController, container: Container){
+    init(navigationController:UINavigationController, container: Container, delegate: ChatCoordinatorDelegate?){
         self.container = container
         self.navigationController = navigationController
+        self.delegate = delegate
     }
     
     func start() {
-        let vc = container.resolve(ChatViewController.self)!
+        let delegate: ChatViewControllerDelegate? = self
+        let vc = container.resolve(ChatViewController.self, argument: delegate)!
         vc.tabBarItem.image = UIImage(systemName: "message.fill")
         vc.tabBarItem.title = "Chat"
         navigationController.pushViewController(vc, animated: false)
     }
+    
+    func didSelectGoToDirectChat(with chatId: String) {
+        navigationController.popToRootViewController(animated: false)
+        let directChatViewController = container.resolve(DirectChatViewController.self, argument: chatId)!
+        navigationController.pushViewController(directChatViewController, animated: true)
+    }
+}
+
+extension ChatCoordinator: ChatViewControllerDelegate {
+    // Conforming to protocol implementation already exists in base class
 }

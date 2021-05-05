@@ -28,17 +28,10 @@ class FavoritesViewController: BaseViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupLayout()
-        setupObservables()
     }
-    
-    private func setupLayout() {
-        
-    }
-}
 
-extension FavoritesViewController {
-    private func setupObservables() {
+    override func setupObservables() {
+        super.setupObservables()
         
         let input = FavoritesViewModel.Input(favoredItemTrigger: contentView.tableView.rx.itemSelected.asDriver(),
                                              favouriteToggleTrigger: contentView.tableView.rx.itemDeleted.asDriver()

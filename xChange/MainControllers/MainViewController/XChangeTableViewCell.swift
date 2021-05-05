@@ -10,7 +10,6 @@ import SnapKit
 import UIKit
 
 class XChangeTableViewCell: BaseTableViewCell {
-    static let reuseIdentifier = "XChangeMainCell"
     
     let dateLabel = FieldLabel(title: "Date:")
     let titleLabel = FieldLabel(title: "Titel:")

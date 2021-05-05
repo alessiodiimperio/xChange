@@ -17,75 +17,79 @@ protocol  AddXChangeViewControllerDelegate: class {
     func setSelectedImage(_ image: UIImage?, to: AddXChangeController)
 }
 
-class AddXChangeController: UIViewController {
-    
+class AddXChangeController: BaseViewController, ViewControllerWithLoadingState {
+
     weak var delegate: AddXChangeViewControllerDelegate!
-    var viewModel: AddXChangeViewModel!
-    let disposeBag = DisposeBag()
+    let contentView: AddXChangeView & ViewWithLoadingState
+    var viewModel: AddXChangeViewModel & ViewModelWithLoadingState
     
-    @IBOutlet weak var imageView: UIImageView!
-    @IBOutlet weak var plusIcon: UIImageView!
-    @IBOutlet weak var titleTextField: UITextField!
-    @IBOutlet weak var descriptionTextView: UITextView!
-    @IBOutlet weak var createButton: UIButton!
-    @IBOutlet weak var priceTextField: UITextField!
+    init(view: AddXChangeView, viewModel: AddXChangeViewModel, delegate: AddXChangeViewControllerDelegate?) {
+        self.contentView = view
+        self.viewModel = viewModel
+        self.delegate = delegate
+        super.init(nibName: nil, bundle: nil)
+    }
     
-    private(set) var placeholder: UILabel!
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func loadView() {
+        view = contentView
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        addPlaceholderToDescriptionTextView()
-        setupObservables()
+        setupStates()
     }
     
-    private func addPlaceholderToDescriptionTextView(){
-        placeholder = UILabel(frame: CGRect(x: 5, y: 5, width: 100, height: 20))
-        placeholder.font = .systemFont(ofSize: 14)
-        placeholder.text = "Description"
-        placeholder.textColor = .lightGray
-        placeholder.isUserInteractionEnabled = false
-        descriptionTextView.addSubview(placeholder)
-    }
-    
-    private func setupObservables(){
+    override func setupObservables() {
+        super.setupObservables()
         
-        let imageViewTapped = imageView.rx.tapGesture()
+        let imageViewTapped = contentView.imageView.rx.tapGesture()
             .when(.recognized)
             .map { _ -> Void in
                 return
             }.asDriver(onErrorJustReturn: ())
         
         let output = viewModel.transform(AddXChangeViewModel.Input(
-                                                                   titleTextfieldTrigger: titleTextField.rx.text.asDriver(),
-                                                                   descriptionTextViewTrigger: descriptionTextView.rx.text.asDriver(),
-                                                                   createButtonTrigger: createButton.rx.tap.asDriver(),
-                                                                   imageViewTappedTrigger: imageViewTapped.asDriver(),
-                                                                   priceTextFieldTrigger: priceTextField.rx.text.asDriver()
+            titleTextfieldTrigger: contentView.titleTextField.rx.text.asDriver(),
+            descriptionTextViewTrigger: contentView.descriptionTextView.rx.text.asDriver(),
+            createButtonTrigger: contentView.createButton.rx.tap.asDriver(),
+            imageViewTappedTrigger: imageViewTapped.asDriver(),
+            priceTextFieldTrigger: contentView.priceTextField.rx.text.asDriver()
         ))
         
         output.onImageViewImage
-            .drive(imageView.rx.image)
+            .drive(contentView.imageView.rx.image)
             .disposed(by: disposeBag)
             
         output.onTitleTextFieldText
-            .drive(titleTextField.rx.text)
+            .drive(contentView.titleTextField.rx.text)
             .disposed(by: disposeBag)
         
         output.onDescriptionTextViewText
-            .drive(descriptionTextView.rx.text)
+            .drive(contentView.descriptionTextView.rx.text)
             .disposed(by: disposeBag)
         
         output.onDescriptionPlaceholder
-            .drive(placeholder.rx.isHidden)
+            .drive(contentView.placeholder.rx.isHidden)
             .disposed(by: disposeBag)
         
         output.onCreateButtonTapped
             .drive(onNext: {[weak self] in
-//                self?.resetForm()
+                self?.resetForm()
             }).disposed(by: disposeBag)
         
+        output.onCreateButtonEnabled.map { enabled in
+            enabled ? 1 : 0.4
+        }.drive(onNext: {[weak self] alpha in
+            self?.contentView.createButton.alpha = alpha
+        })
+        .disposed(by: disposeBag)
+        
         output.onCreateButtonEnabled
-            .drive(createButton.rx.isEnabled)
+            .drive(contentView.createButton.rx.isEnabled)
             .disposed(by: disposeBag)
         
         output.onImageViewTapped
@@ -95,15 +99,33 @@ class AddXChangeController: UIViewController {
             .disposed(by: disposeBag)
         
         output.onPlaceHolderUpdated
-            .drive(plusIcon.rx.isHidden)
+            .drive(contentView.plusIcon.rx.isHidden)
             .disposed(by: disposeBag)
     }
     
     private func resetForm(){
-        imageView.image = imageView.placeHolderPhoto()
-        titleTextField.text = nil
-        priceTextField.text = nil
-        descriptionTextView.text = nil        
+        contentView.imageView.image = contentView.imageView.placeHolderPhoto()
+        contentView.titleTextField.text = nil
+        contentView.priceTextField.text = nil
+        contentView.descriptionTextView.text = nil
+    }
+    
+    func getState() -> ViewModelWithLoadingState {
+        viewModel
+    }
+    
+    func getView() -> ViewWithLoadingState {
+        contentView
+    }
+    
+    func loadingView() -> LoadingView {
+        contentView.loadingView
+    }
+    func errorView() -> ErrorView {
+        contentView.errorView
+    }
+    func successView() -> SuccessView {
+        contentView.successView
     }
 }
 

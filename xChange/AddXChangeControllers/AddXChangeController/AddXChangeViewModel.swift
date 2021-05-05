@@ -9,7 +9,9 @@ import Foundation
 import RxSwift
 import RxCocoa
 
-class AddXChangeViewModel {
+class AddXChangeViewModel: ViewModelType, ViewModelWithLoadingState {
+    let state = BehaviorRelay<LoadingState>(value: .initial)
+    
     var authenticationService: AuthenticationProvider
     var xChangeService: DataProvider
     
@@ -92,7 +94,6 @@ class AddXChangeViewModel {
                                                description: description,
                                                author: userID,
                                                followers: [],
-                                               chatters: [],
                                                price: price,
                                                image: nil)
                                 
@@ -104,9 +105,13 @@ class AddXChangeViewModel {
             .compactMap { $0 }
             .map { [weak self] xChange -> Void in
                 
+                self?.setLoadingState()
+                
                 guard let image = self?.image.value,
                       image != UIImageView().placeHolderPhoto() else {
-                    self?.xChangeService.add(xChange)
+                    self?.xChangeService.add(xChange) {
+                        self?.setSuccessState()
+                    }
                     return
                 }
                 self?.xChangeService.uploadImage(image) { imageLink in
@@ -114,9 +119,10 @@ class AddXChangeViewModel {
                                                      description: xChange.description,
                                                      author: xChange.author,
                                                      followers: xChange.followers,
-                                                     chatters: [],
                                                      price: xChange.price,
-                                                     image: imageLink))
+                                                     image: imageLink)) {
+                        self?.setSuccessState()
+                    }
                 }
             }
     }

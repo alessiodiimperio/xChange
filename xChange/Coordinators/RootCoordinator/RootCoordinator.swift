@@ -16,6 +16,7 @@ class RootCoordinator: Coordinator {
     var navigationController:UINavigationController
     var childrenCoordinators:[Coordinator] = [Coordinator]()
     let authenticator:AuthenticationProvider?
+    var tabBarController: TabBarController?
     
     init(navigationController:UINavigationController, container: Container){
         self.navigationController = navigationController
@@ -30,20 +31,36 @@ class RootCoordinator: Coordinator {
     }
     
     func goToLoginScreen(){
-        let loginViewController = container.resolve(LoginViewController.self)!
-        loginViewController.delegate = self
+        let delegate: LoginViewControllerDelegate? = self
+        let loginViewController = container.resolve(LoginViewController.self, argument: delegate)!
         navigationController.setViewControllers([loginViewController], animated: false)
     }
     
     func goToSignUp(){
-        let signUpViewController = container.resolve(SignUpViewController.self)!
-        signUpViewController.delegate = self
+        let delegate: SignUpViewControllerDelegate? = self
+        let signUpViewController = container.resolve(SignUpViewController.self, argument: delegate)!
         navigationController.present(signUpViewController, animated: true)
     }
     
     func goToTabBarController(){
-        let tabBarController = container.resolve(TabBarController.self)!
-        tabBarController.profileCoordinator.parentCoordinator = self
+        
+        let tabBarDelegate: TabBarControllerDelegate? = self
+        let mainCoordinatorDelegate: MainCoordinatorDelegate? = self
+        let favoriteCoordinatorDelegate: FavoriteCoordinatorDelegate? = self
+        let addXchangeCoordinatorDelegate: AddXChangeCoordinatorDelegate? = self
+        let chatCoordinatorDelegate: ChatCoordinatorDelegate? = self
+        let profileCoordinatorDelegate: ProfileCoordinatorDelegate? = self
+        
+        let mainCoordinator = container.resolve(MainCoordinator.self, argument: mainCoordinatorDelegate)!
+        let favoriteCoordinator = container.resolve(FavoritesCoordinator.self, argument: favoriteCoordinatorDelegate)!
+        let addXchangeCoordinator = container.resolve(AddXChangeCoordinator.self, argument: addXchangeCoordinatorDelegate)!
+        let chatCoordinator = container.resolve(ChatCoordinator.self, argument: chatCoordinatorDelegate)!
+        let profileCoordinator = container.resolve(ProfileCoordinator.self, argument: profileCoordinatorDelegate)!
+        
+        self.tabBarController = container.resolve(TabBarController.self, arguments: tabBarDelegate, mainCoordinator, favoriteCoordinator, addXchangeCoordinator, chatCoordinator, profileCoordinator)
+        
+        guard let tabBarController = tabBarController else { return }
+        
         navigationController.setViewControllers([tabBarController], animated: true)
     }
     
@@ -96,4 +113,35 @@ extension RootCoordinator: SignUpViewControllerDelegate {
     func shouldDismiss(_ viewController: SignUpViewController) {
         viewController.dismiss(animated: true)
     }
+}
+
+extension RootCoordinator: TabBarControllerDelegate {
+    func navigateToDetailChatViewController(with chatId: String) {
+    }
+}
+
+extension RootCoordinator: MainCoordinatorDelegate {
+    func didSelectGoToDirectChat(with chatId: String) {
+        guard let tabController = tabBarController else { return }
+        tabController.selectedIndex = 3
+        tabController.chatCoordinator.didSelectGoToDirectChat(with: chatId)
+    }
+    
+    
+}
+
+extension RootCoordinator: FavoriteCoordinatorDelegate {
+    
+}
+
+extension RootCoordinator: AddXChangeCoordinatorDelegate {
+    
+}
+
+extension RootCoordinator: ChatCoordinatorDelegate {
+    
+}
+
+extension RootCoordinator: ProfileCoordinatorDelegate {
+    
 }

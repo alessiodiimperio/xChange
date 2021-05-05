@@ -14,10 +14,12 @@ class ChatViewModel {
     let chatProvider: ChatProvider
     
     struct Input {
+        let itemSelectedTrigger: Driver<IndexPath>
     }
     
     struct Output {
-        let chats: Driver<[Chat]>
+        let onChats: Driver<[Chat]>
+        let onItemSelected: Driver<String?>
     }
     
     init(chatProvider: ChatProvider) {
@@ -25,6 +27,19 @@ class ChatViewModel {
     }
     
     func transform(_ Input: Input) -> Output {
-        Output(chats: chatProvider.getConversations())
+        Output(onChats: chatProvider.getChats(),
+               onItemSelected: itemSelectedAsDriver(Input)
+        )
+    }
+    
+    private func itemSelectedAsDriver(_ input: Input) -> Driver<String?> {
+        Observable.combineLatest(
+            input.itemSelectedTrigger.asObservable(),
+            chatProvider.getChats().asObservable()
+        ).map { (indexPath, chats) -> String? in
+            
+            guard chats.count - 1 <= indexPath.row else { return nil }
+            return chats[indexPath.row].id
+        }.asDriver(onErrorJustReturn: nil)
     }
 }

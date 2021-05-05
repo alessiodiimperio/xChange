@@ -9,14 +9,19 @@ import UIKit
 import Swinject
 import SwinjectStoryboard
 
+protocol AddXChangeCoordinatorDelegate: AnyObject {
+}
+
 class AddXChangeCoordinator:NSObject, Coordinator {
     let container: Container
     var childrenCoordinators = [Coordinator]()
     var navigationController:UINavigationController
+    weak var delegate: AddXChangeCoordinatorDelegate?
     
-    init(navigationController:UINavigationController, container: Container){
+    init(navigationController:UINavigationController, container: Container, delegate: AddXChangeCoordinatorDelegate?){
         self.navigationController = navigationController
         self.container = container
+        self.delegate = delegate
     }
     
     func start() {

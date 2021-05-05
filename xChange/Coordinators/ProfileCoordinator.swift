@@ -11,16 +11,21 @@ import SwinjectStoryboard
 import RxSwift
 import Firebase
 
+protocol ProfileCoordinatorDelegate: AnyObject {
+    func signOut()
+}
+
 class ProfileCoordinator:Coordinator {
     let container: Container
     
-    weak var parentCoordinator:RootCoordinator?
+    weak var delegate: ProfileCoordinatorDelegate?
     var childrenCoordinators = [Coordinator]()
     var navigationController:UINavigationController
     
-    init(navigationController:UINavigationController, container: Container){
+    init(navigationController:UINavigationController, container: Container, delegate: ProfileCoordinatorDelegate?){
         self.navigationController = navigationController
         self.container = container
+        self.delegate = delegate
     }
     
     func start() {
@@ -34,6 +39,6 @@ class ProfileCoordinator:Coordinator {
 
 extension ProfileCoordinator: ProfileViewControllerDelegate {
     func didSelectSignOut() {
-        parentCoordinator?.signOut()
+        delegate?.signOut()
     }
 }

@@ -7,13 +7,39 @@
 
 import UIKit
 
-class TabBarController: UITabBarController, Storyboarded {
+protocol TabBarControllerDelegate: AnyObject {
+    func navigateToDetailChatViewController(with chatId: String)
+}
 
-    var mainCoordinator:MainCoordinator!
-    var favoritesCoordinator:FavoritesCoordinator!
-    var addXChangeCoordinator:AddXChangeCoordinator!
-    var chatCoordinator:ChatCoordinator!
-    var profileCoordinator:ProfileCoordinator!
+class TabBarController: UITabBarController {
+
+    weak var tabBarDelegate: TabBarControllerDelegate?
+    
+    var mainCoordinator:MainCoordinator
+    var favoritesCoordinator:FavoritesCoordinator
+    var addXChangeCoordinator:AddXChangeCoordinator
+    var chatCoordinator:ChatCoordinator
+    var profileCoordinator:ProfileCoordinator
+    
+    init(delegate: TabBarControllerDelegate?,
+         mainCoordinator: MainCoordinator,
+         favouriteCoordinator: FavoritesCoordinator,
+         addXChangeCoordinator: AddXChangeCoordinator,
+         chatCoordinator: ChatCoordinator,
+         profileCoordinator: ProfileCoordinator) {
+        
+        self.tabBarDelegate = delegate
+        self.mainCoordinator = mainCoordinator
+        self.favoritesCoordinator = favouriteCoordinator
+        self.addXChangeCoordinator = addXChangeCoordinator
+        self.chatCoordinator = chatCoordinator
+        self.profileCoordinator = profileCoordinator
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()

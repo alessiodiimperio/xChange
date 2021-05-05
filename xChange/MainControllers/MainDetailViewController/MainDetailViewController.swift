@@ -8,13 +8,20 @@ import RxSwift
 import RxCocoa
 import UIKit
 
+protocol MainDetailViewControllerDelegate: class {
+    func didSelectGoToDirectChat(with chatId: String)
+}
+
 class MainDetailViewController: BaseViewController {
     
-    let contentView = MainDetailView()
+    let contentView:  MainDetailView
     var viewModel: MainDetailViewModel
+    weak var delegate: MainDetailViewControllerDelegate?
     
-    init(viewModel: MainDetailViewModel) {
+    init(view: MainDetailView, viewModel: MainDetailViewModel, delegate: MainDetailViewControllerDelegate?) {
+        self.contentView = view
         self.viewModel = viewModel
+        self.delegate = delegate
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -22,17 +29,17 @@ class MainDetailViewController: BaseViewController {
         fatalError("init(coder:) has not been implemented")
     }
         
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        setupObservables()
-    }
-    
     override func loadView() {
         view = contentView
     }
     
-    private func setupObservables() {
+    override func viewDidLoad() {
+        super.viewDidLoad()
+    }
+    
+    override func setupObservables() {
+        super.setupObservables()
+        
         let output = viewModel.transform(MainDetailViewModel.Input(favButtonTrigger: contentView.favoriteButton.rx.tap.asDriver(),
                                                                    chatButtonTrigger: contentView.chatButton.rx.tap.asDriver()))
 
@@ -78,8 +85,9 @@ class MainDetailViewController: BaseViewController {
         output.onFavButtonClicked.drive()
         .disposed(by: disposeBag)
 
-        output.onChatButtonClicked.drive(onNext: {[weak self] xChange in
-            print("Start chatting about xchange:", xChange.id)
+        output.onChatButtonClicked.drive(onNext: { [weak self] chatId in
+            guard let chatId = chatId else { return}
+            self?.delegate?.didSelectGoToDirectChat(with: chatId)
         }).disposed(by: disposeBag)
     }
 }

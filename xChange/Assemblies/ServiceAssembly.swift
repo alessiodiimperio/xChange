@@ -50,9 +50,11 @@ final class ServiceAssembly: Assembly {
             let auth = r.resolve(AuthenticationProvider.self)!
             let firestore = r.resolve(Firestore.self)!
             let storage = r.resolve(Storage.self)!
+            let chatService = r.resolve(ChatProvider.self)!
             return FirestoreDataProvider(auth: auth,
                                          firestore: firestore,
-                                         storage: storage)
+                                         storage: storage,
+                                         chatService: chatService)
         }.inObjectScope(.container)
     }
    
@@ -61,7 +63,7 @@ final class ServiceAssembly: Assembly {
             let auth = r.resolve(AuthenticationProvider.self)!
             let firestore = r.resolve(Firestore.self)!
             return FirebaseFavouriteProvider(auth: auth, firestore: firestore)
-        }
+        }.inObjectScope(.container)
     }
     
     private func assembleChatProvider(_ container: Container) {
@@ -70,7 +72,7 @@ final class ServiceAssembly: Assembly {
             let firestore = Firestore.firestore()
             return FirebaseChatProvider(auth: auth,
                                  firestore: firestore)
-        }
+        }.inObjectScope(.container)
     }
     
     private func assembleFeedProvider(_ container: Container){
@@ -78,6 +80,6 @@ final class ServiceAssembly: Assembly {
             let auth = r.resolve(AuthenticationProvider.self)!
             let firestore = r.resolve(Firestore.self)!
             return FirebaseFeedProvider(auth: auth, firestore: firestore)
-        }
+        }.inObjectScope(.container)
     }
 }

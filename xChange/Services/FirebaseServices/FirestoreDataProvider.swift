@@ -14,7 +14,7 @@ enum FirestoreCollection {
     case xChange
     case users
     case chat
-    case privateMessages
+    case directMessages
     
     var path: String {
         switch self {
@@ -24,8 +24,8 @@ enum FirestoreCollection {
             return "xchanges"
         case .chat:
             return "chats"
-        case .privateMessages:
-            return "privatemessages"
+        case .directMessages:
+            return "directmessages"
         }
     }
 }
@@ -35,6 +35,7 @@ class FirestoreDataProvider: DataProvider {
     private let auth:AuthenticationProvider
     private let firestore: Firestore
     private let storage: Storage
+    private let chatService: ChatProvider
     
     private var userSubscription: ListenerRegistration?
     private var xChangeDetailSubscription: ListenerRegistration?
@@ -42,10 +43,11 @@ class FirestoreDataProvider: DataProvider {
     let userXChanges = BehaviorRelay<[XChange]?>(value: nil)
     let xChangeDetail = BehaviorRelay<XChange?>(value: nil)
     
-    init(auth: AuthenticationProvider, firestore: Firestore, storage: Storage) {
+    init(auth: AuthenticationProvider, firestore: Firestore, storage: Storage, chatService: ChatProvider) {
         self.auth = auth
         self.firestore = firestore
         self.storage = storage
+        self.chatService = chatService
         
         subscribeToUserXchanges()
     }
@@ -94,18 +96,18 @@ class FirestoreDataProvider: DataProvider {
             .delete()
     }
     
-    func add(_ xChange: XChange){
+    func add(_ xChange: XChange, completion: @escaping () -> Void ){
         do {
             let _ = try firestore
                 .collection(FirestoreCollection.xChange.path)
                 .addDocument(from: xChange)
+            completion()
         } catch {
             print(error.localizedDescription)
         }
     }
     
     func uploadImage(_ image: UIImage, _ completion: @escaping (String?) -> Void) {
-        
         
         let imagesPath = storage.reference(withPath: "images")
         let imageRef = imagesPath.child("\(UUID().uuidString).jpg")

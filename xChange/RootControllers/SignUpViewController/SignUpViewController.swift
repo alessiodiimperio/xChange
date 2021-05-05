@@ -9,52 +9,64 @@ import UIKit
 import RxSwift
 import RxCocoa
 
-class SignUpViewController: UIViewController, UITextFieldDelegate, Storyboarded {
+protocol SignUpViewControllerDelegate: class {
+    func didSelectCreateAccount(with credentials: Credential, completion: @escaping (_ error: Error?) -> Void)
+    func shouldDismiss(_ viewController: SignUpViewController)
+}
+
+class SignUpViewController: BaseViewController, UITextFieldDelegate {
     
     weak var delegate: SignUpViewControllerDelegate?
-    var viewModel:SignUpViewModel!
-    let disposeBag = DisposeBag()
+    let viewModel:SignUpViewModel
+    let contentView: SignUpView
+
+    init(view: SignUpView, viewModel: SignUpViewModel, delegate: SignUpViewControllerDelegate?) {
+        self.contentView = view
+        self.viewModel = viewModel
+        self.delegate = delegate
+        super.init(nibName: nil, bundle: nil)
+    }
     
-    @IBOutlet weak var usernameTextField: UITextField!
-    @IBOutlet weak var emailTextField: UITextField!
-    @IBOutlet weak var passwordTextField: UITextField!
-    @IBOutlet weak var createBtn: UIButton!
-    @IBOutlet weak var errorLabel: UILabel!
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func loadView() {
+        view = contentView
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        usernameTextField.becomeFirstResponder()
+        contentView.usernameTextField.becomeFirstResponder()
         hideKeyboardOnTap()
-        setupObservables()
     }
     
     func becomeTextfieldDelegate(){
-        usernameTextField.delegate = self
-        emailTextField.delegate = self
-        passwordTextField.delegate = self
+        contentView.usernameTextField.delegate = self
+        contentView.emailTextField.delegate = self
+        contentView.passwordTextField.delegate = self
     }
-}
 
-//MARK: Bindings
-extension SignUpViewController {
-    func setupObservables(){
-        let output = viewModel.transform(SignUpViewModel.Input(createAccountTrigger: createBtn.rx.tap.asDriver(),
-                                                               userNameTrigger: usernameTextField.rx.text.asDriver(),
-                                                               emailTrigger: emailTextField.rx.text.asDriver(),
-                                                               passwordTrigger: passwordTextField.rx.text.asDriver(),
+    override func setupObservables(){
+        super.setupObservables()
+        
+        let output = viewModel.transform(SignUpViewModel.Input(createAccountTrigger: contentView.createBtn.rx.tap.asDriver(),
+                                                               userNameTrigger: contentView.usernameTextField.rx.text.asDriver(),
+                                                               emailTrigger: contentView.emailTextField.rx.text.asDriver(),
+                                                               passwordTrigger: contentView.passwordTextField.rx.text.asDriver(),
                                                                errorLabelTrigger: viewModel.errorLabelText.asDriver(onErrorJustReturn: "Error")))
         output.onCreateBtnEnabled
-            .drive(createBtn.rx.isEnabled)
+            .drive(contentView.createBtn.rx.isEnabled)
             .disposed(by: disposeBag)
         
         output.onErrorLabel
-            .drive(errorLabel.rx.text)
+            .drive(contentView.errorLabel.rx.text)
             .disposed(by: disposeBag)
         
         output.onCreateBtnEnabled
             .map { active in
                 return active ? 1 : 0.4
-            }.drive(createBtn.rx.alpha)
+            }.drive(contentView.createBtn.rx.alpha)
             .disposed(by: disposeBag)
         
         output.onCreateBtnTapped

@@ -12,7 +12,12 @@ struct Chat: Identifiable, Codable {
     @DocumentID var id: String?
     @ServerTimestamp var timestamp: Date?
     let xChangeId: String
-    let recieverId: String
-    let senderId: String
-    let active: Bool
+    let title: String
+    let image: String
+    let itemPrice: String
+    let seller: String
+    let buyer: String
+    var chatters: [String]
+    var active: Bool
+    var hasNewMessage: Bool
 }

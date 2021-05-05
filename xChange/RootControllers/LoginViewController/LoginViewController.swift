@@ -10,79 +10,95 @@ import RxSwift
 import RxCocoa
 import Firebase
 
-class LoginViewController: UIViewController, Storyboarded {
+protocol LoginViewControllerDelegate: class {
+    func didSelectSignIn(with Credentials: Credential, completion: @escaping (_ error: Error?) -> Void)
+    func didSelectForgotPassword(for email: String?, completion: @escaping (_ error: Error?) -> Void)
+    func didSelectSignUp()
+}
+
+class LoginViewController: BaseViewController {
     
     weak var delegate: LoginViewControllerDelegate?
     
-    var viewModel:LoginViewModel!
-    let disposebag = DisposeBag()
+    let contentView: LoginView
+    let viewModel:LoginViewModel
+   
+    init(view: LoginView, viewModel: LoginViewModel, delegate: LoginViewControllerDelegate?) {
+        self.contentView = view
+        self.viewModel = viewModel
+        self.delegate = delegate
+        super.init(nibName: nil, bundle: nil)
+    }
     
-    @IBOutlet weak var emailTextField: UITextField!
-    @IBOutlet weak var passwordTextField: UITextField!
-    @IBOutlet weak var errorLabel: UILabel!
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
-    @IBOutlet weak var signInBtn: UIButton!
-    @IBOutlet weak var signUpBtn: UIButton!
-    @IBOutlet weak var forgotPasswordBtn: UIButton!
-
+    override func loadView() {
+        view = contentView
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupObservables()
         hideKeyboardOnTap()
     }
-}
-extension LoginViewController {
-    private func setupObservables(){
+
+    override func setupObservables() {
+        super.setupObservables()
         
-        let output = viewModel.transform(LoginViewModel.Input(emailTrigger: emailTextField.rx.text.asDriver(),
-                                                              passwordTrigger: passwordTextField.rx.text.asDriver(),
-                                                              signInTrigger: signInBtn.rx.tap.asDriver(),
-                                                              signUpTrigger: signUpBtn.rx.tap.asDriver(),
-                                                              forgotPasswordTrigger: forgotPasswordBtn.rx.tap.asDriver(),
+        let output = viewModel.transform(LoginViewModel.Input(emailTrigger: contentView.emailTextField.rx.text.asDriver(),
+                                                              passwordTrigger: contentView.passwordTextField.rx.text.asDriver(),
+                                                              signInTrigger: contentView.signInBtn.rx.tap.asDriver(),
+                                                              signUpTrigger: contentView.signUpBtn.rx.tap.asDriver(),
+                                                              forgotPasswordTrigger: contentView.forgotPasswordBtn.rx.tap.asDriver(),
                                                               errorLabelTrigger: viewModel.errorLabelText.asDriver(onErrorJustReturn: "Error")
         ))
         
         output.onErrorLabel
-            .drive(errorLabel.rx.text)
-            .disposed(by: disposebag)
+            .drive(contentView.errorLabel.rx.text)
+            .disposed(by: disposeBag)
         
         output.onForgotPasswordEnabled
-            .drive(forgotPasswordBtn.rx.isEnabled)
-            .disposed(by: disposebag)
+            .drive(contentView.forgotPasswordBtn.rx.isEnabled)
+            .disposed(by: disposeBag)
         
         output.onForgotPasswordEnabled
             .map { enabled -> CGFloat in
                 enabled ? 1 : 0.4
-            }.drive(forgotPasswordBtn.rx.alpha)
-            .disposed(by: disposebag)
+            }.drive(contentView.forgotPasswordBtn.rx.alpha)
+            .disposed(by: disposeBag)
         
         output.onIsSignInEnabled
-            .drive(signInBtn.rx.isEnabled)
-            .disposed(by: disposebag)
+            .drive(contentView.signInBtn.rx.isEnabled)
+            .disposed(by: disposeBag)
         
         output.onIsSignInEnabled
             .map { enabled -> CGFloat in
                 enabled ? 1 : 0.4
-            }.drive(signInBtn.rx.alpha)
-            .disposed(by: disposebag)
+            }.drive(contentView.signInBtn.rx.alpha)
+            .disposed(by: disposeBag)
         
         output.onSignInTapped.drive(onNext: {[weak self] credentials in
             guard let credentials = credentials else { return }
             self?.delegate?.didSelectSignIn(with: credentials) { error in
                     self?.viewModel.errorLabelText.onNext(error?.localizedDescription)
             }
-        }).disposed(by: disposebag)
+        }).disposed(by: disposeBag)
         
         output.onForgotPasswordTapped
             .drive(onNext: { [weak self] email in
-                self?.delegate?.didSelectForgotPassword(for: email) { error in
-                    self?.viewModel.errorLabelText.onNext(error?.localizedDescription)
+                self?.delegate?.didSelectForgotPassword(for: email) { [weak self] error in
+                    if error == nil {
+                        self?.contentView.confirmPasswordResetSent()
+                    } else {
+                        self?.viewModel.errorLabelText.onNext(error?.localizedDescription)
+                    }
                 }
-            }).disposed(by: disposebag)
+            }).disposed(by: disposeBag)
         
         output.onSignUpTapped
             .drive(onNext: {[weak self] in
                 self?.delegate?.didSelectSignUp()
-            }).disposed(by: disposebag)
+            }).disposed(by: disposeBag)
     }
 }

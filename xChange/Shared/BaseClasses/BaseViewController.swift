@@ -16,5 +16,9 @@ class BaseViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         edgesForExtendedLayout = []
+        setupObservables()
+    }
+    
+    func setupObservables() {
     }
 }

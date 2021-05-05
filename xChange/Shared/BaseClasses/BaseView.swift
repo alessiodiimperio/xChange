@@ -9,6 +9,10 @@ import UIKit
 
 class BaseView: UIView {
 
+    let loadingView = LoadingView()
+    let successView = SuccessView()
+    let errorView = ErrorView()
+    
     init() {
         super.init(frame: .zero)
         setup()

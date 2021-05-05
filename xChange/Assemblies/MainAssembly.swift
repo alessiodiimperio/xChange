@@ -15,8 +15,19 @@ final class MainAssembly: Assembly {
     }
         
     private func assembleMain(_ container: Container) {
+        assembleViews(container)
         assembleViewModels(container)
         assembleViewControllers(container)
+    }
+    
+    private func assembleViews(_ container: Container) {
+        container.register(MainView.self) { _ in
+            MainView()
+        }
+        
+        container.register(MainDetailView.self) { _ in
+            MainDetailView()
+        }
     }
     
     private func assembleViewModels(_ container: Container){
@@ -30,23 +41,34 @@ final class MainAssembly: Assembly {
             let authProvider = r.resolve(AuthenticationProvider.self)!
             let favoriteProvider = r.resolve(FavoritesProvider.self)!
             let dataProvider = r.resolve(DataProvider.self)!
+            let chatProvider = r.resolve(ChatProvider.self)!
+            
             return MainDetailViewModel(xChange,
                                        authProvider: authProvider,
                                        favoriteProvider: favoriteProvider,
-                                       dataProvider: dataProvider)
+                                       dataProvider: dataProvider,
+                                       chatProvider: chatProvider)
         }
     }
     
     private func assembleViewControllers(_ container: Container){
         
-        container.register(MainViewController.self) { r in
+        container.register(MainViewController.self) { (r, delegate: MainViewControllerDelegate?) in
+            let view = r.resolve(MainView.self)!
             let viewModel = r.resolve(MainViewModel.self)!
-            return MainViewController(viewModel: viewModel)
+            
+            return MainViewController(view: view,
+                                      viewModel: viewModel,
+                                      delegate: delegate)
         }
         
-        container.register(MainDetailViewController.self) { (r: Resolver, xChange: XChange) in
+        container.register(MainDetailViewController.self) { (r: Resolver, xChange: XChange, delegate: MainDetailViewControllerDelegate?) in
+            let view = r.resolve(MainDetailView.self)!
             let viewModel = r.resolve(MainDetailViewModel.self, argument: xChange)!
-            return MainDetailViewController(viewModel: viewModel)
+            
+            return MainDetailViewController(view: view,
+                                            viewModel: viewModel,
+                                            delegate: delegate)
         }
     }
 }

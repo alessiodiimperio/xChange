@@ -70,4 +70,14 @@ final class ProfileView: BaseView {
         tableView.isHidden = false
         emptyLabel.isHidden = true
     }
+    
+    func hideUserLabels() {
+        userNameLabel.isHidden = true
+        emailLabel.isHidden = true
+    }
+    
+    func showUserLabels() {
+        userNameLabel.isHidden = false
+        emailLabel.isHidden = false
+    }
 }

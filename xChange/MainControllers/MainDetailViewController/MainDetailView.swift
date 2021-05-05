@@ -35,12 +35,12 @@ class MainDetailView: BaseView {
     override func setupStyling() {
         super.setupStyling()
         
-        favoriteButton.imageView?.image = UIImage(systemName: "heart")
-        chatButton.imageView?.image = UIImage(systemName: "heart")
+        chatButton.setImage(UIImage(systemName: "message"), for: .normal)
         
         dateLabel.titleLabel.setupUI(font: .semiboldText, textAlignment: .right)
         authorLabel.titleLabel.setupUI(font: .semiboldText, textAlignment: .right)
         priceLabel.titleLabel.setupUI(font: .semiboldText, textAlignment: .right)
+
     }
     
     override func setupConstraints() {
@@ -48,7 +48,7 @@ class MainDetailView: BaseView {
             
         itemImageView.snp.makeConstraints { make in
             make.top.left.right.equalToSuperview()
-            make.height.equalToSuperview().multipliedBy(0.5)
+            make.height.equalToSuperview().multipliedBy(0.4)
         }
 
         dateLabel.snp.makeConstraints { make in
@@ -76,8 +76,10 @@ class MainDetailView: BaseView {
             make.left.right.equalToSuperview().inset(.largeMargin)
         }
         
+        descriptionTextView.setContentHuggingPriority(.defaultLow, for: .vertical)
+        
         chatButton.snp.makeConstraints { make in
-            make.top.equalTo(descriptionTextView).offset(.mediumMargin)
+            make.top.equalTo(descriptionTextView.snp.bottom).offset(.mediumMargin)
             make.width.height.equalTo(LayoutConstants.minimumTappableSize)
             make.right.equalToSuperview().inset(.largeMargin)
             make.bottom.equalToSuperview().inset(.mediumMargin)

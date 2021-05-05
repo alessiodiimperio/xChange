@@ -30,6 +30,8 @@ end
 	pod 'Firebase/Auth'
 	pod 'Firebase/Storage'
 	pod 'FirebaseFirestoreSwift', '~> 7.0-beta'
+  
+  pod 'IQKeyboardManagerSwift'
 
   target 'xChangeTests' do
     inherit! :search_paths

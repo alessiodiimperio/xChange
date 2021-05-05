@@ -8,13 +8,19 @@
 import Foundation
 
 final class ChatMessageViewModel {
-    let date: String
-    let userMessage: String?
-    let peerMessage: String?
     
-    init(from message: ChatMessage) {
-        self.date = DateFormat.mediumDateLabel(for: message.timestamp)
-        self.userMessage = message.message
-        self.peerMessage = message.message
+    let date: String
+    let message: String?
+    let isBuyer: Bool
+    
+    init(from message: ChatMessage, _ userId: String?) {
+        self.date = DateFormat.longDateLabel(for: message.timestamp)
+        self.message = message.message
+        
+        if message.senderId == userId {
+            isBuyer = true
+        } else {
+            isBuyer = false
+        }
     }
 }

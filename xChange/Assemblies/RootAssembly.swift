@@ -16,8 +16,19 @@ final class RootAssembly: Assembly {
     }
         
     private func assembleRootTabBar(_ container: Container){
+        assembleViews(container)
         assembleViewModels(container)
         assembleViewControllers(container)
+    }
+    
+    private func assembleViews(_ container: Container) {
+        container.register(LoginView.self) { _ in
+            LoginView()
+        }
+        
+        container.register(SignUpView.self) { _ in
+            SignUpView()
+        }
     }
     
     private func assembleViewModels(_ container: Container){
@@ -31,36 +42,41 @@ final class RootAssembly: Assembly {
     }
     
     private func assembleViewControllers(_ container: Container){
-        let rootStoryboard = SwinjectStoryboard.create(name: StoryboardType.rootStoryboard.rawValue, bundle: Bundle.main, container: container)
 
-        container.register(LoginViewController.self) { r in
-            let controller = rootStoryboard.instantiateViewController(withIdentifier: String(describing: LoginViewController.self)) as! LoginViewController
-            controller.viewModel = r.resolve(LoginViewModel.self)!
-            return controller
+        container.register(LoginViewController.self) { (r, delegate: LoginViewControllerDelegate?) in
+            
+            let view = r.resolve(LoginView.self)!
+            let viewModel = r.resolve(LoginViewModel.self)!
+            
+            return LoginViewController(view: view,
+                                       viewModel: viewModel,
+                                       delegate: delegate)
+        
         }
         
-        container.register(SignUpViewController.self) { r in
-            let controller = rootStoryboard.instantiateViewController(withIdentifier: String(describing: SignUpViewController.self)) as! SignUpViewController
-            controller.viewModel = r.resolve(SignUpViewModel.self)!
-            return controller
+        container.register(SignUpViewController.self) { (r, delegate: SignUpViewControllerDelegate?) in
+            
+            let view = r.resolve(SignUpView.self)!
+            let viewModel = r.resolve(SignUpViewModel.self)!
+            return SignUpViewController(view: view,
+                                        viewModel: viewModel,
+                                        delegate: delegate)
         }
         
-        container.register(TabBarController.self) { r in
-            let mainCoordinator = r.resolve(MainCoordinator.self)!
-            let favoritesCoordinator = r.resolve(FavoritesCoordinator.self)!
-            let addXChangeCoordinator = r.resolve(AddXChangeCoordinator.self)!
-            let chatCoordinator = r.resolve(ChatCoordinator.self)!
-            let profileCoordinator = r.resolve(ProfileCoordinator.self)!
+        container.register(TabBarController.self) { (r,
+                                                     delegate: TabBarControllerDelegate?,
+                                                     mainCoordinator: MainCoordinator,
+                                                     favouriteCoordinator: FavoritesCoordinator,
+                                                     addXChangeCoordinator: AddXChangeCoordinator,
+                                                     chatCoordinator: ChatCoordinator,
+                                                     profileCoordinator: ProfileCoordinator) in
             
-            let tabBar = rootStoryboard.instantiateViewController(withIdentifier: String(describing: TabBarController.self)) as! TabBarController
-            
-            tabBar.mainCoordinator = mainCoordinator
-            tabBar.favoritesCoordinator = favoritesCoordinator
-            tabBar.addXChangeCoordinator = addXChangeCoordinator
-            tabBar.chatCoordinator = chatCoordinator
-            tabBar.profileCoordinator = profileCoordinator
-            
-            return tabBar
+            return TabBarController(delegate: delegate,
+                                    mainCoordinator: mainCoordinator,
+                                    favouriteCoordinator: favouriteCoordinator,
+                                    addXChangeCoordinator: addXChangeCoordinator,
+                                    chatCoordinator: chatCoordinator,
+                                    profileCoordinator: profileCoordinator)
         }
     }
 }

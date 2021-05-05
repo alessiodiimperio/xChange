@@ -8,13 +8,21 @@ import RxCocoa
 import RxSwift
 import UIKit
 
+protocol ChatViewControllerDelegate: AnyObject {
+    func didSelectGoToDirectChat(with chatId: String)
+}
+
 class ChatViewController: BaseViewController {
     
-    let contentView = ChatView()
+    weak var delegate: ChatViewControllerDelegate?
+    let contentView: ChatView
     var viewModel:ChatViewModel
     
-    init(viewModel: ChatViewModel) {
+    init(view: ChatView, viewModel: ChatViewModel, delegate: ChatViewControllerDelegate?) {
+        self.contentView = view
         self.viewModel = viewModel
+        self.delegate = delegate
+        super.init(nibName: nil, bundle: nil)
     }
     
     required init?(coder: NSCoder) {
@@ -27,18 +35,26 @@ class ChatViewController: BaseViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupObservables()
     }
     
-    private func setupObservables() {
-        let output = viewModel.transform(ChatViewModel.Input())
+    override func setupObservables() {
+        super.setupObservables()
+        let output = viewModel.transform(ChatViewModel.Input(itemSelectedTrigger: contentView.tableView.rx.itemSelected.asDriver()))
         
-        output.chats
+        output.onChats
             .drive(contentView.tableView.rx.items(cellIdentifier: ChatTableViewCell.reuseIdentifier)) { _, chat, cell in
                 
                 guard let cell = cell as? ChatTableViewCell else { return }
-                cell.setup(with: ChatViewModel(from: chat))
+                cell.setup(with: ChatSubjectViewModel(from: chat))
 
             }.disposed(by: disposeBag)
+        
+        output.onItemSelected
+            .drive (onNext:{ [weak self] chatId in
+                guard let chatId = chatId else { return }
+                self?.delegate?.didSelectGoToDirectChat(with: chatId)
+            })
+            .disposed(by: disposeBag)
+
     }
 }

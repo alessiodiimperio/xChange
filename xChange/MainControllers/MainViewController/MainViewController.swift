@@ -16,11 +16,13 @@ protocol MainViewControllerDelegate: class {
 
 final class MainViewController: BaseViewController {
     var viewModel: MainViewModel
-    let contentView = MainView()
+    let contentView: MainView
     weak var delegate: MainViewControllerDelegate?
         
-    init(viewModel: MainViewModel) {
+    init(view: MainView, viewModel: MainViewModel, delegate: MainViewControllerDelegate?) {
+        self.contentView = view
         self.viewModel = viewModel
+        self.delegate = delegate
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -34,10 +36,11 @@ final class MainViewController: BaseViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupObservables()
     }
     
-    private func setupObservables() {
+    override func setupObservables() {
+        super.setupObservables()
+        
         let input = MainViewModel.Input(searchTrigger: Driver.empty(),
                                         selectItemTrigger: contentView.tableView.rx.itemSelected.asDriver()
         )

@@ -11,11 +11,10 @@ import FirebaseFirestoreSwift
 struct XChange: Identifiable, Codable {
     @DocumentID var id: String?
     @ServerTimestamp var timestamp: Date?
-    var title: String
-    var description: String
+    let title: String
+    let description: String
     let author:String
     var followers: [String]
-    var chatters: [String]
-    var price: String?
-    var image: String?
+    let price: String?
+    let image: String?
 }
