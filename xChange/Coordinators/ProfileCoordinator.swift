@@ -41,4 +41,19 @@ extension ProfileCoordinator: ProfileViewControllerDelegate {
     func didSelectSignOut() {
         delegate?.signOut()
     }
+    
+    func didSelectGoToDetailView(for xChange: XChange) {
+        let delegate: DetailViewControllerDelegate? = self
+        let detailViewController = container.resolve(DetailViewController.self, arguments: xChange, delegate)!
+        navigationController.pushViewController(detailViewController, animated: true)
+    }
+}
+
+extension ProfileCoordinator: DetailViewControllerDelegate {
+    func didSelectXchangeSold(in viewController: BaseViewController) {
+        navigationController.popToRootViewController(animated: true)
+    }
+    
+    func didSelectGoToDirectChat(with chatId: String) {
+    }
 }

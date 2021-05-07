@@ -7,7 +7,7 @@
 
 import UIKit
 
-class MainDetailView: BaseView {
+class DetailView: BaseView {
     
     let dateLabel = FieldLabel(title: "Date:")
     let titleLabel = FieldLabel(title: "Titel:")
@@ -17,6 +17,7 @@ class MainDetailView: BaseView {
     let itemImageView = UIImageView()
     let favoriteButton = UIButton()
     let chatButton = UIButton()
+    let soldButton = UIButton()
     
 
     override func addSubviews() {
@@ -29,18 +30,33 @@ class MainDetailView: BaseView {
                     descriptionTextView,
                     itemImageView,
                     favoriteButton,
-                    chatButton)
+                    chatButton,
+                    soldButton)
     }
     
     override func setupStyling() {
         super.setupStyling()
         
         chatButton.setImage(UIImage(systemName: "message"), for: .normal)
+        soldButton.setTitle("Sold", for: .normal)
+        soldButton.backgroundColor = .systemBlue
         
         dateLabel.titleLabel.setupUI(font: .semiboldText, textAlignment: .right)
         authorLabel.titleLabel.setupUI(font: .semiboldText, textAlignment: .right)
         priceLabel.titleLabel.setupUI(font: .semiboldText, textAlignment: .right)
 
+    }
+    
+    func setup(if isUsers: Bool) {
+        if isUsers {
+            chatButton.isHidden = true
+            favoriteButton.isHidden = true
+            soldButton.isHidden = false
+        } else {
+            chatButton.isHidden = false
+            favoriteButton.isHidden = false
+            soldButton.isHidden = true
+        }
     }
     
     override func setupConstraints() {
@@ -89,6 +105,12 @@ class MainDetailView: BaseView {
             make.width.height.equalTo(LayoutConstants.minimumTappableSize)
             make.centerX.equalToSuperview()
             make.bottom.equalTo(chatButton)
+        }
+        
+        soldButton.snp.makeConstraints { make in
+            make.centerX.equalToSuperview()
+            make.height.equalTo(LayoutConstants.minimumTappableSize)
+            make.left.right.bottom.equalToSuperview().inset(.largeMargin)
         }
     }   
 }

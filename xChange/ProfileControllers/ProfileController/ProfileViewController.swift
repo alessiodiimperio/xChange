@@ -11,6 +11,7 @@ import RxCocoa
 
 protocol ProfileViewControllerDelegate: class {
     func didSelectSignOut()
+    func didSelectGoToDetailView(for xChange: XChange)
 }
 
 class ProfileViewController: BaseViewController {
@@ -49,8 +50,9 @@ class ProfileViewController: BaseViewController {
     override func setupObservables(){
         super.setupObservables()
         
-        let input = ProfileViewModel.Input(deleteItemTrigger: contentView.tableView.rx.itemDeleted.asDriver(),
+        let input = ProfileViewModel.Input(itemSelectedTrigger: contentView.tableView.rx.itemSelected.asDriver(),
                                            signOutTrigger: signOutButton.rx.tap.asDriver())
+        
         let output = viewModel.transform(input)
     
         output.onUserXChanges
@@ -70,11 +72,9 @@ class ProfileViewController: BaseViewController {
         
         output.onUserXChanges
             .drive(onNext: {[weak self] xchanges in
-                xchanges.count > 0 ? self?.contentView.showTableView() : self?.contentView.showEmptyView()
+                self?.contentView.setupContent(for: xchanges.count > 0)
             }).disposed(by: disposeBag)
-        
-        output.onDeleteItem.drive().disposed(by: disposeBag)
-        
+                        
         output.onUser
             .drive(onNext: {[weak self] user in
                 guard let user = user else {
@@ -87,5 +87,9 @@ class ProfileViewController: BaseViewController {
             })
             .disposed(by: disposeBag)
         
+        output.onItemSelected
+            .drive(onNext: { [weak self] xChange in
+                self?.delegate?.didSelectGoToDetailView(for: xChange)
+            }).disposed(by: disposeBag)
     }
 }

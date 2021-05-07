@@ -8,19 +8,18 @@ import RxSwift
 import RxCocoa
 import Foundation
 
-final class MainDetailViewModel: ViewModelType {
+class DetailViewModel: ViewModelType {
     private let authProvider: AuthenticationProvider
     private let favoriteProvider: FavoritesProvider
     private let dataProvider: DataProvider
     private let chatProvider: ChatProvider
     
-    private let xChange = BehaviorRelay<XChange?>(value: nil)
     private let xChangeDetail: Driver<XChange?>
-    private let chatIdRelay = BehaviorRelay<String?>(value: nil)
     
     struct Input {
         let favButtonTrigger: Driver<Void>
         let chatButtonTrigger: Driver<Void>
+        let soldButtonTrigger: Driver<Void>
     }
     
     struct Output {
@@ -32,7 +31,9 @@ final class MainDetailViewModel: ViewModelType {
         let onAuthor: Driver<String>
         let onIsFavourite: Driver<Bool>
         let onFavButtonClicked: Driver<Void>
-        let onChatButtonClicked: Driver<String?>
+        let onContactSellerClicked: Driver<String?>
+        let onSoldButtonClicked: Driver<Void>
+        let onIsUserXchange: Driver<Bool>
     }
     
     init(_ xChange: XChange,
@@ -62,7 +63,10 @@ final class MainDetailViewModel: ViewModelType {
                onAuthor: authorLabelAsDriver(),
                onIsFavourite: onIsFavouriteAsDriver(),
                onFavButtonClicked: onFavoriteButtonTappedAsDriver(input),
-               onChatButtonClicked: onChatButtonTappedAsDriver(input))
+               onContactSellerClicked: onChatButtonTappedAsDriver(input),
+               onSoldButtonClicked: onSoldButtonTappedAsDriver(input),
+               onIsUserXchange: onHideFunctionButtons()
+        )
     }
     
     private func titleLabelAsDriver() -> Driver<String> {
@@ -105,16 +109,9 @@ final class MainDetailViewModel: ViewModelType {
     }
     
     private func authorLabelAsDriver() -> Driver<String> {
-        let authorLabel = BehaviorRelay(value: "")
-        
         return xChangeDetail.compactMap { $0 }
-            .map { [weak self] xChange -> String in
-                self?.authProvider.getUser(for: xChange.author) { user in
-                    if let user = user {
-                        authorLabel.accept(user.username)
-                    }
-                }
-                return authorLabel.value
+            .map { xChange in
+                xChange.authorName
             }.asDriver()
     }
     
@@ -136,13 +133,33 @@ final class MainDetailViewModel: ViewModelType {
             }
     }
     
+    private func onHideFunctionButtons() -> Driver<Bool> {
+        xChangeDetail.map { [weak self] xChange -> Bool in
+            guard let xChange = xChange,
+                  let userId = self?.authProvider.currentUserID() else { return true }
+            
+            return xChange.author == userId
+        }
+    }
+    
     private func onChatButtonTappedAsDriver(_ input: Input) -> Driver<String?> {
-        input.chatButtonTrigger.withLatestFrom(xChangeDetail.compactMap({ $0 }))
-            .map { [weak self] xChange -> String? in
-                self?.chatProvider.contactSeller(about: xChange) { [weak self] chatId in
-                    self?.chatIdRelay.accept(chatId)
+        input.chatButtonTrigger.withLatestFrom(xChangeDetail)
+            .compactMap { $0 }
+            .map { xChange -> Observable<String?> in
+                return .create { observer -> Disposable in
+                    self.chatProvider.contactSeller(about: xChange) { chatId in
+                        observer.onNext(chatId)
+                    }
+                    return Disposables.create { }
                 }
-                return self?.chatIdRelay.value
+            }.flatMap { $0.asDriver(onErrorJustReturn: nil) }
+    }
+    
+    private func onSoldButtonTappedAsDriver(_ input: Input) -> Driver<Void> {
+        input.soldButtonTrigger.withLatestFrom(xChangeDetail)
+            .map { [weak self] xChange in
+                guard let xChange = xChange else { return }
+                self?.dataProvider.makeUnavailable(xChange)
             }
     }
 }

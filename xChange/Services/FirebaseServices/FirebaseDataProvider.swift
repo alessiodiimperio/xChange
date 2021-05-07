@@ -30,39 +30,47 @@ enum FirestoreCollection {
     }
 }
 
-class FirestoreDataProvider: DataProvider {
+class FirebaseDataProvider: DataProvider {
     
     private let auth:AuthenticationProvider
     private let firestore: Firestore
     private let storage: Storage
     private let chatService: ChatProvider
     
+    let firestoreXchanges: CollectionReference
+    let firestoreChats: CollectionReference
+    
     private var userSubscription: ListenerRegistration?
     private var xChangeDetailSubscription: ListenerRegistration?
     
     let userXChanges = BehaviorRelay<[XChange]?>(value: nil)
     let xChangeDetail = BehaviorRelay<XChange?>(value: nil)
+    private var latestSubscription: ListenerRegistration?
+    let feed = BehaviorRelay<[XChange]?>(value: nil)
     
     init(auth: AuthenticationProvider, firestore: Firestore, storage: Storage, chatService: ChatProvider) {
         self.auth = auth
         self.firestore = firestore
         self.storage = storage
         self.chatService = chatService
+        self.firestoreXchanges = firestore.collection(FirestoreCollection.xChange.path)
+        self.firestoreChats = firestore.collection(FirestoreCollection.chat.path)
         
+        subscribeToLatestXchanges()
         subscribeToUserXchanges()
     }
     
     deinit {
+        unsubscribeFromLatestXchanges()
         unsubscribeFromUserXchanges()
     }
     
     private func subscribeToUserXchanges() {
-        
         guard let userId = auth.currentUserID() else { return }
         
-        userSubscription = firestore
-            .collection(FirestoreCollection.xChange.path)
+        userSubscription = firestoreXchanges
             .whereField("author", isEqualTo: userId)
+            .whereField("available", isEqualTo: true)
             .addSnapshotListener {[weak self] snapshot, error in
                 
                 if let _ = error {
@@ -88,18 +96,24 @@ class FirestoreDataProvider: DataProvider {
             .compactMap { $0 }
     }
     
-    func delete(_ xChange: XChange){
+    func makeUnavailable(_ xChange: XChange){
         guard let id = xChange.id else { return }
-        firestore
-            .collection(FirestoreCollection.xChange.path)
+        firestoreXchanges
             .document(id)
-            .delete()
+            .updateData(["available": false])
+        
+        firestoreChats
+            .whereField("xChangeId", isEqualTo: id)
+            .getDocuments { snapshot, error in
+                snapshot?.documents.forEach({ doc in
+                    doc.reference.updateData(["available": false])
+                })
+            }
     }
     
     func add(_ xChange: XChange, completion: @escaping () -> Void ){
         do {
-            let _ = try firestore
-                .collection(FirestoreCollection.xChange.path)
+            let _ = try firestoreXchanges
                 .addDocument(from: xChange)
             completion()
         } catch {
@@ -133,8 +147,7 @@ class FirestoreDataProvider: DataProvider {
     func subscribeToChanges(in xChange: XChange) -> Driver<XChange?> {
         guard let id = xChange.id else { return Driver.empty() }
         
-        xChangeDetailSubscription = firestore
-            .collection(FirestoreCollection.xChange.path)
+        xChangeDetailSubscription = firestoreXchanges
             .document(id)
             .addSnapshotListener {[weak self] snapshot, error in
                 
@@ -152,5 +165,37 @@ class FirestoreDataProvider: DataProvider {
     
     func unsubscribeToChanges() {
         xChangeDetailSubscription?.remove()
+    }
+    
+    private func subscribeToLatestXchanges() {
+        guard let userId = auth.currentUserID() else { return }
+        
+        latestSubscription = firestoreXchanges
+            .whereField("author", isNotEqualTo: userId)
+            .whereField("available", isEqualTo: true)
+            .addSnapshotListener {[weak self] snapshot, error in
+                if let error = error {
+                    self?.feed.accept([])
+                    print("feed error: ", error.localizedDescription)
+                    return
+                }
+                
+                guard let documents = snapshot?.documents else { return }
+                let xChanges = documents.compactMap({ (snap) -> XChange? in
+                    return try? snap.data(as: XChange.self)
+                })
+                print(xChanges)
+                self?.feed.accept(xChanges)
+            }
+    }
+    
+    private func unsubscribeFromLatestXchanges() {
+        latestSubscription?.remove()
+    }
+    
+    func getFeed() -> Driver<[XChange]> {
+        feed
+            .asDriver()
+            .compactMap { $0 }
     }
 }

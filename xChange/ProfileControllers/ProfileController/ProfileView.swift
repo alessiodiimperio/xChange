@@ -13,6 +13,7 @@ final class ProfileView: BaseView {
     let emptyLabel = UILabel()
     let userNameLabel = UILabel()
     let emailLabel = UILabel()
+    let separator = UIView()
     
     override func addSubviews() {
         super.addSubviews()
@@ -20,7 +21,8 @@ final class ProfileView: BaseView {
         addSubviews(userNameLabel,
                     emailLabel,
                     tableView,
-                    emptyLabel)
+                    emptyLabel,
+                    separator)
         
         setupTableView()
     }
@@ -28,9 +30,11 @@ final class ProfileView: BaseView {
     override func setupStyling() {
         super.setupStyling()
         
-        emptyLabel.text = "No content..."
+        emptyLabel.text = "This is where will be able to view/edit your listings."
+        emptyLabel.setupUI(font: .regularText, adjustsFontSizeToFitWidth: true)
         emailLabel.setupUI(font: .boldBigTitle)
         userNameLabel.setupUI(font: .semiboldSubtitle)
+        separator.backgroundColor = .black
     }
     
     private func setupTableView() {
@@ -42,7 +46,7 @@ final class ProfileView: BaseView {
         super.setupConstraints()
         
         emailLabel.snp.makeConstraints { make in
-            make.top.left.equalToSuperview().offset(.hugeMargin)
+            make.top.left.right.equalToSuperview().offset(.hugeMargin)
         }
         
         userNameLabel.snp.makeConstraints { make in
@@ -50,8 +54,14 @@ final class ProfileView: BaseView {
             make.left.equalToSuperview().offset(.hugeMargin)
         }
         
-        tableView.snp.makeConstraints { make in
+        separator.snp.makeConstraints { make in
+            make.left.right.equalToSuperview().inset(.mediumMargin)
+            make.height.equalTo(.point)
             make.top.equalTo(userNameLabel.snp.bottom).offset(.hugeMargin)
+        }
+        
+        tableView.snp.makeConstraints { make in
+            make.top.equalTo(separator.snp.bottom)
             make.bottom.left.right.equalToSuperview()
         }
         
@@ -61,14 +71,14 @@ final class ProfileView: BaseView {
         }
     }
     
-    func showEmptyView() {
-        tableView.isHidden = true
-        emptyLabel.isHidden = false
-    }
-    
-    func showTableView() {
-        tableView.isHidden = false
-        emptyLabel.isHidden = true
+    func setupContent(for hasXchanges: Bool) {
+        if hasXchanges {
+            tableView.isHidden = false
+            emptyLabel.isHidden = true
+        } else {
+            tableView.isHidden = true
+            emptyLabel.isHidden = false
+        }
     }
     
     func hideUserLabels() {

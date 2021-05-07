@@ -60,8 +60,10 @@ class RootCoordinator: Coordinator {
         self.tabBarController = container.resolve(TabBarController.self, arguments: tabBarDelegate, mainCoordinator, favoriteCoordinator, addXchangeCoordinator, chatCoordinator, profileCoordinator)
         
         guard let tabBarController = tabBarController else { return }
-        
         navigationController.setViewControllers([tabBarController], animated: true)
+        
+        // Force layout of lazy loaded ChatViewController to subscribe to chats for badge update
+        tabBarController.chatCoordinator.navigationController.viewControllers.first?.loadViewIfNeeded()
     }
     
     func signOut(){
@@ -116,32 +118,24 @@ extension RootCoordinator: SignUpViewControllerDelegate {
 }
 
 extension RootCoordinator: TabBarControllerDelegate {
-    func navigateToDetailChatViewController(with chatId: String) {
-    }
 }
 
 extension RootCoordinator: MainCoordinatorDelegate {
-    func didSelectGoToDirectChat(with chatId: String) {
+    func didSelectToGoToDirectChat(with chatId: String) {
         guard let tabController = tabBarController else { return }
         tabController.selectedIndex = 3
         tabController.chatCoordinator.didSelectGoToDirectChat(with: chatId)
     }
-    
-    
 }
 
 extension RootCoordinator: FavoriteCoordinatorDelegate {
-    
 }
 
 extension RootCoordinator: AddXChangeCoordinatorDelegate {
-    
 }
 
 extension RootCoordinator: ChatCoordinatorDelegate {
-    
 }
 
 extension RootCoordinator: ProfileCoordinatorDelegate {
-    
 }

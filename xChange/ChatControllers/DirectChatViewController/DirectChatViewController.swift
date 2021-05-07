@@ -30,6 +30,16 @@ class DirectChatViewController: BaseViewController {
         super.viewDidLoad()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        viewModel.subScribeToChat()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        viewModel.unSubscribeToChat()
+    }
+    
     override func setupObservables() {
         super.setupObservables()
         

@@ -9,7 +9,8 @@ import UIKit
 import Swinject
 import SwinjectStoryboard
 
-protocol FavoriteCoordinatorDelegate: AnyObject {    
+protocol FavoriteCoordinatorDelegate: AnyObject {
+    func didSelectToGoToDirectChat(with chatId: String)
 }
 
 class FavoritesCoordinator:Coordinator {
@@ -24,10 +25,31 @@ class FavoritesCoordinator:Coordinator {
         self.delegate = delegate
     }
     
-    func start() {        
-        let vc = container.resolve(FavoritesViewController.self)!
+    func start() {
+        let delegate: FavouritesViewControllerDelegate? = self
+        let vc = container.resolve(FavoritesViewController.self, argument: delegate)!
         vc.tabBarItem.image = UIImage(systemName: "heart.fill")
         vc.tabBarItem.title = "Favorites"
         navigationController.pushViewController(vc, animated: false)
+    }
+}
+
+extension FavoritesCoordinator: FavouritesViewControllerDelegate {
+    
+    func didSelectFavourite(_ xChange: XChange) {
+        let delegate: DetailViewControllerDelegate? = self
+        let favouriteDetailViewController = container.resolve(DetailViewController.self, arguments: xChange, delegate)!
+        navigationController.pushViewController(favouriteDetailViewController, animated: true)
+    }
+}
+
+extension FavoritesCoordinator: DetailViewControllerDelegate {
+    func didSelectXchangeSold(in viewController: BaseViewController) {
+    }
+    
+    
+    func didSelectGoToDirectChat(with chatId: String) {
+        let directChatViewController = container.resolve(DirectChatViewController.self, argument: chatId)!
+        navigationController.pushViewController(directChatViewController, animated: true)
     }
 }

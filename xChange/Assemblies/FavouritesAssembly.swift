@@ -16,8 +16,15 @@ final class FavouritesAssembly: Assembly {
     }
         
     private func assembleFavourites(_ container: Container) {
+        assembleViews(container)
         assembleViewModels(container)
         assembleViewControllers(container)
+    }
+    
+    private func assembleViews(_ container: Container) {
+        container.register(FavoritesView.self) { _ in
+            FavoritesView()
+        }
     }
     
     private func assembleViewModels(_ container: Container){
@@ -28,9 +35,13 @@ final class FavouritesAssembly: Assembly {
     }
     
     private func assembleViewControllers(_ container: Container){
-        container.register(FavoritesViewController.self) { r in
+        container.register(FavoritesViewController.self) { (r, delegate: FavouritesViewControllerDelegate?) in
+            let view = r.resolve(FavoritesView.self)!
             let viewModel = r.resolve(FavoritesViewModel.self)!
-            return FavoritesViewController(viewModel: viewModel)
+            
+            return FavoritesViewController(view: view,
+                                           viewModel: viewModel,
+                                           delegate: delegate)
         }
     }
 }

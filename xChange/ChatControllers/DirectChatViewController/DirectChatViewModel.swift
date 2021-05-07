@@ -14,8 +14,7 @@ final class DirectChatViewModel: ViewModelType {
     private let authProvider: AuthenticationProvider
     private let chatProvider: ChatProvider
     private let chatRelay = BehaviorRelay<Chat?>(value: nil)
-    private let chatMessagesRelay = BehaviorRelay<[ChatMessage]>(value: [])
-    
+    private let chatId: String
     private(set) var currentUserId: String?
     
     struct Input {
@@ -32,23 +31,16 @@ final class DirectChatViewModel: ViewModelType {
     init(chatId: String, chatProvider: ChatProvider, authProvider: AuthenticationProvider) {
         self.chatProvider =  chatProvider
         self.authProvider = authProvider
-        
         self.currentUserId = authProvider.currentUserID()
-        
-        chatProvider.getChat(with: chatId) { [weak self] chat in
-            if let chat = chat,
-               let self = self {
-                self.chatRelay.accept(chat)
-                self.chatProvider.subscribeToDirectMessages(for: chat) { [weak self] messages in
-                    self?.chatMessagesRelay.accept(messages)
-                }
-            }
-        }
+        self.chatId = chatId
     }
     
-    deinit {
-        guard let chat = chatRelay.value else { return }
-        chatProvider.unsubscribeToDirectMessages(for: chat)
+    func subScribeToChat() {
+        chatProvider.subscribeToChat(with: chatId)
+    }
+    
+    func unSubscribeToChat() {
+        chatProvider.unsubscribeToChat()
     }
     
     func transform(_ input: Input) -> Output {
@@ -65,8 +57,8 @@ final class DirectChatViewModel: ViewModelType {
                   let currentUser = self?.authProvider.currentUser.value,
                   let userId = currentUser.id,
                   let chat = self?.chatRelay.value else { return }
-            
-            let chatMessage = ChatMessage(senderId: userId,
+            let chatMessage = ChatMessage(timestamp: Date(),
+                                          senderId: userId,
                                           senderName: currentUser.username,
                                           message: message)
             
@@ -76,14 +68,14 @@ final class DirectChatViewModel: ViewModelType {
     }
     
     private func chatMessagesAsDriver() -> Driver<[ChatMessage]> {
-        chatMessagesRelay
+        chatProvider.getChat()
             .compactMap { $0 }
-            .map({ messages -> [ChatMessage] in
-                messages.sorted { (prevMessage, nextMessage) -> Bool in
-                    guard let firstTimeStamp = prevMessage.timestamp,
-                          let secondTimeStamp = nextMessage.timestamp else { return false }
-                    return firstTimeStamp > secondTimeStamp
+            .map { [weak self] chat in
+                self?.chatRelay.accept(chat)
+                self?.chatProvider.setAsRead(chat)
+                return chat.messages.sorted { (firstMessage, secondMessage) -> Bool in
+                    firstMessage.timestamp > secondMessage.timestamp
                 }
-            }).asDriver(onErrorJustReturn: [])
+            }
     }
 }

@@ -9,13 +9,22 @@ import UIKit
 
 final class FavoritesView: BaseView {
 
+    let emptyLabel = UILabel()
     let tableView = UITableView()
     
     override func addSubviews() {
         super.addSubviews()
         
-        addSubview(tableView)
+        addSubviews(tableView,
+                   emptyLabel)
+        
         setupTableView()
+    }
+    
+    override func setupStyling() {
+        super.setupStyling()
+        emptyLabel.text = "This is where you can view your saved listings."
+        emptyLabel.setupUI(font: .regularText, adjustsFontSizeToFitWidth: true)
     }
     
     private func setupTableView() {
@@ -28,6 +37,22 @@ final class FavoritesView: BaseView {
         
         tableView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
+        }
+        
+        emptyLabel.snp.makeConstraints { make in
+            make.centerX.equalToSuperview()
+            make.left.right.lessThanOrEqualToSuperview().inset(.mediumMargin).priority(.low)
+            make.top.equalToSuperview().offset(.giganticMargin)
+        }
+    }
+    
+    func setupContent(for hasContent: Bool) {
+        if hasContent {
+            tableView.isHidden = false
+            emptyLabel.isHidden = true
+        } else {
+            tableView.isHidden = true
+            emptyLabel.isHidden = false
         }
     }
 }

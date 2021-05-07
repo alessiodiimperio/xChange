@@ -87,15 +87,18 @@ class AddXChangeViewModel: ViewModelType, ViewModelWithLoadingState {
                                 guard let title = title,
                                       let description = description,
                                       let price = price,
-                                      let userID = self?.authenticationService.currentUserID() else { return nil }
+                                      let currentUser = self?.authenticationService.currentUser.value,
+                                      let userId = currentUser.id else { return nil }
                                 
                                 
                                 return XChange(title: title,
                                                description: description,
-                                               author: userID,
+                                               author: userId,
+                                               authorName: currentUser.username,
                                                followers: [],
                                                price: price,
-                                               image: nil)
+                                               image: nil,
+                                               available: true)
                                 
                              }
     }
@@ -118,9 +121,11 @@ class AddXChangeViewModel: ViewModelType, ViewModelWithLoadingState {
                     self?.xChangeService.add(XChange(title: xChange.title,
                                                      description: xChange.description,
                                                      author: xChange.author,
+                                                     authorName: self?.authenticationService.currentUser.value?.username ?? "",
                                                      followers: xChange.followers,
                                                      price: xChange.price,
-                                                     image: imageLink)) {
+                                                     image: imageLink,
+                                                     available: true)) {
                         self?.setSuccessState()
                     }
                 }

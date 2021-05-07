@@ -10,7 +10,7 @@ import Swinject
 import SwinjectStoryboard
 
 protocol MainCoordinatorDelegate: AnyObject {
-    func didSelectGoToDirectChat(with chatId: String)
+    func didSelectToGoToDirectChat(with chatId: String)
 }
 
 class MainCoordinator:Coordinator {
@@ -34,20 +34,24 @@ class MainCoordinator:Coordinator {
     }
     
     func goToMainDetailView(for xChange: XChange) {
-        let delegate: MainDetailViewControllerDelegate? = self
-        let vc = container.resolve(MainDetailViewController.self, arguments: xChange, delegate)!
+        let delegate: DetailViewControllerDelegate? = self
+        let vc = container.resolve(DetailViewController.self, arguments: xChange, delegate)!
         navigationController.pushViewController(vc, animated: true)
     }
 }
 
 extension MainCoordinator: MainViewControllerDelegate {
+    
     func handleDidSelectTableViewItem(xChange: XChange) {
         self.goToMainDetailView(for: xChange)
     }
 }
 
-extension MainCoordinator: MainDetailViewControllerDelegate {
+extension MainCoordinator: DetailViewControllerDelegate {
+    func didSelectXchangeSold(in viewController: BaseViewController) {
+    }
+    
     func didSelectGoToDirectChat(with chatId: String) {
-        delegate?.didSelectGoToDirectChat(with: chatId)
+        delegate?.didSelectToGoToDirectChat(with: chatId)
     }
 }

@@ -13,11 +13,15 @@ final class ChatSubjectViewModel {
     let title: String
     let price: String
     let date: String
+    let available: Bool
+    let unread: Bool
     
-    init(from chat: Chat) {
+    init(from chat: Chat, unread: Bool) {
         imageLink = chat.image
         title = chat.title
         price = chat.itemPrice
         date = DateFormat.mediumDateLabel(for: chat.timestamp)
+        available = chat.available
+        self.unread = unread
     }
 }

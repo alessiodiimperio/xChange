@@ -8,7 +8,6 @@
 import UIKit
 
 protocol TabBarControllerDelegate: AnyObject {
-    func navigateToDetailChatViewController(with chatId: String)
 }
 
 class TabBarController: UITabBarController {

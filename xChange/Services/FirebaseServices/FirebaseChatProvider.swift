@@ -11,20 +11,23 @@ import RxSwift
 import RxCocoa
 
 class FirebaseChatProvider: ChatProvider {
-    
-    let auth: AuthenticationProvider
-    let firestore: Firestore
+
+
+    private let auth: AuthenticationProvider
+    private let firestore: Firestore
+    private let firestoreChats: CollectionReference
     
     private let chats = BehaviorRelay<[Chat]>(value: [])
-    private let directMessages = BehaviorRelay<[ChatMessage]>(value: [])
+    private let chat = BehaviorRelay<Chat?>(value: nil)
     
+    private(set) var chatsSubscription: ListenerRegistration?
     private(set) var chatSubscription: ListenerRegistration?
-    private(set) var directMessageSubscription: ListenerRegistration?
     
     init(auth: AuthenticationProvider, firestore: Firestore) {
         self.auth = auth
         self.firestore = firestore
-        
+        self.firestoreChats = firestore.collection(FirestoreCollection.chat.path)
+
         subscribeToChats()
     }
     
@@ -32,8 +35,20 @@ class FirebaseChatProvider: ChatProvider {
         unsubscribeToChats()
     }
     
+    private func parseChatIdFor(_ userId: String, and xChangeId: String) -> String {
+        if userId < xChangeId {
+            return xChangeId.appending(userId)
+        } else {
+            return userId.appending(xChangeId)
+        }
+    }
+    
     func getChats() -> Driver<[Chat]> {
         chats.asDriver()
+    }
+    
+    func getChat() -> Driver<Chat?> {
+        chat.asDriver()
     }
     
     func contactSeller(about xChange: XChange, completion: @escaping (String) -> Void) {
@@ -42,7 +57,7 @@ class FirebaseChatProvider: ChatProvider {
         
         let chatId = parseChatIdFor(userId, and: xChangeId)
         
-        firestore.collection(FirestoreCollection.chat.path)
+        firestoreChats
             .document(chatId)
             .getDocument { [weak self] snapshot, error in
                 if let error = error {
@@ -50,18 +65,16 @@ class FirebaseChatProvider: ChatProvider {
                 }
                 
                 if let document = snapshot, document.exists {
-                    self?.firestore.collection(FirestoreCollection.chat.path)
-                        .document(document.documentID)
-                        .updateData(["chatters" : [userId, xChange.author]])
                     completion(document.documentID)
                 } else {
-                    self?.createChat(about: xChange, with: chatId)
-                    completion(chatId)
+                    self?.createChat(about: xChange, with: chatId) { chatId in
+                        completion(chatId)
+                    }
                 }
             }
     }
     
-    func createChat(about xChange: XChange, with chatId: String) {
+    func createChat(about xChange: XChange, with chatId: String, completion: @escaping (String) -> Void) {
         guard let xChangeId = xChange.id,
               let userId = auth.currentUserID() else { return }
         
@@ -70,46 +83,64 @@ class FirebaseChatProvider: ChatProvider {
                         image: xChange.image ?? "",
                         itemPrice: xChange.price ?? "",
                         seller: xChange.author,
+                        sellerName: xChange.authorName,
                         buyer: userId,
-                        chatters: [userId, xChange.author],
-                        active: true,
-                        hasNewMessage: true)
+                        chatters: [userId],
+                        hasNewMessage: [xChange.author],
+                        messages: [ChatMessage](),
+                        available: true)
         do {
-            try firestore.collection(FirestoreCollection.chat.path)
+            try firestoreChats
                 .document(chatId)
                 .setData(from: chat)
+            
+            completion(chatId)
         } catch {
             print(error.localizedDescription)
         }
     }
     
-    func getChat(with chatId: String, completion: @escaping (Chat?) -> Void) {
-        firestore.collection(FirestoreCollection.chat.path)
+    func send(_ message: ChatMessage, to chat: Chat?) {
+        guard let chat = chat,
+              let chatId = chat.id,
+              let userId = auth.currentUserID()  else { return }
+        
+        firestoreChats
             .document(chatId)
-            .getDocument { snapshot, error in
-                if let error = error {
-                    print(error.localizedDescription)
-                }
-                
-                let result = Result {
-                    try? snapshot?.data(as: Chat.self)
-                }
-                
-                switch result {
-                case .success(let chat):
-                    completion(chat)
-                case .failure(let error):
-                    print(error.localizedDescription)
-                    completion(nil)
-                }
-            }
+            .updateData([
+                "hasNewMessage": FieldValue.arrayUnion([userId == chat.seller ? chat.buyer : chat.seller]),
+                "chatters" : [chat.seller, chat.buyer],
+                "messages" :
+                            FieldValue.arrayUnion([[
+                                "timestamp" : message.timestamp,
+                                "senderId" : message.senderId,
+                                "senderName" : message.senderName,
+                                "message" : message.message
+                    ]])
+            ])
     }
-
+    
+    func remove(_ chat: Chat) {
+        guard let userId = auth.currentUserID(),
+              let chatId = chat.id else { return }
+        
+        firestoreChats
+            .document(chatId)
+            .updateData(["chatters" : FieldValue.arrayRemove([userId])])
+    }
+    
+    func setAsRead(_ chat: Chat) {
+        guard let userId = auth.currentUserID(),
+              let chatId = chat.id else { return }
+        
+        firestoreChats
+            .document(chatId)
+            .updateData(["hasNewMessage": FieldValue.arrayRemove([userId])])
+    }
     
     private func subscribeToChats() {
         guard let userId = auth.currentUserID() else { return }
-        chatSubscription = firestore
-            .collection(FirestoreCollection.chat.path)
+        chatsSubscription = firestoreChats
             .whereField("chatters", arrayContains: userId)
             .addSnapshotListener {[weak self] (snapshot, error) in
                 
@@ -126,59 +157,33 @@ class FirebaseChatProvider: ChatProvider {
                 })
                 chats.append(contentsOf: result)
                 self?.chats.accept(chats)
-                print("subscribing", chats.count)
             }
     }
     
-    private func parseChatIdFor(_ userId: String, and xChangeId: String) -> String {
-        if userId < xChangeId {
-            return xChangeId.appending(userId)
-        } else {
-            return userId.appending(xChangeId)
-        }
-    }
-    
     private func unsubscribeToChats () {
-        chatSubscription?.remove()
+        chatsSubscription?.remove()
     }
     
-    func send(_ message: ChatMessage, to chat: Chat?) {
-        guard let chat = chat,
-              let chatId = chat.id else { return }
-        
-        let _ = try? firestore.collection(FirestoreCollection.chat.path)
+    func subscribeToChat(with chatId: String) {
+        chatSubscription = firestoreChats
             .document(chatId)
-            .collection(FirestoreCollection.directMessages.path)
-            .addDocument(from: message)
-    }
-    
-    func subscribeToDirectMessages(for chat: Chat, completion: @escaping ([ChatMessage]) -> Void) {
-        guard let chatId = chat.id else { return completion([]) }
-        
-        firestore.collection(FirestoreCollection.chat.path)
-            .document(chatId)
-            .collection(FirestoreCollection.directMessages.path)
             .addSnapshotListener { snapshot, error in
                 
                 if let error = error {
                     print(error.localizedDescription)
                 }
                 
-                guard let documents = snapshot?.documents else { return }
+                guard let snapshot = snapshot else { return }
                 
-                var messages = [ChatMessage]()
-
-                let result = documents.compactMap({ (snap) -> ChatMessage? in
-                    return try? snap.data(as: ChatMessage.self)
-                })
+                let chat = try? snapshot.data(as: Chat.self)
                 
-                messages.append(contentsOf: result)
-                completion(messages)
+                if let chat = chat {
+                    self.chat.accept(chat)
+                }
             }
     }
     
-    func unsubscribeToDirectMessages(for chat: Chat) {
-        directMessageSubscription?.remove()
+    func unsubscribeToChat() {
+        chatSubscription?.remove()
     }
-    
 }

@@ -14,6 +14,7 @@ protocol DataProvider{
     func subscribeToChanges(in xChange: XChange) -> Driver<XChange?>
     func unsubscribeToChanges()
     func add(_ xChange: XChange, completion: @escaping () -> Void)
-    func delete(_ xChange: XChange)
+    func makeUnavailable(_ xChange: XChange)
     func uploadImage(_ image: UIImage, _ completion: @escaping (String?) -> Void)
+    func getFeed() -> Driver<[XChange]>
 }

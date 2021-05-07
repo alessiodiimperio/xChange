@@ -16,8 +16,10 @@ struct Chat: Identifiable, Codable {
     let image: String
     let itemPrice: String
     let seller: String
+    let sellerName: String
     let buyer: String
     var chatters: [String]
-    var active: Bool
-    var hasNewMessage: Bool
+    var hasNewMessage: [String]
+    let messages: [ChatMessage]
+    var available: Bool
 }

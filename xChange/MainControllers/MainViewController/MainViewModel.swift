@@ -10,7 +10,7 @@ import RxSwift
 import RxCocoa
 
 class MainViewModel: ViewModelType {
-    private var feedProvider: FeedProvider
+    private var dataProvider: DataProvider
     private var favoriteProvider: FavoritesProvider
     
     struct Input {
@@ -23,8 +23,8 @@ class MainViewModel: ViewModelType {
         let onItemSelect: Driver<XChange>
     }
     
-    init(feedProvider:FeedProvider, favoriteProvider: FavoritesProvider){
-        self.feedProvider = feedProvider
+    init(dataProvider:DataProvider, favoriteProvider: FavoritesProvider){
+        self.dataProvider = dataProvider
         self.favoriteProvider = favoriteProvider
     }
     
@@ -34,11 +34,11 @@ class MainViewModel: ViewModelType {
     }
     
     private func onFeedAsDriver(_ input: Input) -> Driver<[XChange]> {
-        feedProvider.getFeed()
+        dataProvider.getFeed()
     }
     
     private func itemSelectedAsDriver(_ input: Input) -> Driver<XChange> {
-        input.selectItemTrigger.withLatestFrom(feedProvider.getFeed()) { indexPath, xChanges in
+        input.selectItemTrigger.withLatestFrom(dataProvider.getFeed()) { indexPath, xChanges in
             xChanges[indexPath.row]
         }
     }

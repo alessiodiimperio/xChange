@@ -13,10 +13,11 @@ class FavoritesViewModel: ViewModelType {
     private var favouriteProvider: FavoritesProvider
     
     struct Input {
-        let favoredItemTrigger: Driver<IndexPath>
+        let favouriteItemSelectedTrigger: Driver<IndexPath>
         let favouriteToggleTrigger: Driver<IndexPath>
     }
     struct Output {
+        let onFavouriteSelected: Driver<XChange>
         let onFavourites: Driver<[XChange]>
         let onFavoriteToggle: Driver<Void>
     }
@@ -26,10 +27,17 @@ class FavoritesViewModel: ViewModelType {
     }
     
     func transform(_ input: Input) -> Output {
-        Output(onFavourites: getUserFavouritesAsDriver(),
+        Output(onFavouriteSelected: onFavouriteSelectedAsDriver(input),
+               onFavourites: getUserFavouritesAsDriver(),
                onFavoriteToggle: onFavoriteToggledAsDriver(input))
     }
 
+    private func onFavouriteSelectedAsDriver(_ input: Input) -> Driver<XChange> {
+        input.favouriteItemSelectedTrigger.withLatestFrom(favouriteProvider.getFavoriteXchanges()) { indexPath, xChanges in
+            xChanges[indexPath.row]
+        }
+    }
+    
     private func getUserFavouritesAsDriver() -> Driver<[XChange]> {
         favouriteProvider.getFavoriteXchanges()
     }

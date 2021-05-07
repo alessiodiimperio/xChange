@@ -31,9 +31,10 @@ final class FieldLabel: BaseView {
     
     override func setupStyling() {
         super.setupStyling()
-        
+        backgroundColor = .clear
         titleLabel.setupUI(font: .semiboldText)
         textLabel.setupUI(font: .regularText)
+        textLabel.lineBreakMode = .byTruncatingTail
     }
     
     override func setupConstraints() {

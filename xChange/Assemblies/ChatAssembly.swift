@@ -34,7 +34,9 @@ final class ChatAssembly: Assembly {
     private func assembleViewModels(_ container: Container){
         container.register(ChatViewModel.self){r in
             let chatProvider = r.resolve(ChatProvider.self)!
-            return ChatViewModel(chatProvider: chatProvider)
+            let authProvider = r.resolve(AuthenticationProvider.self)!
+            return ChatViewModel(chatProvider: chatProvider,
+                                 authProvider: authProvider)
         }
         
         container.register(DirectChatViewModel.self) { (r, chatId: String) in

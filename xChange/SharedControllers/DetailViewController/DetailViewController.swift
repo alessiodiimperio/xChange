@@ -8,17 +8,18 @@ import RxSwift
 import RxCocoa
 import UIKit
 
-protocol MainDetailViewControllerDelegate: class {
+protocol DetailViewControllerDelegate: class {
     func didSelectGoToDirectChat(with chatId: String)
+    func didSelectXchangeSold(in viewController: BaseViewController)
 }
 
-class MainDetailViewController: BaseViewController {
+class DetailViewController: BaseViewController {
     
-    let contentView:  MainDetailView
-    var viewModel: MainDetailViewModel
-    weak var delegate: MainDetailViewControllerDelegate?
+    let contentView:  DetailView
+    var viewModel: DetailViewModel
+    weak var delegate: DetailViewControllerDelegate?
     
-    init(view: MainDetailView, viewModel: MainDetailViewModel, delegate: MainDetailViewControllerDelegate?) {
+    init(view: DetailView, viewModel: DetailViewModel, delegate: DetailViewControllerDelegate?) {
         self.contentView = view
         self.viewModel = viewModel
         self.delegate = delegate
@@ -40,8 +41,9 @@ class MainDetailViewController: BaseViewController {
     override func setupObservables() {
         super.setupObservables()
         
-        let output = viewModel.transform(MainDetailViewModel.Input(favButtonTrigger: contentView.favoriteButton.rx.tap.asDriver(),
-                                                                   chatButtonTrigger: contentView.chatButton.rx.tap.asDriver()))
+        let output = viewModel.transform(DetailViewModel.Input(favButtonTrigger: contentView.favoriteButton.rx.tap.asDriver(),
+                                                               chatButtonTrigger: contentView.chatButton.rx.tap.asDriver(),
+                                                               soldButtonTrigger: contentView.soldButton.rx.tap.asDriver()))
 
         output.onImage
             .drive(onNext: {[weak self] imageLink in
@@ -85,9 +87,23 @@ class MainDetailViewController: BaseViewController {
         output.onFavButtonClicked.drive()
         .disposed(by: disposeBag)
 
-        output.onChatButtonClicked.drive(onNext: { [weak self] chatId in
+        output.onContactSellerClicked.drive(onNext: { [weak self] chatId in
             guard let chatId = chatId else { return}
             self?.delegate?.didSelectGoToDirectChat(with: chatId)
         }).disposed(by: disposeBag)
+        
+        output.onIsUserXchange
+            .drive(onNext: { [weak self] isUsers in
+                self?.contentView.setup(if: isUsers)
+            })
+            .disposed(by: disposeBag)
+        
+        output.onSoldButtonClicked
+            .drive(onNext: { [weak self] in
+                guard let self = self else { return }
+                
+                self.delegate?.didSelectXchangeSold(in: self)
+            })
+            .disposed(by: disposeBag)
     }
 }

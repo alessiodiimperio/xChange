@@ -8,13 +8,20 @@ import RxSwift
 import RxCocoa
 import UIKit
 
+protocol FavouritesViewControllerDelegate: AnyObject {
+    func didSelectFavourite(_ xChange: XChange)
+}
+
 class FavoritesViewController: BaseViewController {
 
     let viewModel:FavoritesViewModel
-    let contentView = FavoritesView()
+    let contentView: FavoritesView
+    weak var delegate: FavouritesViewControllerDelegate?
     
-    init(viewModel: FavoritesViewModel) {
+    init(view: FavoritesView, viewModel: FavoritesViewModel, delegate: FavouritesViewControllerDelegate?) {
+        self.contentView = view
         self.viewModel = viewModel
+        self.delegate = delegate
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -33,7 +40,7 @@ class FavoritesViewController: BaseViewController {
     override func setupObservables() {
         super.setupObservables()
         
-        let input = FavoritesViewModel.Input(favoredItemTrigger: contentView.tableView.rx.itemSelected.asDriver(),
+        let input = FavoritesViewModel.Input(favouriteItemSelectedTrigger: contentView.tableView.rx.itemSelected.asDriver(),
                                              favouriteToggleTrigger: contentView.tableView.rx.itemDeleted.asDriver()
         )
         
@@ -48,5 +55,15 @@ class FavoritesViewController: BaseViewController {
             }.disposed(by: disposeBag)
         
         output.onFavoriteToggle.drive().disposed(by: disposeBag)
+        
+        output.onFavouriteSelected
+            .drive(onNext: { [weak self] xChange in
+                self?.delegate?.didSelectFavourite(xChange)
+            }).disposed(by: disposeBag)
+        
+        output.onFavourites
+            .drive(onNext: {[weak self] xChanges in
+                self?.contentView.setupContent(for: xChanges.count > 0)
+            }).disposed(by: disposeBag)
     }
 }
