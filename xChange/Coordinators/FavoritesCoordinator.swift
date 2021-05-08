@@ -49,7 +49,14 @@ extension FavoritesCoordinator: DetailViewControllerDelegate {
     
     
     func didSelectGoToDirectChat(with chatId: String) {
-        let directChatViewController = container.resolve(DirectChatViewController.self, argument: chatId)!
+        let delegate: DirectChatViewControllerDelegate? = self
+        let directChatViewController = container.resolve(DirectChatViewController.self, arguments: chatId, delegate)!
         navigationController.pushViewController(directChatViewController, animated: true)
+    }
+}
+
+extension FavoritesCoordinator: DirectChatViewControllerDelegate {
+    func shouldDismiss(_ viewController: BaseViewController) {
+        viewController.dismiss(animated: true)
     }
 }

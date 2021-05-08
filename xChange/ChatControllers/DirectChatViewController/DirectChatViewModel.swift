@@ -26,6 +26,7 @@ final class DirectChatViewModel: ViewModelType {
         let onSendButtonTapped: Driver<Void>
         let onTextInput: Driver<String?>
         let onMessages: Driver<[ChatMessage]>
+        let onDismiss: Driver<Bool>
     }
     
     init(chatId: String, chatProvider: ChatProvider, authProvider: AuthenticationProvider) {
@@ -46,7 +47,8 @@ final class DirectChatViewModel: ViewModelType {
     func transform(_ input: Input) -> Output {
         Output(onSendButtonTapped: sendButtonTappedAsDriver(input),
                onTextInput: input.textInputTrigger.asDriver(),
-               onMessages: chatMessagesAsDriver()
+               onMessages: chatMessagesAsDriver(),
+               onDismiss: onDismissAsDriver()
         )
     }
     
@@ -77,5 +79,12 @@ final class DirectChatViewModel: ViewModelType {
                     firstMessage.timestamp > secondMessage.timestamp
                 }
             }
+    }
+    
+    private func onDismissAsDriver() -> Driver<Bool> {
+        chatProvider.getChat().map { chat -> Bool in
+            guard let chat = chat else { return false }
+            return chat.available
+        }
     }
 }

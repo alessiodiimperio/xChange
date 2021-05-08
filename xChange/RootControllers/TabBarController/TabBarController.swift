@@ -42,6 +42,11 @@ class TabBarController: UITabBarController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        tabBar.barTintColor = .mainNavigationColor
+        tabBar.tintColor = .mainActiveTintColor
+        tabBar.unselectedItemTintColor = .mainClickableTintColor
+
+        
         mainCoordinator.start()
         favoritesCoordinator.start()
         addXChangeCoordinator.start()

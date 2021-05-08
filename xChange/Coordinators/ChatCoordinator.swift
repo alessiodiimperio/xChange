@@ -34,8 +34,16 @@ class ChatCoordinator:Coordinator {
     
     func didSelectGoToDirectChat(with chatId: String) {
         navigationController.popToRootViewController(animated: false)
-        let directChatViewController = container.resolve(DirectChatViewController.self, argument: chatId)!
+        let delegate: DirectChatViewControllerDelegate? = self
+        let directChatViewController = container.resolve(DirectChatViewController.self, arguments: chatId, delegate)!
         navigationController.pushViewController(directChatViewController, animated: true)
+    }
+}
+
+extension ChatCoordinator: DirectChatViewControllerDelegate {
+    
+    func shouldDismiss(_ viewController: BaseViewController) {
+        viewController.dismiss(animated: true)
     }
 }
 

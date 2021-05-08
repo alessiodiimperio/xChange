@@ -42,7 +42,7 @@ class ProfileViewController: BaseViewController {
     
     private func setupSignOutButtonInNavigationBar() {
         signOutButton.setTitle("Sign Out", for: .normal)
-        signOutButton.setTitleColor(.systemBlue, for: .normal)
+        signOutButton.setTitleColor(.mainClickableTintColor, for: .normal)
         let barButtonItem = UIBarButtonItem(customView: signOutButton)
         navigationItem.rightBarButtonItem = barButtonItem
     }

@@ -57,12 +57,13 @@ final class ChatAssembly: Assembly {
             return ChatViewController(view: view, viewModel: viewModel, delegate: delegate)
         }
         
-        container.register(DirectChatViewController.self) { (r, chatId: String) in
+        container.register(DirectChatViewController.self) { (r, chatId: String, delegate: DirectChatViewControllerDelegate?) in
             let view = r.resolve(DirectChatView.self)!
             let viewModel = r.resolve(DirectChatViewModel.self, argument: chatId)!
             
             return DirectChatViewController(view: view,
-                                            viewModel: viewModel)
+                                            viewModel: viewModel,
+                                            delegate: delegate)
         }
     }
 }

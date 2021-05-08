@@ -39,6 +39,9 @@ final class CoordinatorAssembly: Assembly {
         container.register(MainCoordinator.self){ (_, delegate: MainCoordinatorDelegate?) in
             
             let navigationController = UINavigationController()
+            navigationController.navigationBar.barTintColor = .mainNavigationColor
+            navigationController.navigationBar.tintColor = .mainClickableTintColor
+            
             return MainCoordinator(navigationController: navigationController,
                                    container: container,
                                    delegate: delegate)
@@ -49,6 +52,9 @@ final class CoordinatorAssembly: Assembly {
         container.register(FavoritesCoordinator.self){ (_, delegate: FavoriteCoordinatorDelegate?) in
             
             let navigationController = UINavigationController()
+            navigationController.navigationBar.barTintColor = .mainNavigationColor
+            navigationController.navigationBar.tintColor = .mainClickableTintColor
+            
             return FavoritesCoordinator(navigationController: navigationController,
                                         container: container,
                                         delegate: delegate)
@@ -59,6 +65,9 @@ final class CoordinatorAssembly: Assembly {
         container.register(AddXChangeCoordinator.self){ (_, delegate: AddXChangeCoordinatorDelegate?) in
             
             let navigationController = UINavigationController()
+            navigationController.navigationBar.barTintColor = .mainNavigationColor
+            navigationController.navigationBar.tintColor = .mainClickableTintColor
+            
             return AddXChangeCoordinator(navigationController: navigationController,
                                          container: container,
                                          delegate: delegate)
@@ -69,6 +78,9 @@ final class CoordinatorAssembly: Assembly {
         container.register(ChatCoordinator.self){ (_, delegate: ChatCoordinatorDelegate?) in
             
             let navigationController = UINavigationController()
+            navigationController.navigationBar.barTintColor = .mainNavigationColor
+            navigationController.navigationBar.tintColor = .mainClickableTintColor
+            
             return ChatCoordinator(navigationController: navigationController,
                                    container: container,
                                    delegate: delegate)
@@ -79,6 +91,9 @@ final class CoordinatorAssembly: Assembly {
         container.register(ProfileCoordinator.self){ (_, delegate: ProfileCoordinatorDelegate?) in
             
             let navigationController = UINavigationController()
+            navigationController.navigationBar.barTintColor = .mainNavigationColor
+            navigationController.navigationBar.tintColor = .mainClickableTintColor
+
             return ProfileCoordinator(navigationController: navigationController,
                                       container: container,
                                       delegate: delegate)

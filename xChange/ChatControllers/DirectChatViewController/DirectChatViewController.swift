@@ -7,14 +7,20 @@
 
 import UIKit
 
+protocol DirectChatViewControllerDelegate: AnyObject {
+    func shouldDismiss(_ viewController: BaseViewController)
+}
+
 class DirectChatViewController: BaseViewController {
 
+    weak var delegate: DirectChatViewControllerDelegate?
     let contentView: DirectChatView
     let viewModel: DirectChatViewModel
     
-    init(view: DirectChatView, viewModel: DirectChatViewModel) {
+    init(view: DirectChatView, viewModel: DirectChatViewModel, delegate: DirectChatViewControllerDelegate?) {
         self.contentView = view
         self.viewModel = viewModel
+        self.delegate = delegate
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -72,5 +78,12 @@ class DirectChatViewController: BaseViewController {
                 cell.setup(with: ChatMessageViewModel(from: message, self?.viewModel.currentUserId))
                 
             }.disposed(by: disposeBag)
+        output.onDismiss
+            .drive(onNext: { [weak self] shouldDismiss in
+                guard let self = self else { return }
+                if shouldDismiss {
+                    self.delegate?.shouldDismiss(self)
+                }
+            }).disposed(by: disposeBag)
     }
 }
