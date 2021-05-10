@@ -31,9 +31,9 @@ class ProfileCoordinator:Coordinator {
     func start() {
         let delegate: ProfileViewControllerDelegate? = self
         let profileViewController = container.resolve(ProfileViewController.self, argument: delegate)!
-        profileViewController.tabBarItem.image = UIImage(systemName: "person.fill")
-        profileViewController.tabBarItem.title = "Profile"
-        navigationController.pushViewController(profileViewController, animated: false)
+        navigationController.tabBarItem.image = UIImage(systemName: "person.fill")
+        navigationController.tabBarItem.title = "Profile"
+        navigationController.setViewControllers([profileViewController], animated: false)
     }
 }
 

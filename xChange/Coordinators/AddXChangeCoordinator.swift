@@ -27,9 +27,9 @@ class AddXChangeCoordinator:NSObject, Coordinator {
     func start() {
         let delegate: AddXChangeViewControllerDelegate? = self
         let vc = container.resolve(AddXChangeController.self, argument: delegate)!
-        vc.tabBarItem.image = UIImage(systemName: "plus.circle.fill")
-        vc.tabBarItem.title = "Create"
-        navigationController.pushViewController(vc, animated: false)
+        navigationController.tabBarItem.image = UIImage(systemName: "plus.circle.fill")
+        navigationController.tabBarItem.title = "Create"
+        navigationController.setViewControllers([vc], animated: false)
         navigationController.isNavigationBarHidden = true
     }
 }

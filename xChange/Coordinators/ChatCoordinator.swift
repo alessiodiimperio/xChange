@@ -27,9 +27,9 @@ class ChatCoordinator:Coordinator {
     func start() {
         let delegate: ChatViewControllerDelegate? = self
         let vc = container.resolve(ChatViewController.self, argument: delegate)!
-        vc.tabBarItem.image = UIImage(systemName: "message.fill")
-        vc.tabBarItem.title = "Chat"
-        navigationController.pushViewController(vc, animated: false)
+        navigationController.tabBarItem.image = UIImage(systemName: "message.fill")
+        navigationController.tabBarItem.title = "Chat"
+        navigationController.setViewControllers([vc], animated: false)
     }
     
     func didSelectGoToDirectChat(with chatId: String) {

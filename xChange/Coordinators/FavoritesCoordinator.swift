@@ -28,9 +28,9 @@ class FavoritesCoordinator:Coordinator {
     func start() {
         let delegate: FavouritesViewControllerDelegate? = self
         let vc = container.resolve(FavoritesViewController.self, argument: delegate)!
-        vc.tabBarItem.image = UIImage(systemName: "heart.fill")
-        vc.tabBarItem.title = "Favorites"
-        navigationController.pushViewController(vc, animated: false)
+        navigationController.tabBarItem.image = UIImage(systemName: "heart.fill")
+        navigationController.tabBarItem.title = "Favorites"
+        navigationController.setViewControllers([vc], animated: false)
     }
 }
 

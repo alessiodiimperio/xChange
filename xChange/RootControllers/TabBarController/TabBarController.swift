@@ -34,7 +34,9 @@ class TabBarController: UITabBarController {
         self.chatCoordinator = chatCoordinator
         self.profileCoordinator = profileCoordinator
         super.init(nibName: nil, bundle: nil)
+        self.delegate = self
     }
+    
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -60,5 +62,14 @@ class TabBarController: UITabBarController {
             chatCoordinator.navigationController,
             profileCoordinator.navigationController
         ]
+    }
+}
+
+extension TabBarController: UITabBarControllerDelegate {
+    func tabBarController(_ tabBarController: UITabBarController, shouldSelect viewController: UIViewController) -> Bool {
+        if let nav = viewController as? UINavigationController {
+            nav.popToRootViewController(animated: false)
+        }
+        return true
     }
 }
