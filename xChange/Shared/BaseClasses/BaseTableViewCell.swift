@@ -26,14 +26,14 @@ class BaseTableViewCell: UITableViewCell {
     }
     
     func setupStyling() {
-        separator.backgroundColor = .lightGray
+        separator.backgroundColor = .primaryTintColor
     }
     
     func setupConstraints() {
         separator.snp.makeConstraints { make in
             make.left.right.equalToSuperview().inset(.mediumMargin)
-            make.height.equalTo(.point)
             make.bottom.equalToSuperview()
+            make.height.equalTo(.point)
         }
     }
 }

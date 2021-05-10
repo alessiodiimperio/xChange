@@ -112,7 +112,7 @@ extension UIView {
 extension UIView {
     
     func addGradient(colors: [UIColor] = [.black, .white],
-                     locations: [NSNumber] = [0, 2],
+                     locations: [NSNumber] = [0, 1],
                      startPoint: CGPoint = CGPoint(x: 0.0, y: 1.0),
                      endPoint: CGPoint = CGPoint(x: 1.0, y: 1.0),
                      type: CAGradientLayerType = .axial){

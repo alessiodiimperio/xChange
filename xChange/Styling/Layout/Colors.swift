@@ -37,7 +37,16 @@ extension UIColor {
     }
 }
 extension UIColor {
-    class var mainNavigationColor: UIColor      { return UIColor(hex: "#799eb2") }
-    class var mainClickableTintColor: UIColor   { return .black }
-    class var mainActiveTintColor: UIColor      { return UIColor(hex: "#EBD1D3") }
+    class var primaryTintColor: UIColor         { return UIColor(hex: "#799eb2") }
+    class var secondaryTintColor: UIColor       { return UIColor(hex: "#d8e3e7") }
+    class var tertiaryTintColor: UIColor        { return UIColor(hex: "#0F263F") }
+    
+    class var mainNavigationColor: UIColor      { return .primaryTintColor }
+    class var mainClickableTintColor: UIColor   { return .tertiaryTintColor }
+    class var mainActiveTintColor: UIColor      { return  .secondaryTintColor }
+    class var mainBackgroundColor: UIColor      { return .secondaryTintColor }
+    class var buyerChatBubbleColor: UIColor     { return .tertiaryTintColor }
+    class var sellerChatBubbleColor: UIColor    { return .primaryTintColor }
+    class var mainBorderColor: UIColor          { return .primaryTintColor}
+
 }

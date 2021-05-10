@@ -10,9 +10,17 @@ import RxSwift
 import RxCocoa
 
 class MainViewModel: ViewModelType {
+    
+    // Services
     private var dataProvider: DataProvider
     private var favoriteProvider: FavoritesProvider
     
+    // Static vars
+    
+    let contentPlaceholderTitle = "This is where available Xchanges will be shown."
+    let contentPlaceholderImage = UIImage(systemName: "arrow.up.arrow.down.square")
+    
+    //Dynamic vars
     struct Input {
         let searchTrigger: Driver<String>
         let selectItemTrigger: Driver<IndexPath>

@@ -28,8 +28,8 @@ class MainCoordinator:Coordinator {
     func start() {
         let delegate: MainViewControllerDelegate? = self
         let vc = container.resolve(MainViewController.self, argument: delegate)!
-        vc.tabBarItem.image = UIImage(systemName: "house.fill")
-        vc.tabBarItem.title = "Home"
+        vc.tabBarItem.image = UIImage(systemName: "arrow.up.arrow.down")
+        vc.tabBarItem.title = "Xchanges"
         navigationController.pushViewController(vc, animated: false)
     }
     

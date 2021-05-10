@@ -10,9 +10,16 @@ import RxSwift
 import RxCocoa
 
 class ChatViewModel {
+    
+    //Services
     let authProvider: AuthenticationProvider
     let chatProvider: ChatProvider
     
+    //Static vars
+    let contentPlaceholderTitle = "This is where you will find your chats about Xchanges"
+    let contentPlaceholderImage = UIImage(systemName: "plus.message.fill")
+    
+    //Dynamic vars
     struct Input {
         let itemSelectedTrigger: Driver<IndexPath>
         let itemDeletedTrigger: Driver<IndexPath>

@@ -37,14 +37,24 @@ class DetailView: BaseView {
     override func setupStyling() {
         super.setupStyling()
         
+        backgroundColor = .mainBackgroundColor
+        
+        itemImageView.tintColor = .primaryTintColor
+        
+        favoriteButton.tintColor = .mainClickableTintColor
+        
         chatButton.setImage(UIImage(systemName: "message"), for: .normal)
+        chatButton.tintColor = .mainClickableTintColor
+        
         soldButton.setTitle("Sold", for: .normal)
-        soldButton.backgroundColor = .systemBlue
+        soldButton.backgroundColor = .mainClickableTintColor
         
         dateLabel.titleLabel.setupUI(font: .semiboldText, textAlignment: .right)
         authorLabel.titleLabel.setupUI(font: .semiboldText, textAlignment: .right)
         priceLabel.titleLabel.setupUI(font: .semiboldText, textAlignment: .right)
-
+        
+        
+        descriptionTextView.setBackgroundColor(.secondaryTintColor)
     }
     
     func setup(if isUsers: Bool) {

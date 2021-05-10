@@ -48,6 +48,16 @@
                ReferencedContainer = "container:xChange.xcodeproj">
             </BuildableReference>
          </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "78A3D08D2649258A00627B9E"
+               BuildableName = "xChangeSnapShotTests.xctest"
+               BlueprintName = "xChangeSnapShotTests"
+               ReferencedContainer = "container:xChange.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
    </TestAction>
    <LaunchAction

@@ -37,17 +37,19 @@ class ChatMessageTableViewCell: BaseTableViewCell {
         
         separator.isHidden = true
         
+        backgroundColor = .mainBackgroundColor
         contentView.transform = CGAffineTransform(scaleX: 1, y: -1)
         
         buyerMessageLabel.numberOfLines = 0
         buyerChatBubble.layer.cornerRadius = 10
-        buyerChatBubble.backgroundColor = .systemGreen
+        buyerChatBubble.backgroundColor = .buyerChatBubbleColor
         buyerChatBubble.transform = CGAffineTransform(scaleX: 1, y: -1)
         
         sellerMessageLabel.numberOfLines = 0
         sellerChatBubble.layer.cornerRadius = 10
-        sellerChatBubble.backgroundColor = .systemBlue
+        sellerChatBubble.backgroundColor = .sellerChatBubbleColor
         sellerChatBubble.transform = CGAffineTransform(scaleX: 1, y: -1)
+        sellerChatBubble.withBorders(for: .all, color: .tertiaryTintColor)
 
         
         buyerDateLabel.setupUI(font: .semiboldSubtext)

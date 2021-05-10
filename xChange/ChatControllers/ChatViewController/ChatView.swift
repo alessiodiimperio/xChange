@@ -10,36 +10,29 @@ import UIKit
 final class ChatView: BaseView {
 
     let tableView = UITableView()
-    let emptyLabel = UILabel()
+    let emptyContentView = ContentPlaceholderView(title: nil,
+                                                  image: nil)
     
     override func addSubviews() {
         super.addSubviews()
         
         addSubviews(tableView,
-                    emptyLabel)
+                    emptyContentView)
         
         setupTableView()
-    }
-    
-    override func setupStyling() {
-        super.setupStyling()
-        
-        emptyLabel.text = "This is where you will find your chats about Xchanges"
-        emptyLabel.setupUI(font: .regularText, adjustsFontSizeToFitWidth: true)
     }
     
     private func setupTableView() {
         tableView.register(ChatTableViewCell.self, forCellReuseIdentifier: ChatTableViewCell.reuseIdentifier)
         tableView.separatorStyle = .none
+        tableView.backgroundColor = .mainBackgroundColor
     }
     
     override func setupConstraints() {
         super.setupConstraints()
         
-        emptyLabel.snp.makeConstraints { make in
-            make.centerX.equalToSuperview()
-            make.left.right.lessThanOrEqualToSuperview().inset(.mediumMargin).priority(.low)
-            make.top.equalToSuperview().offset(.giganticMargin)
+        emptyContentView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
         }
         
         tableView.snp.makeConstraints { make in
@@ -50,11 +43,16 @@ final class ChatView: BaseView {
     func setupContent(for hasChats: Bool) {
         if hasChats {
             tableView.isHidden = false
-            emptyLabel.isHidden = true
+            emptyContentView.isHidden = true
         } else {
-            emptyLabel.isHidden = false
+            emptyContentView.isHidden = false
             tableView.isHidden = true
         }
+    }
+    
+    func setup(with viewModel: ChatViewModel) {
+        emptyContentView.title.text = viewModel.contentPlaceholderTitle
+        emptyContentView.imageView.image = viewModel.contentPlaceholderImage
     }
 }
 

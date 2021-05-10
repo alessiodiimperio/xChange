@@ -27,13 +27,16 @@ final class SignUpView: BaseView {
     }
     override func setupStyling() {
         super.setupStyling()
-        usernameTextField.placeholder = "Username"
-        emailTextField.placeholder = "Email"
-        passwordTextField.placeholder = "Password"
+        backgroundColor = .mainBackgroundColor
+        
+        usernameTextField.autocorrectionType = .no
+        
+        emailTextField.autocorrectionType = .no
+        
         passwordTextField.isSecureTextEntry = true
         
-        createBtn.setTitle("Create", for: .normal)
-        createBtn.backgroundColor = .systemRed
+        createBtn.backgroundColor = .mainClickableTintColor
+        createBtn.layer.cornerRadius = 10
         createBtn.setTitleColor(.white, for: .normal)
     }
     
@@ -65,5 +68,12 @@ final class SignUpView: BaseView {
             make.top.equalTo(createBtn.snp.bottom).offset(.mediumMargin)
             make.left.right.equalToSuperview().inset(.largeMargin)
         }
+    }
+    
+    func setup(with viewModel: SignUpViewModel) {
+        usernameTextField.placeholder = viewModel.userNamePlaceholderText
+        emailTextField.placeholder = viewModel.emailPlaceholderText
+        passwordTextField.placeholder = viewModel.passwordPlaceholderText
+        createBtn.setTitle(viewModel.createButtonTitle, for: .normal)
     }
 }

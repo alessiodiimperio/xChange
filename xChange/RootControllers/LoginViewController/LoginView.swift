@@ -39,30 +39,30 @@ final class LoginView: BaseView {
     
     override func setupStyling() {
         super.setupStyling()
+        
+        backgroundColor = .mainBackgroundColor
+        
         errorLabel.setupUI(textColor: .systemRed, font: .regularText)
         titleLabel.setupUI(font: .boldTitle)
         errorLabel.numberOfLines = 0
         
-        titleLabel.text = "xChange"
+        
         titleLabel.setupUI(font: .regularSuperBigTitle)
         
-        emailTextField.placeholder = "Email"
-        passwordTextField.placeholder = "Password"
+        emailTextField.autocorrectionType = .no
+        
         passwordTextField.isSecureTextEntry = true
         
-        signInBtn.setTitle("Sign In", for: .normal)
-        signInBtn.backgroundColor = .systemPink
+        signInBtn.backgroundColor = .mainClickableTintColor
         signInBtn.setTitleColor(.white, for: .normal)
         
-        signUpLabel.text = "Don't have an account?"
         signUpLabel.setupUI(textColor: .black, font: .regularSubtitle)
-        signUpBtn.setTitle("Sign Up", for: .normal)
-        signUpBtn.setTitleColor(.systemRed, for: .normal)
+        signUpBtn.backgroundColor = .mainClickableTintColor
+        signUpBtn.setTitleColor(.secondaryTintColor, for: .normal)
+        signUpBtn.layer.cornerRadius = 5
         
-        forgotPasswordBtn.setTitle("Forgot password", for: .normal)
-        forgotPasswordBtn.setTitleColor(.systemRed, for: .normal)
+        forgotPasswordBtn.setTitleColor(.mainClickableTintColor, for: .normal)
         
-        bannerImageView.image = UIImage(named: "banner")
         bannerImageView.contentMode = .scaleAspectFill
         bannerImageView.clipsToBounds = true
         
@@ -97,6 +97,7 @@ final class LoginView: BaseView {
         
         signInBtn.snp.makeConstraints { make in
             make.top.equalTo(passwordTextField.snp.bottom).offset(.giganticMargin)
+            make.height.equalTo(LayoutConstants.minimumTappableSize)
             make.left.right.equalToSuperview().inset(.largeMargin)
         }
         
@@ -112,7 +113,7 @@ final class LoginView: BaseView {
         
         horizontalStackView.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
-            make.bottom.equalToSuperview().inset(.mediumMargin)
+            make.bottom.equalToSuperview().inset(.largeMargin)
         }
         
         signUpLabel.snp.makeConstraints { make in
@@ -121,11 +122,29 @@ final class LoginView: BaseView {
         
         signUpBtn.snp.makeConstraints { make in
             make.left.equalTo(signUpLabel.snp.right).offset(.tinyMargin)
+            make.width.equalTo(80)
             make.top.right.bottom.equalToSuperview()
         }
     }
     
-    func confirmPasswordResetSent() {
-        errorLabel.text = "Password reset sent to email. Check your inbox!"
+    func confirmPasswordResetSent(_ errorMessage: String?) {
+        errorLabel.text = errorMessage
+    }
+    
+    func clearErrors() {
+        errorLabel.text = nil
+    }
+    
+    func setup(with viewModel: LoginViewModel) {
+        titleLabel.text = viewModel.titleText
+        emailTextField.placeholder = viewModel.emailPlaceholderText
+        passwordTextField.placeholder = viewModel.passwordPlaceholderText
+        signInBtn.setTitle(viewModel.signInButtonTitle, for: .normal)
+        signUpLabel.text = viewModel.signUpLabelText
+        signUpBtn.setTitle(viewModel.signUpButtonTitle, for: .normal)
+        forgotPasswordBtn.setTitle(viewModel.forgotPasswordButtonTitle, for: .normal)
+        bannerImageView.image = viewModel.bannerImage
+
+        
     }
 }

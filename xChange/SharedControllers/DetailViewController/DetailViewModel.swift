@@ -9,11 +9,18 @@ import RxCocoa
 import Foundation
 
 class DetailViewModel: ViewModelType {
+    
+    //Services
     private let authProvider: AuthenticationProvider
     private let favoriteProvider: FavoritesProvider
     private let dataProvider: DataProvider
     private let chatProvider: ChatProvider
     
+    //Static vars
+    let favoredIconImage = UIImage(systemName: "heart.fill")
+    let unfavoredIconImage = UIImage(systemName: "heart")
+    
+    //Reactive vars
     private let xChangeDetail: Driver<XChange?>
     
     struct Input {

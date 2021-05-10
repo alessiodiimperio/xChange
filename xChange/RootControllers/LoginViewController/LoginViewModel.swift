@@ -10,6 +10,20 @@ import RxCocoa
 
 class LoginViewModel:ViewModelType{
         
+    //Static vars
+    
+    let titleText = "Xchange"
+    let emailPlaceholderText = "Email"
+    let passwordPlaceholderText = "Password"
+    let signInButtonTitle = "Sign In"
+    let signUpLabelText = "Don't have an account?"
+    let signUpButtonTitle = "Sign Up!"
+    let forgotPasswordButtonTitle = "Forgot password?"
+    let passwordResetSent = "Password reset sent to email. Check your inbox!"
+    let bannerImage = UIImage(named: "banner")
+    
+    //Dynamic vars
+    
     var errorLabelText = PublishSubject<String?>()
     
     struct Input {

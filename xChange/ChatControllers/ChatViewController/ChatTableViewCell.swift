@@ -37,6 +37,9 @@ class ChatTableViewCell: BaseTableViewCell {
     
     override func setupStyling() {
         super.setupStyling()
+        
+        backgroundColor = .mainBackgroundColor
+        
         unavailableView.backgroundColor = UIColor.lightGray.withAlphaComponent(0.8)
         unavailableLabel.setupUI(textColor: .darkGray, font: .boldBigTitle)
         unavailableLabel.text = "Removed by seller"
@@ -47,6 +50,7 @@ class ChatTableViewCell: BaseTableViewCell {
         unreadMessageLabel.text = "NEW"
         
         subjectImage.image = subjectImage.placeHolderPhoto()
+        subjectImage.tintColor = .primaryTintColor
     }
     
     override func setupConstraints() {
@@ -95,6 +99,9 @@ class ChatTableViewCell: BaseTableViewCell {
         priceLabel.text = viewModel.price
         if let url = URL(string: viewModel.imageLink) {
             subjectImage.af.setImage(withURL: url)
+            subjectImage.contentMode = .scaleAspectFill
+        } else {
+            subjectImage.contentMode = .scaleAspectFit
         }
     }
 }

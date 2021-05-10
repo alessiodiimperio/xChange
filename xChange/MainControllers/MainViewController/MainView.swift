@@ -8,19 +8,22 @@
 import UIKit
 
 final class MainView: BaseView {
-
+    
+    let emptyContentView = ContentPlaceholderView(title: nil, image: nil)
     let tableView = UITableView()
     
     override func addSubviews() {
         super.addSubviews()
         
-        addSubview(tableView)
+        addSubviews(tableView,
+                   emptyContentView)
         setupTableView()
     }
     
     private func setupTableView() {
         tableView.register(XChangeTableViewCell.self, forCellReuseIdentifier: XChangeTableViewCell.reuseIdentifier)
         tableView.separatorStyle = .none
+        tableView.backgroundColor = .secondaryTintColor
     }
     
     override func setupConstraints() {
@@ -29,5 +32,24 @@ final class MainView: BaseView {
         tableView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
+        
+        emptyContentView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
+    }
+    
+    func setupContent(for hasContent: Bool) {
+        if hasContent {
+            tableView.isHidden = false
+            emptyContentView.isHidden = true
+        } else {
+            tableView.isHidden = true
+            emptyContentView.isHidden = false
+        }
+    }
+    
+    func setup(with viewModel: MainViewModel) {
+        emptyContentView.title.text = viewModel.contentPlaceholderTitle
+        emptyContentView.imageView.image = viewModel.contentPlaceholderImage
     }
 }

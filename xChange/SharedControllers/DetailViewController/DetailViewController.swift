@@ -38,6 +38,10 @@ class DetailViewController: BaseViewController {
         super.viewDidLoad()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+    }
+    
     override func setupObservables() {
         super.setupObservables()
         
@@ -78,9 +82,9 @@ class DetailViewController: BaseViewController {
         output.onIsFavourite
             .drive(onNext: {[weak self] isFavorite in
                 isFavorite ?
-                    self?.contentView.favoriteButton.setImage(UIImage(systemName: "heart.fill"), for: .normal)
+                    self?.contentView.favoriteButton.setImage(self?.viewModel.favoredIconImage, for: .normal)
                     :
-                    self?.contentView.favoriteButton.setImage(UIImage(systemName: "heart"), for: .normal)
+                    self?.contentView.favoriteButton.setImage(self?.viewModel.unfavoredIconImage, for: .normal)
             })
             .disposed(by: disposeBag)
 

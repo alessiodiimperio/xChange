@@ -11,9 +11,16 @@ import Foundation
 
 class ProfileViewModel: ViewModelType {
     
+    //Services
     private var auth: AuthenticationProvider
     private var dataProvider: DataProvider
     
+    //Static vars
+    let contentPlaceholderTitle = "This is where will be able to view/edit your listings."
+    let contentPlaceholderImage = UIImage(systemName: "rectangle.stack.fill.badge.person.crop")
+    let signOutButtonTitle = "Sign Out"
+    
+    //Reactive vars
     struct Input {
         let itemSelectedTrigger: Driver<IndexPath>
         let signOutTrigger:Driver<Void>

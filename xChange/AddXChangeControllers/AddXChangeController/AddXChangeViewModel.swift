@@ -10,11 +10,19 @@ import RxSwift
 import RxCocoa
 
 class AddXChangeViewModel: ViewModelType, ViewModelWithLoadingState {
-    let state = BehaviorRelay<LoadingState>(value: .initial)
     
+    //Services
     var authenticationService: AuthenticationProvider
     var xChangeService: DataProvider
     
+    //Static vars
+    let titlePlaceholderText = "Title"
+    let pricePlaceholderText = "Price"
+    let descriptionsPlaceholderText = "Description"
+    let createButtonTitle = "Create"
+    
+    //Dynamic vars
+    let state = BehaviorRelay<LoadingState>(value: .initial)
     private let image = BehaviorRelay<UIImage>(value: UIImageView().placeHolderPhoto())
     private let placeholderUpdated = BehaviorRelay<Bool>(value: false)
     

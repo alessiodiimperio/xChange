@@ -32,9 +32,11 @@ final class DirectChatView: BaseView {
     }
     
     override func setupStyling() {
+            
+        tableView.backgroundColor = .mainBackgroundColor
+        
         inputContainer.withBorders(for: .top, width: LayoutMargin.point.rawValue, color: .lightGray)
         
-        placeholderLabel.text = "Write message..."
         placeholderLabel.setupUI(textColor: .lightGray, font: .regularText)
         
         tableView.separatorStyle = .none
@@ -42,8 +44,7 @@ final class DirectChatView: BaseView {
         
         messageInputTextView.font = .regularText
         
-        sendButton.setTitle("Send", for: .normal)
-        sendButton.backgroundColor = .systemTeal
+        sendButton.backgroundColor = .mainClickableTintColor
     }
     
     override func setupConstraints() {
@@ -73,5 +74,10 @@ final class DirectChatView: BaseView {
         placeholderLabel.snp.makeConstraints { make in
             make.top.left.equalToSuperview().inset(.smallMargin)
         }
+    }
+    
+    func setup(with viewModel: DirectChatViewModel) {
+        placeholderLabel.text = viewModel.messageInputPlaceholderText
+        sendButton.setTitle(viewModel.sendButtonTitle, for: .normal)
     }
 }

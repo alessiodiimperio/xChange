@@ -36,6 +36,7 @@ final class MainViewController: BaseViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        contentView.setup(with: viewModel)
     }
     
     override func setupObservables() {
@@ -46,6 +47,12 @@ final class MainViewController: BaseViewController {
         )
         
         let output = viewModel.transform(input)
+        
+        output.onFeed
+            .drive(onNext: { [weak self] xChanges in
+                self?.contentView.setupContent(for: xChanges.count > 0)
+            })
+            .disposed(by: disposeBag)
         
         output.onFeed
             .drive(contentView.tableView.rx.items(cellIdentifier: XChangeTableViewCell.reuseIdentifier)) { _, xChange, cell in

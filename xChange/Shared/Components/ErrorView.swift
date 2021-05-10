@@ -37,7 +37,7 @@ final class ErrorView: UIView {
         backgroundColor = UIColor.black.withAlphaComponent(0.7)
         
         containerView.backgroundColor = .white
-        containerView.withBorders(for: .all)
+        containerView.withBorders(for: .all, color: .mainBorderColor)
         
         subtitle.numberOfLines = 0
         subtitle.setupUI(font: .boldSubtitle)

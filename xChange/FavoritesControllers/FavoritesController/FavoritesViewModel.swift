@@ -10,8 +10,15 @@ import Foundation
 
 class FavoritesViewModel: ViewModelType {
     
+    // Services
     private var favouriteProvider: FavoritesProvider
     
+    //Static vars
+    let contentPlaceholderTitle = "This is where you can view your saved listings."
+    let contentPlaceholderImage = UIImage(systemName: "heart.fill")
+            
+    
+    //Dynamic vars
     struct Input {
         let favouriteItemSelectedTrigger: Driver<IndexPath>
         let favouriteToggleTrigger: Driver<IndexPath>

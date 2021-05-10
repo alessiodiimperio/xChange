@@ -34,8 +34,11 @@ final class SuccessView: UIView {
     func setupStyling() {
         backgroundColor = UIColor.black.withAlphaComponent(0.7)
         
-        containerView.backgroundColor = .white
-        containerView.withBorders(for: .all)
+        imageView.tintColor = .primaryTintColor
+        
+        containerView.backgroundColor = .secondaryTintColor
+        containerView.roundCorners(radius: 20)
+        containerView.withBorders(for: .all, color: .mainBorderColor)
         
         subtitle.numberOfLines = 0
         subtitle.setupUI(font: .boldSubtitle)

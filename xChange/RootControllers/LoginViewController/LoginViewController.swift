@@ -41,6 +41,7 @@ class LoginViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         hideKeyboardOnTap()
+        contentView.setup(with: viewModel)
     }
 
     override func setupObservables() {
@@ -87,9 +88,10 @@ class LoginViewController: BaseViewController {
         
         output.onForgotPasswordTapped
             .drive(onNext: { [weak self] email in
+                self?.contentView.clearErrors()
                 self?.delegate?.didSelectForgotPassword(for: email) { [weak self] error in
                     if error == nil {
-                        self?.contentView.confirmPasswordResetSent()
+                        self?.contentView.confirmPasswordResetSent(self?.viewModel.passwordResetSent)
                     } else {
                         self?.viewModel.errorLabelText.onNext(error?.localizedDescription)
                     }

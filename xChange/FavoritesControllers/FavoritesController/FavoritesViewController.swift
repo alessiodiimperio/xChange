@@ -35,6 +35,7 @@ class FavoritesViewController: BaseViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        contentView.setup(with: viewModel)
     }
 
     override func setupObservables() {

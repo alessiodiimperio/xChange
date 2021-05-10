@@ -41,6 +41,7 @@ class AddXChangeController: BaseViewController, ViewControllerWithLoadingState {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupStates()
+        contentView.setup(with: viewModel)
     }
     
     override func setupObservables() {

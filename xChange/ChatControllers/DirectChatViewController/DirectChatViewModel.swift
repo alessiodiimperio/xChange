@@ -11,8 +11,15 @@ import RxCocoa
 
 final class DirectChatViewModel: ViewModelType {
 
+    //Services
     private let authProvider: AuthenticationProvider
     private let chatProvider: ChatProvider
+    
+    //Static vars
+    let messageInputPlaceholderText = "Write message..."
+    let sendButtonTitle = "Send"
+    
+    //Dynamic vars
     private let chatRelay = BehaviorRelay<Chat?>(value: nil)
     private let chatId: String
     private(set) var currentUserId: String?

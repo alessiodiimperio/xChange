@@ -38,10 +38,11 @@ class ProfileViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupSignOutButtonInNavigationBar()
+        contentView.setup(with: viewModel)
     }
     
     private func setupSignOutButtonInNavigationBar() {
-        signOutButton.setTitle("Sign Out", for: .normal)
+        signOutButton.setTitle(viewModel.signOutButtonTitle, for: .normal)
         signOutButton.setTitleColor(.mainClickableTintColor, for: .normal)
         let barButtonItem = UIBarButtonItem(customView: signOutButton)
         navigationItem.rightBarButtonItem = barButtonItem
@@ -77,13 +78,13 @@ class ProfileViewController: BaseViewController {
                         
         output.onUser
             .drive(onNext: {[weak self] user in
-                guard let user = user else {
+                if let user = user {
+                    self?.contentView.showUserLabels()
+                    self?.contentView.emailLabel.text = user.email
+                    self?.contentView.userNameLabel.text = user.username
+                } else {
                     self?.contentView.hideUserLabels()
-                    return
                 }
-                self?.contentView.showUserLabels()
-                self?.contentView.emailLabel.text = user.email
-                self?.contentView.userNameLabel.text = user.username
             })
             .disposed(by: disposeBag)
         

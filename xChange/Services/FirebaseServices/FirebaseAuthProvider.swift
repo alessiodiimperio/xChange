@@ -87,6 +87,7 @@ struct FirebaseAuthProvider:AuthenticationProvider {
         firestore.collection(FirestoreCollection.users.path).document(userId).getDocument { (doc, error) in
             if let error = error {
                 print(error.localizedDescription)
+                completion(nil)
                 return
             }
     

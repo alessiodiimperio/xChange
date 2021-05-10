@@ -34,27 +34,30 @@ final class AddXChangeView: BaseView, ViewWithLoadingState {
         super.setupStyling()
         addPlaceholderToDescriptionTextView()
         
-        
+        backgroundColor = .mainBackgroundColor
         
         imageView.image = imageView.placeHolderPhoto()
         imageView.contentMode = .scaleAspectFit
+        imageView.tintColor = .primaryTintColor
         
         plusIcon.image = UIImage(systemName: "plus.circle.fill")
+        plusIcon.tintColor = .mainClickableTintColor
         
-        titleTextField.placeholder = "Title"
-        titleTextField.withBorders(for: .bottom)
+        titleTextField.withBorders(for: .bottom, color: .mainBorderColor)
+        titleTextField.autocorrectionType = .no
         
-        priceTextField.placeholder = "Price"
-        priceTextField.withBorders(for: .bottom)
+        priceTextField.withBorders(for: .bottom, color: .mainBorderColor)
+        priceTextField.autocorrectionType = .no
         
-        placeholder.text = "Description"
 
-        createButton.setTitle("Create", for: .normal)
-        createButton.backgroundColor = .systemBlue
-        createButton.layer.cornerRadius = 20
+        createButton.backgroundColor = .mainClickableTintColor
+        createButton.layer.cornerRadius = 10
         
+        descriptionTextView.backgroundColor = .mainBackgroundColor
         descriptionTextView.font = .regularText
-        descriptionTextView.withBorders(for: [.all])
+        descriptionTextView.layer.cornerRadius = 10
+        descriptionTextView.withBorders(for: [.all], color: .mainBorderColor)
+        descriptionTextView.autocorrectionType = .no
     }
     
     private func addPlaceholderToDescriptionTextView(){
@@ -73,8 +76,8 @@ final class AddXChangeView: BaseView, ViewWithLoadingState {
         }
         
         plusIcon.snp.makeConstraints { make in
-            make.centerX.equalTo(imageView.snp.right).inset(.largeMargin)
-            make.centerY.equalTo(imageView.snp.bottom).inset(.largeMargin)
+            make.centerX.equalTo(imageView.snp.right).inset(.giganticMargin)
+            make.centerY.equalTo(imageView.snp.bottom).inset(.giganticMargin)
             make.width.height.equalTo(60)
         }
         
@@ -91,7 +94,7 @@ final class AddXChangeView: BaseView, ViewWithLoadingState {
         descriptionTextView.snp.makeConstraints { make in
             make.top.equalTo(priceTextField.snp.bottom).offset(.mediumMargin)
             make.left.right.equalToSuperview().inset(.largeMargin)
-            make.height.equalTo(200)
+            make.height.equalTo(200).priority(.low)
         }
         
         placeholder.snp.makeConstraints { make in
@@ -104,6 +107,14 @@ final class AddXChangeView: BaseView, ViewWithLoadingState {
             make.height.equalTo(LayoutConstants.minimumTappableSize)
             make.width.equalTo(100)
             make.centerX.equalToSuperview()
+            make.bottom.equalToSuperview().inset(.largeMargin)
         }
+    }
+    
+    func setup(with viewModel: AddXChangeViewModel) {
+        titleTextField.placeholder = viewModel.titlePlaceholderText
+        priceTextField.placeholder = viewModel.pricePlaceholderText
+        placeholder.text = viewModel.descriptionsPlaceholderText
+        createButton.setTitle(viewModel.createButtonTitle, for: .normal)
     }
 }

@@ -27,13 +27,17 @@ class XChangeTableViewCell: BaseTableViewCell {
         addSubviews(dateLabel,
                     titleLabel,
                     priceLabel,
-                    itemImageView)
+                    itemImageView
+                    )
     }
     
     override func setupStyling() {
         super.setupStyling()
+        
+        backgroundColor = .mainBackgroundColor
+        
         itemImageView.clipsToBounds = true
-        itemImageView.contentMode = .scaleAspectFill
+        itemImageView.tintColor = .primaryTintColor
     }
     
     override func setupConstraints() {
@@ -42,7 +46,7 @@ class XChangeTableViewCell: BaseTableViewCell {
         itemImageView.snp.makeConstraints { make in
             make.height.width.equalTo(150)
             make.top.left.bottom.equalToSuperview()
-            make.bottom.equalTo(separator.snp.top)
+            make.bottom.equalToSuperview().inset(.point)
         }
         
         dateLabel.snp.makeConstraints { make in
@@ -64,8 +68,10 @@ class XChangeTableViewCell: BaseTableViewCell {
     
         if let url = viewModel.image {
             itemImageView.af.setImage(withURL: url)
+            itemImageView.contentMode = .scaleAspectFill
         } else {
             itemImageView.image = UIImageView().placeHolderPhoto()
+            itemImageView.contentMode = .scaleAspectFit
         }
         
         dateLabel.textLabel.text = viewModel.date

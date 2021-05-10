@@ -33,13 +33,22 @@ end
   
   pod 'IQKeyboardManagerSwift'
 
+  def testing_pods
+    pod 'Nimble'
+    pod 'Quick'
+  end
+
   target 'xChangeTests' do
     inherit! :search_paths
     # Pods for testing
+    testing_pods
   end
 
-  target 'xChangeUITests' do
+  target 'xChangeSnapShotTests' do
     # Pods for testing
+    testing_pods
+    pod 'iOSSnapshotTestCase'
+    pod 'Nimble-Snapshots'
   end
 
 end

@@ -10,6 +10,14 @@ import RxCocoa
 
 class SignUpViewModel:ViewModelType {
     
+    //Static vars
+    
+    let userNamePlaceholderText = "Username"
+    let emailPlaceholderText = "Email"
+    let passwordPlaceholderText = "Password"
+    let createButtonTitle = "Create"
+    
+    //Dynamic vars
     var errorLabelText = PublishSubject<String?>()
     
     struct Input {

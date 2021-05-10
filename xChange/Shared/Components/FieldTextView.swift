@@ -36,6 +36,7 @@ class FieldTextView: BaseView {
         
         titleLabel.setupUI(font: .semiboldText)
         textView.font = .regularText
+        textView.autocorrectionType = .no
     }
     
     override func setupConstraints() {
@@ -49,5 +50,10 @@ class FieldTextView: BaseView {
             make.top.equalTo(titleLabel.snp.bottom).offset(.smallMargin)
             make.left.right.bottom.equalToSuperview()
         }
+    }
+    
+    func setBackgroundColor(_ color: UIColor) {
+        textView.backgroundColor = color
+        backgroundColor = color
     }
 }

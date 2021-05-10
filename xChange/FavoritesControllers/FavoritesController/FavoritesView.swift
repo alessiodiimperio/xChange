@@ -9,27 +9,23 @@ import UIKit
 
 final class FavoritesView: BaseView {
 
-    let emptyLabel = UILabel()
+    let emptyContentView = ContentPlaceholderView(title: nil,
+                                                  image: nil)
     let tableView = UITableView()
     
     override func addSubviews() {
         super.addSubviews()
         
         addSubviews(tableView,
-                   emptyLabel)
+                   emptyContentView)
         
         setupTableView()
-    }
-    
-    override func setupStyling() {
-        super.setupStyling()
-        emptyLabel.text = "This is where you can view your saved listings."
-        emptyLabel.setupUI(font: .regularText, adjustsFontSizeToFitWidth: true)
     }
     
     private func setupTableView() {
         tableView.register(XChangeTableViewCell.self, forCellReuseIdentifier: XChangeTableViewCell.reuseIdentifier)
         tableView.separatorStyle = .none
+        tableView.backgroundColor = .secondaryTintColor
     }
     
     override func setupConstraints() {
@@ -39,20 +35,24 @@ final class FavoritesView: BaseView {
             make.edges.equalToSuperview()
         }
         
-        emptyLabel.snp.makeConstraints { make in
-            make.centerX.equalToSuperview()
-            make.left.right.lessThanOrEqualToSuperview().inset(.mediumMargin).priority(.low)
-            make.top.equalToSuperview().offset(.giganticMargin)
+        emptyContentView.snp.makeConstraints { make in
+            make.center.equalToSuperview()
+            make.edges.equalToSuperview()
         }
     }
     
     func setupContent(for hasContent: Bool) {
         if hasContent {
             tableView.isHidden = false
-            emptyLabel.isHidden = true
+            emptyContentView.isHidden = true
         } else {
             tableView.isHidden = true
-            emptyLabel.isHidden = false
+            emptyContentView.isHidden = false
         }
+    }
+    
+    func setup(with viewModel: FavoritesViewModel) {
+        emptyContentView.title.text = viewModel.contentPlaceholderTitle
+        emptyContentView.imageView.image = viewModel.contentPlaceholderImage
     }
 }

@@ -39,6 +39,7 @@ class SignUpViewController: BaseViewController, UITextFieldDelegate {
         super.viewDidLoad()
         contentView.usernameTextField.becomeFirstResponder()
         hideKeyboardOnTap()
+        contentView.setup(with: viewModel)
     }
     
     func becomeTextfieldDelegate(){
