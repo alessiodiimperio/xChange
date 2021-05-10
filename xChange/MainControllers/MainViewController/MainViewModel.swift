@@ -20,7 +20,7 @@ class MainViewModel: ViewModelType {
     let contentPlaceholderTitle = "This is where available Xchanges will be shown."
     let contentPlaceholderImage = UIImage(systemName: "arrow.up.arrow.down.square")
     
-    //Dynamic vars
+    //Reactive vars
     struct Input {
         let searchTrigger: Driver<String>
         let selectItemTrigger: Driver<IndexPath>

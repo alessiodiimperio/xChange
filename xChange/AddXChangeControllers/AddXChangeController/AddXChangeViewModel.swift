@@ -21,7 +21,7 @@ class AddXChangeViewModel: ViewModelType, ViewModelWithLoadingState {
     let descriptionsPlaceholderText = "Description"
     let createButtonTitle = "Create"
     
-    //Dynamic vars
+    //Reactive vars
     let state = BehaviorRelay<LoadingState>(value: .initial)
     private let image = BehaviorRelay<UIImage>(value: UIImageView().placeHolderPhoto())
     private let placeholderUpdated = BehaviorRelay<Bool>(value: false)

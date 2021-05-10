@@ -18,7 +18,7 @@ class FavoritesViewModel: ViewModelType {
     let contentPlaceholderImage = UIImage(systemName: "heart.fill")
             
     
-    //Dynamic vars
+    //Reactive vars
     struct Input {
         let favouriteItemSelectedTrigger: Driver<IndexPath>
         let favouriteToggleTrigger: Driver<IndexPath>

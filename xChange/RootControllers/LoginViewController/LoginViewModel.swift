@@ -22,7 +22,7 @@ class LoginViewModel:ViewModelType{
     let passwordResetSent = "Password reset sent to email. Check your inbox!"
     let bannerImage = UIImage(named: "banner")
     
-    //Dynamic vars
+    //Reactive vars
     
     var errorLabelText = PublishSubject<String?>()
     

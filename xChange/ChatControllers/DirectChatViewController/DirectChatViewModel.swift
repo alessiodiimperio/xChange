@@ -18,11 +18,11 @@ final class DirectChatViewModel: ViewModelType {
     //Static vars
     let messageInputPlaceholderText = "Write message..."
     let sendButtonTitle = "Send"
-    
-    //Dynamic vars
-    private let chatRelay = BehaviorRelay<Chat?>(value: nil)
     private let chatId: String
     private(set) var currentUserId: String?
+    
+    //Reactive vars
+    private let chatRelay = BehaviorRelay<Chat?>(value: nil)
     
     struct Input {
         let sendButtonTrigger: Driver<Void>

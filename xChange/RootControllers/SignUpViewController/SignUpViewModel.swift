@@ -17,7 +17,7 @@ class SignUpViewModel:ViewModelType {
     let passwordPlaceholderText = "Password"
     let createButtonTitle = "Create"
     
-    //Dynamic vars
+    //Reactive vars
     var errorLabelText = PublishSubject<String?>()
     
     struct Input {
