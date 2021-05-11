@@ -67,17 +67,7 @@ class TestLoginViewController: QuickSpec {
 }
 
 private class MockLoginViewControllerDelegate: LoginViewControllerDelegate {
-    func didSelectSignIn(with Credentials: Credential, completion: @escaping (Error?) -> Void) {
-        
-    }
-    
-    func didSelectForgotPassword(for email: String?, completion: @escaping (Error?) -> Void) {
-        
-    }
-    
-    func didSelectSignUp() {
-        
-    }
-    
-    
+    func didSelectSignIn(with Credentials: Credential, completion: @escaping (Error?) -> Void) {}
+    func didSelectForgotPassword(for email: String?, completion: @escaping (Error?) -> Void) {}
+    func didSelectSignUp() {}    
 }
