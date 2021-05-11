@@ -1,8 +1,8 @@
 //
-//  QuickSpecSnapshotting.swift
-//  xChangeTests
+//  QuickSpecSnapShoting.swift
+//  xChangeSnapShotTest
 //
-//  Created by Alessio on 2021-05-10.
+//  Created by Alessio on 2021-05-11.
 //
 
 import Foundation
