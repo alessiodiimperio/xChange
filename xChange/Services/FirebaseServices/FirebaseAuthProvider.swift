@@ -36,6 +36,11 @@ struct FirebaseAuthProvider:AuthenticationProvider {
                 completion(.failure(error!))
                 return
             }
+            if let userId = data?.user.uid {
+                getUser(for: userId)  { user in
+                    currentUser.accept(user)
+                }
+            }
             completion(.success(true))
         }
     }
