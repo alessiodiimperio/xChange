@@ -72,9 +72,9 @@ class ChatViewController: BaseViewController {
             .throttle(.seconds(1))
             .drive(onNext:{ [weak self] unreadMessages in
                 if let unread = unreadMessages, unread > 0 {
-                    self?.tabBarItem.badgeValue = "\(unread)"
+                    self?.navigationController?.tabBarItem.badgeValue = "\(unread)"
                 } else {
-                    self?.tabBarItem.badgeValue = nil
+                    self?.navigationController?.tabBarItem.badgeValue = nil
                 }
             }).disposed(by: disposeBag)
     }

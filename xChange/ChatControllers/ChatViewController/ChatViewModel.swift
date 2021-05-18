@@ -79,7 +79,6 @@ class ChatViewModel {
                     unreadMessages += 1
                 }
             }
-            print(unreadMessages)
             return unreadMessages
         }
     }

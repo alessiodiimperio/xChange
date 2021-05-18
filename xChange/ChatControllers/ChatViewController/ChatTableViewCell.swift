@@ -71,7 +71,9 @@ class ChatTableViewCell: XChangeTableViewCell {
             itemImageView.af.setImage(withURL: url)
             itemImageView.contentMode = .scaleAspectFill
         } else {
+            itemImageView.image = itemImageView.placeHolderPhoto()
             itemImageView.contentMode = .scaleAspectFit
+            
         }
     }
 }
