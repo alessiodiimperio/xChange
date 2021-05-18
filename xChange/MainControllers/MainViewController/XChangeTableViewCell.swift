@@ -13,7 +13,7 @@ class XChangeTableViewCell: BaseTableViewCell {
     
     let dateLabel = FieldLabel(title: "Date:")
     let titleLabel = FieldLabel(title: "Titel:")
-    let priceLabel = FieldLabel(title: "Pris:")
+    let priceLabel = FieldLabel(title: "Price:")
     let itemImageView = UIImageView()
     
     override func setSelected(_ selected: Bool, animated: Bool) {
@@ -45,8 +45,8 @@ class XChangeTableViewCell: BaseTableViewCell {
         
         itemImageView.snp.makeConstraints { make in
             make.height.width.equalTo(150)
-            make.top.left.bottom.equalToSuperview()
-            make.bottom.equalToSuperview().inset(.point)
+            make.top.left.equalToSuperview()
+            make.bottom.equalTo(separator.snp.top)
         }
         
         dateLabel.snp.makeConstraints { make in

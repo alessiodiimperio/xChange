@@ -7,12 +7,8 @@
 
 import UIKit
 
-class ChatTableViewCell: BaseTableViewCell {
+class ChatTableViewCell: XChangeTableViewCell {
     
-    let dateLabel = UILabel()
-    let titleLabel = FieldLabel(title: "Title:", text: nil)
-    let subjectImage = UIImageView()
-    let priceLabel = UILabel()
     let unavailableView = UIView()
     let unavailableLabel = UILabel()
     let unreadMessageLabel = UILabel()
@@ -25,11 +21,7 @@ class ChatTableViewCell: BaseTableViewCell {
     override func addSubviews() {
         super.addSubviews()
         
-        addSubviews(dateLabel,
-                    titleLabel,
-                    subjectImage,
-                    priceLabel,
-                    unavailableView,
+        addSubviews(unavailableView,
                     unreadMessageLabel)
         
         unavailableView.addSubview(unavailableLabel)
@@ -48,33 +40,10 @@ class ChatTableViewCell: BaseTableViewCell {
         unreadMessageLabel.backgroundColor = .systemRed
         unreadMessageLabel.layer.cornerRadius = 8
         unreadMessageLabel.text = "NEW"
-        
-        subjectImage.image = subjectImage.placeHolderPhoto()
-        subjectImage.tintColor = .primaryTintColor
     }
     
     override func setupConstraints() {
         super.setupConstraints()
-        
-        dateLabel.snp.makeConstraints { make in
-            make.top.right.equalToSuperview().inset(.smallMargin)
-        }
-        
-        subjectImage.snp.makeConstraints { make in
-            make.left.top.bottom.equalToSuperview()
-            make.height.width.equalTo(150)
-        }
-        
-        titleLabel.snp.makeConstraints { make in
-            make.centerY.equalToSuperview()
-            make.left.equalTo(subjectImage.snp.right).offset(.mediumMargin)
-            make.right.equalToSuperview().inset(.mediumMargin)
-        }
-        
-        priceLabel.snp.makeConstraints { make in
-            make.left.equalTo(subjectImage.snp.right).offset(.largeMargin)
-            make.bottom.equalToSuperview().inset(.mediumMargin)
-        }
         
         unavailableView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
@@ -94,14 +63,15 @@ class ChatTableViewCell: BaseTableViewCell {
     func setup(with viewModel: ChatSubjectViewModel) {
         unreadMessageLabel.isHidden = !viewModel.unread
         unavailableView.isHidden = viewModel.available
-        dateLabel.text = viewModel.date
+        dateLabel.textLabel.text = viewModel.date
         titleLabel.textLabel.text = viewModel.title
-        priceLabel.text = viewModel.price
+        priceLabel.textLabel.text = viewModel.price
+        
         if let url = URL(string: viewModel.imageLink) {
-            subjectImage.af.setImage(withURL: url)
-            subjectImage.contentMode = .scaleAspectFill
+            itemImageView.af.setImage(withURL: url)
+            itemImageView.contentMode = .scaleAspectFill
         } else {
-            subjectImage.contentMode = .scaleAspectFit
+            itemImageView.contentMode = .scaleAspectFit
         }
     }
 }
