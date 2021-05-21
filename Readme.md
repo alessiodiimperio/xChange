@@ -1,3 +1,7 @@
+
+Extra files:
+XChange Concept.XD includes a wireframe preconcept of the application UI
+
 The application file structure is pretty straight forward:
 
 Assemblies > 
@@ -30,3 +34,4 @@ XChangeTests >
 XChangeSnapShotTests > 
     Contains an example of UI Testing using snapshots
 
+        
