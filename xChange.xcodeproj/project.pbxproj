@@ -474,13 +474,7 @@
 				78DF0DEB25E1A457001859F3 /* Assemblies */,
 				78F5477925C9E75800467741 /* Models */,
 				78372DCF25BF0A50001B82D0 /* Coordinators */,
-				78F2E4CF25C1869D000E5F9D /* RootControllers */,
-				78F2E4D125C186E4000E5F9D /* MainControllers */,
-				78F2E4D225C18706000E5F9D /* FavoritesControllers */,
-				78F2E4D325C1871B000E5F9D /* AddXChangeControllers */,
-				78F2E4D425C18730000E5F9D /* ChatControllers */,
-				78F2E4D525C18740000E5F9D /* ProfileControllers */,
-				78B8C1D2264469BB0098C7A4 /* SharedControllers */,
+				78C75818265790C100781A25 /* Sections */,
 				7832047225C1B2390052CA86 /* Services */,
 				78F5474B25C2D9B900467741 /* Extensions */,
 				78D5CFCB2638949E00FFDA2C /* Shared */,
@@ -551,6 +545,20 @@
 				782B1FB62613B67100DDA412 /* DetailViewController */,
 			);
 			path = SharedControllers;
+			sourceTree = "<group>";
+		};
+		78C75818265790C100781A25 /* Sections */ = {
+			isa = PBXGroup;
+			children = (
+				78F2E4CF25C1869D000E5F9D /* RootControllers */,
+				78F2E4D125C186E4000E5F9D /* MainControllers */,
+				78F2E4D225C18706000E5F9D /* FavoritesControllers */,
+				78F2E4D325C1871B000E5F9D /* AddXChangeControllers */,
+				78F2E4D425C18730000E5F9D /* ChatControllers */,
+				78F2E4D525C18740000E5F9D /* ProfileControllers */,
+				78B8C1D2264469BB0098C7A4 /* SharedControllers */,
+			);
+			path = Sections;
 			sourceTree = "<group>";
 		};
 		78D5CFCB2638949E00FFDA2C /* Shared */ = {
